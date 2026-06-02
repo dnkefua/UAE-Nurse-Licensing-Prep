@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+// Load signing credentials from keystore.properties (gitignored — never commit passwords)
+def keystorePropsFile = rootProject.file("app/keystore.properties")
+def keystoreProps = new Properties()
+if (keystorePropsFile.exists()) {
+    keystoreProps.load(new FileInputStream(keystorePropsFile))
+}
+
 android {
     namespace = "com.ndnanalytics.uaenurseprep"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -18,10 +25,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('uae-nurse-prep-release.keystore')
-            storePassword 'UaeNurse2026!'
-            keyAlias 'uaenurseprep'
-            keyPassword 'UaeNurse2026!'
+            storeFile file(keystoreProps['storeFile'] ?: 'uae-nurse-prep-release.keystore')
+            storePassword keystoreProps['storePassword'] ?: ''
+            keyAlias keystoreProps['keyAlias'] ?: 'uaenurseprep'
+            keyPassword keystoreProps['keyPassword'] ?: ''
         }
     }
     buildTypes {

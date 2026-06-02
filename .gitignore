@@ -13,6 +13,7 @@ coverage/
 # Android signing keys — never commit keystores or passwords
 *.keystore
 *.jks
+**/keystore.properties
 android/local.properties
 
 # IDE
