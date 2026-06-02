@@ -16,6 +16,10 @@ coverage/
 **/keystore.properties
 android/local.properties
 
+# Cloud Functions build output
+functions/lib/
+functions/node_modules/
+
 # IDE
 .idea/
 *.iml

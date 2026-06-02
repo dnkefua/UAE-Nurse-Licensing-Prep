@@ -1,0 +1,26 @@
+{
+  "name": "uae-nurse-prep-functions",
+  "private": true,
+  "description": "Firebase Cloud Functions — UAE Nurse Prep API",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.0.0",
+    "typescript": "~5.5.0"
+  }
+}

@@ -195,6 +195,13 @@ service cloud.firestore {
       allow delete: if isSignedIn() && (request.auth.uid == existing().hostId);
     }
 
+    // -- App Config (access code stored by Cloud Function Admin SDK) --
+    match /appConfig/{docId} {
+      // Admins can read the code via the /api/admin/get-code Cloud Function.
+      // Client apps have no direct read/write access — Admin SDK bypasses these rules.
+      allow read, write: if false;
+    }
+
     // -- Test Attempts Rules (Diagnostic logs) --
     match /testAttempts/{attemptId} {
       // Secure list query limits
