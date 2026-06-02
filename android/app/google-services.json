@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "150095309221",
+    "project_id": "uae-nurse-licensing-prep-feb76",
+    "storage_bucket": "uae-nurse-licensing-prep-feb76.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150095309221:android:f53fb6ca6c9be12fcbe04c",
+        "android_client_info": {
+          "package_name": "com.ndnanalytics.uaenurseprep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150095309221-44hg2adskabe8e5qgctgavp5u77lck5k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ndnanalytics.uaenurseprep",
+            "certificate_hash": "347118001b74b612581ab001182a3f6e00b056a0"
+          }
+        },
+        {
+          "client_id": "150095309221-btv8cba0tm12bac1142eh0gqlpfeuhu2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXRJpesQXZH_6BgsxSlJ63Lxw6_LX4rcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150095309221-btv8cba0tm12bac1142eh0gqlpfeuhu2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "150095309221-27l3veh9m5qtggtumensrs0nnm774qmu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ndnanalytics.uaenurseprep"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

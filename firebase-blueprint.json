@@ -1,0 +1,110 @@
+{
+  "entities": {
+    "userProfile": {
+      "title": "UserProfile",
+      "description": "Stores personalized progress, milestone tracker, target exam details, and streaks of a nurse student.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Owner user authenticated id." },
+        "displayName": { "type": "string" },
+        "targetExam": { "type": "string", "enum": ["DHA", "MOH", "HAAD_DOH"] },
+        "examDate": { "type": "string", "format": "date-time" },
+        "registeredForExam": { "type": "boolean" },
+        "studyHoursGoal": { "type": "integer" },
+        "completedMilestones": { "type": "array" },
+        "currentStreak": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "targetExam", "examDate", "registeredForExam", "studyHoursGoal", "completedMilestones", "currentStreak", "createdAt", "updatedAt"]
+    },
+    "forumPost": {
+      "title": "ForumPost",
+      "description": "A collaborative peer support category discussion post.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "category": { "type": "string", "enum": ["Licensing", "Study Notes", "Exam Tips", "Mentorship"] },
+        "commentsCount": { "type": "integer" },
+        "likes": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "content", "authorId", "authorName", "category", "commentsCount", "likes", "createdAt", "updatedAt"]
+    },
+    "forumComment": {
+      "title": "ForumComment",
+      "description": "Comment detail of a collaborative forum post discussion.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "postId": { "type": "string" },
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "postId", "content", "authorId", "authorName", "createdAt"]
+    },
+    "studySession": {
+      "title": "StudySession",
+      "description": "Study calendar event representing standard sessions or live expert Q&As.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "dateTime": { "type": "string", "format": "date-time" },
+        "duration": { "type": "integer" },
+        "topic": { "type": "string" },
+        "hostId": { "type": "string" },
+        "hostName": { "type": "string" },
+        "attendees": { "type": "array" },
+        "isExpertQA": { "type": "boolean" },
+        "expertName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "dateTime", "duration", "topic", "hostId", "hostName", "attendees", "isExpertQA", "createdAt"]
+    },
+    "testAttempt": {
+      "title": "TestAttempt",
+      "description": "Practice test scoring logs used to generate charts and trends.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "examType": { "type": "string", "enum": ["DHA", "MOH", "HAAD_DOH"] },
+        "score": { "type": "integer" },
+        "correctAnswers": { "type": "integer" },
+        "totalQuestions": { "type": "integer" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "examType", "score", "correctAnswers", "totalQuestions", "completedAt"]
+    }
+  },
+  "firestore": {
+    "userProfiles/{userId}": {
+      "schema": { "$ref": "#/entities/userProfile" },
+      "description": "User custom targets and profile milestones"
+    },
+    "forumPosts/{postId}": {
+      "schema": { "$ref": "#/entities/forumPost" },
+      "description": "Primary parent collection for discussions"
+    },
+    "forumPosts/{postId}/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/forumComment" },
+      "description": "Subcollection containing nested peer comments"
+    },
+    "studySessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/studySession" },
+      "description": "Collaborative calendar event bookings"
+    },
+    "testAttempts/{attemptId}": {
+      "schema": { "$ref": "#/entities/testAttempt" },
+      "description": "Exams diagnostic progress scoring logs"
+    }
+  }
+}

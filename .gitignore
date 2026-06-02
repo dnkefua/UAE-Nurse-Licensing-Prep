@@ -1,0 +1,20 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Firebase local cache
+.firebase/
+
+# Android signing keys — never commit keystores or passwords
+*.keystore
+*.jks
+android/local.properties
+
+# IDE
+.idea/
+*.iml

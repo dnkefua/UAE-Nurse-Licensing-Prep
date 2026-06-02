@@ -1,0 +1,6 @@
+{
+  "name": "UAE Nurse Licensing Prep",
+  "description": "Interactive study companion for nurses preparing for UAE professional licensing sittings (DHA, MOH, HAAD / DOH). Evaluates case questions, hosts study guides, monitors milestone goals, coordinates peer mentorship discuss channels, and features a senior AI clinical coach.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

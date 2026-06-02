@@ -1,0 +1,209 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Catch-All Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Hardened Primitives & Identity Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // 3. Entity-specific Validator Blueprints (Eight Pillars of Hardened Schema)
+
+    function isValidUserProfile(data) {
+      return data.uid is string 
+        && data.uid == request.auth.uid
+        && data.displayName is string 
+        && data.displayName.size() > 0 
+        && data.displayName.size() <= 100
+        && data.targetExam is string 
+        && (data.targetExam == 'DHA' || data.targetExam == 'MOH' || data.targetExam == 'HAAD_DOH')
+        && data.examDate is string
+        && data.examDate.size() <= 64
+        && data.registeredForExam is bool
+        && data.studyHoursGoal is int
+        && data.studyHoursGoal >= 0
+        && data.studyHoursGoal <= 1000
+        && data.completedMilestones is list
+        && data.completedMilestones.size() <= 30
+        && data.currentStreak is int
+        && data.currentStreak >= 0;
+    }
+
+    function isValidForumPost(data) {
+      return data.id is string
+        && data.id.size() <= 128
+        && data.title is string
+        && data.title.size() > 0
+        && data.title.size() <= 200
+        && data.content is string
+        && data.content.size() > 0
+        && data.content.size() <= 5000
+        && data.authorId is string
+        && data.authorId == request.auth.uid
+        && data.authorName is string
+        && data.authorName.size() > 0
+        && data.authorName.size() <= 100
+        && data.category is string
+        && (data.category == 'Licensing' || data.category == 'Study Notes' || data.category == 'Exam Tips' || data.category == 'Mentorship')
+        && data.commentsCount is int
+        && data.commentsCount >= 0
+        && data.likes is list
+        && data.likes.size() <= 10000;
+    }
+
+    function isValidForumComment(data) {
+      return data.id is string
+        && data.id.size() <= 128
+        && data.postId is string
+        && data.postId.size() <= 128
+        && data.content is string
+        && data.content.size() > 0
+        && data.content.size() <= 1500
+        && data.authorId is string
+        && data.authorId == request.auth.uid
+        && data.authorName is string
+        && data.authorName.size() > 0
+        && data.authorName.size() <= 100;
+    }
+
+    function isValidStudySession(data) {
+      return data.id is string
+        && data.id.size() <= 128
+        && data.title is string
+        && data.title.size() > 0
+        && data.title.size() <= 200
+        && data.dateTime is string
+        && data.dateTime.size() <= 64
+        && data.duration is int
+        && data.duration >= 5
+        && data.duration <= 480
+        && data.topic is string
+        && data.topic.size() <= 100
+        && data.hostId is string
+        && data.hostName is string
+        && data.hostName.size() <= 100
+        && data.attendees is list
+        && data.attendees.size() <= 100
+        && data.isExpertQA is bool;
+    }
+
+    function isValidTestAttempt(data) {
+      return data.id is string
+        && data.id.size() <= 128
+        && data.userId is string
+        && data.userId == request.auth.uid
+        && data.examType is string
+        && (data.examType == 'DHA' || data.examType == 'MOH' || data.examType == 'HAAD_DOH')
+        && data.score is int
+        && data.score >= 0
+        && data.score <= 100
+        && data.correctAnswers is int
+        && data.correctAnswers >= 0
+        && data.totalQuestions is int
+        && data.totalQuestions > 0;
+    }
+
+    // 4. Matches for Secured Collections
+
+    // -- User Profiles Rules --
+    match /userProfiles/{userId} {
+      allow get: if isSignedIn() && (isOwner(userId) || resource == null);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming()) 
+        && incoming().createdAt == request.time;
+      allow update: if isOwner(userId) && isValidUserProfile(incoming()) 
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action: Daily Streak / Target Exam / Progress Update
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'displayName', 'targetExam', 'examDate', 'registeredForExam', 
+            'studyHoursGoal', 'completedMilestones', 'currentStreak', 'updatedAt'
+          ])
+        );
+      allow delete: if isOwner(userId);
+    }
+
+    // -- Forum Posts Rules (Peer support discussions) --
+    match /forumPosts/{postId} {
+      allow read: if isSignedIn();
+      allow get: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(postId) && isValidForumPost(incoming())
+        && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidForumPost(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().authorId == existing().authorId
+        && incoming().updatedAt == request.time
+        && (
+          // Action 1: Self-edit Post content
+          (request.auth.uid == existing().authorId && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'content', 'category', 'updatedAt'])) ||
+          // Action 2: Collaborative Upvote / Like
+          (incoming().diff(existing()).affectedKeys().hasOnly(['likes', 'updatedAt'])) ||
+          // Action 3: Incremented Comment Counter
+          (incoming().diff(existing()).affectedKeys().hasOnly(['commentsCount', 'updatedAt']))
+        );
+      allow delete: if isSignedIn() && (request.auth.uid == existing().authorId);
+    }
+
+    // -- Forum Comments Rules (Sub-collection of Forum Posts) --
+    match /forumPosts/{postId}/comments/{commentId} {
+      allow read: if isSignedIn();
+      allow get: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(commentId) && isValidForumComment(incoming())
+        && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && request.auth.uid == existing().authorId && isValidForumComment(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().postId == existing().postId
+        && incoming().authorId == existing().authorId
+        && incoming().diff(existing()).affectedKeys().hasOnly(['content']);
+      allow delete: if isSignedIn() && (request.auth.uid == existing().authorId);
+    }
+
+    // -- Study Sessions Rules (Collaborative Calendar) --
+    match /studySessions/{sessionId} {
+      allow read: if isSignedIn();
+      allow get: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(sessionId) && isValidStudySession(incoming())
+        && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidStudySession(incoming())
+        && (
+          // Action 1: Edit Event (Only original Host has host edit rights)
+          (request.auth.uid == existing().hostId && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'dateTime', 'duration', 'topic'])) ||
+          // Action 2: Study Join/Leave (Any user can toggle their own presence in attendees list)
+          (incoming().diff(existing()).affectedKeys().hasOnly(['attendees']))
+        );
+      allow delete: if isSignedIn() && (request.auth.uid == existing().hostId);
+    }
+
+    // -- Test Attempts Rules (Diagnostic logs) --
+    match /testAttempts/{attemptId} {
+      // Secure list query limits
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(attemptId) && isValidTestAttempt(incoming())
+        && incoming().completedAt == request.time;
+      // Diagnostic outputs are permanent logs -- block client-side updates/deletes to assure absolute study tracking integrity
+      allow update, delete: if false;
+    }
+  }
+}
