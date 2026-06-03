@@ -84,7 +84,7 @@ Your goal is to provide concise, accurate, and extremely clear explanations for 
 - Instructions: Use well-formatted bullet points, cite general UAE healthcare policies when relevant, and provide key takeaways for exam-day success. Keep answers within 250-400 words. Keep it scannable.`;
 
     const response = await client.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       contents: `Exam Type: ${examType ?? 'DHA'} Nurse Practice Exam\nContext: ${context ?? 'None'}\nQuestion/Topic: ${prompt}`,
       config: { systemInstruction, temperature: 0.7 }
     });
