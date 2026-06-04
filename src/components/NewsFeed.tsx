@@ -183,16 +183,14 @@ function sanitizeHtml(container: HTMLElement, baseUrl: string): string {
 
 /** Find the main readable content block in a parsed document */
 function extractMainContent(doc: Document): HTMLElement | null {
-  // Prefer a semantic <article> with substantial text
-  const article = doc.querySelector('article');
-  if (article && (article.textContent || '').trim().length > 350) {
-    return article as HTMLElement;
-  }
-
-  // Otherwise score candidate containers by total paragraph text length
+  // Score every plausible content container by the length of its paragraph text.
+  // (Pages like WordPress blogs have many <article> tags — pick the richest one.)
   const candidates = Array.from(
     doc.querySelectorAll(
-      'main, [role="main"], .article-content, .article-body, .entry-content, .post-content, .story-body, .content__article-body, article, section, div'
+      'article, main, [role="main"], [itemprop="articleBody"], ' +
+      '.article-content, .article-body, .articleBody, .entry-content, .post-content, ' +
+      '.story-body, .story__content, .content__article-body, .post__content, ' +
+      '.c-article-body, .rich-text, .article__body, section, div'
     )
   );
 
@@ -203,13 +201,19 @@ function extractMainContent(doc: Document): HTMLElement | null {
     if (ps.length < 2) continue;
     let score = 0;
     ps.forEach(p => { score += (p.textContent || '').trim().length; });
-    // Penalize obviously navigational/comment containers
-    const cls = (c.className || '').toString().toLowerCase();
-    if (/comment|sidebar|related|promo|footer|nav|share/.test(cls)) score *= 0.3;
+    const cls = (c.className || '').toString().toLowerCase() + ' ' + (c.id || '').toLowerCase();
+    // Penalise navigational / promotional / comment / related containers
+    if (/comment|sidebar|related|promo|footer|nav|share|recirc|newsletter|widget|teaser|card/.test(cls)) score *= 0.25;
+    // Reward obvious article containers
+    if (/article|entry|post|story|content|rich-text/.test(cls)) score *= 1.3;
     if (score > bestScore) { bestScore = score; best = c as HTMLElement; }
   }
 
-  if (bestScore > 350) return best;
+  if (best && bestScore > 300) return best;
+
+  // Last resort: a single semantic <article>, else the body
+  const article = doc.querySelector('article');
+  if (article && (article.textContent || '').trim().length > 300) return article as HTMLElement;
   return doc.body as HTMLElement;
 }
 

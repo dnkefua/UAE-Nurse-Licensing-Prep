@@ -82,27 +82,31 @@ const rssParser = new Parser({
 
 interface FeedDef { url: string; label: string; flag: string; region: string; }
 
-// Direct publisher feeds give real article URLs that read fully in-app with
-// images. Google News feeds add freshness/volume (those open via the source link).
+// Direct publisher feeds only — every item is a real article URL that opens and
+// reads fully in-app with images. (Google News redirect links were removed: they
+// only resolve in a full browser via JS and can't be read inside the app.)
 const NEWS_FEEDS: Record<string, FeedDef[]> = {
   africa: [
     { url: 'https://theconversation.com/africa/topics/health-33/articles.atom', label: 'The Conversation', flag: '🌍', region: 'africa' },
     { url: 'https://reliefweb.int/updates/rss.xml?search=health%20Africa%20nurse', label: 'ReliefWeb', flag: '🌍', region: 'africa' },
-    { url: 'https://news.google.com/rss/search?q=africa+health+OR+nursing+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌍', region: 'africa' },
-    { url: 'https://news.google.com/rss/search?q=Nigeria+OR+Kenya+OR+Ghana+OR+%22South+Africa%22+health+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌍', region: 'africa' },
+    { url: 'https://healthpolicy-watch.news/feed/', label: 'Health Policy Watch', flag: '🌍', region: 'africa' },
+    { url: 'https://www.afro.who.int/rss.xml', label: 'WHO Africa', flag: '🌍', region: 'africa' },
   ],
   global: [
     { url: 'https://www.who.int/rss-feeds/news-english.xml', label: 'WHO', flag: '🌐', region: 'global' },
     { url: 'https://feeds.bbci.co.uk/news/health/rss.xml', label: 'BBC Health', flag: '🇬🇧', region: 'global' },
     { url: 'https://theconversation.com/global/topics/health-1/articles.atom', label: 'The Conversation', flag: '🌐', region: 'global' },
-    { url: 'https://news.google.com/rss/search?q=health+OR+medicine+when:4d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌐', region: 'global' },
+    { url: 'https://www.statnews.com/feed/', label: 'STAT News', flag: '🔬', region: 'global' },
+    { url: 'https://feeds.npr.org/1128/rss.xml', label: 'NPR Health', flag: '🇺🇸', region: 'global' },
+    { url: 'https://www.medicalnewstoday.com/rss', label: 'Medical News Today', flag: '🔬', region: 'global' },
   ],
   nursing: [
     { url: 'https://www.myamericannurse.com/feed/', label: 'American Nurse', flag: '🏥', region: 'nursing' },
     { url: 'https://dailynurse.com/feed/', label: 'Daily Nurse', flag: '🩺', region: 'nursing' },
     { url: 'https://nurse.org/feed/', label: 'Nurse.org', flag: '💊', region: 'nursing' },
-    { url: 'https://news.google.com/rss/search?q=nursing+OR+nurses+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🏥', region: 'nursing' },
-    { url: 'https://news.google.com/rss/search?q=NCLEX+OR+%22DHA+exam%22+OR+%22nurse+licensing%22+UAE+when:30d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '💊', region: 'nursing' },
+    { url: 'https://minoritynurse.com/feed/', label: 'Minority Nurse', flag: '🩺', region: 'nursing' },
+    { url: 'https://www.nursingtimes.net/feed', label: 'Nursing Times', flag: '🏥', region: 'nursing' },
+    { url: 'https://nursejournal.org/feed/', label: 'NurseJournal', flag: '💊', region: 'nursing' },
   ],
 };
 
