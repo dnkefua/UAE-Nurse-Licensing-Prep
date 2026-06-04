@@ -5,9 +5,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Video, VideoOff, Mic, MicOff, PhoneOff, Calendar, Clock,
-  MessageSquare, Send, BookOpen, Sparkles, CheckCircle2,
-  Link2, Copy, ExternalLink, Users
+  Video, PhoneOff, Calendar, Clock, MessageSquare, Send, BookOpen,
+  Sparkles, CheckCircle2, Link2, Copy, ExternalLink, Users, Loader2
 } from 'lucide-react';
 
 interface Booking {
@@ -19,16 +18,15 @@ interface Booking {
   time: string;
   topic: string;
   status: 'scheduled' | 'live' | 'completed';
-  meetingCode: string; // unique Jitsi room code
+  meetingCode: string;
 }
 
-// Generate a pronounceable, unique room code
+// Generate a unique, readable room code
 function genMeetingCode(): string {
-  const prefix = 'UAENurse';
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
   for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return `${prefix}-${code}`;
+  return `UAENurse-${code}`;
 }
 
 function getMeetingLink(code: string): string {
@@ -62,77 +60,12 @@ export default function Consultation() {
   ]);
 
   const [activeCallBooking, setActiveCallBooking] = useState<Booking | null>(null);
-
-  // ── Webcam state ──────────────────────────────────────────────────────────
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [isCamOn, setIsCamOn] = useState(true);
-  const [isMicOn, setIsMicOn] = useState(true);
-  const [cameraError, setCameraError] = useState<string | null>(null);
-
-  // Fix: attach stream to <video> via a dedicated effect so the element
-  // is guaranteed to be in the DOM when srcObject is assigned.
-  useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream;
-    }
-  }, [stream]);
-
-  const startCamera = async () => {
-    setCameraError(null);
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user' },
-        audio: true
-      });
-      setStream(mediaStream);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      if (msg.includes('Permission denied') || msg.includes('NotAllowedError')) {
-        setCameraError('Camera access was denied. Allow camera access in your browser settings and re-enter the room.');
-      } else if (msg.includes('NotFoundError') || msg.includes('DevicesNotFoundError')) {
-        setCameraError('No camera found. Connect a webcam and try again.');
-      } else {
-        setCameraError('Could not start camera. Check browser permissions.');
-      }
-    }
-  };
-
-  const stopCamera = () => {
-    if (stream) {
-      stream.getTracks().forEach(t => t.stop());
-      setStream(null);
-    }
-  };
-
-  useEffect(() => {
-    if (activeCallBooking) {
-      startCamera();
-    } else {
-      stopCamera();
-    }
-    return () => {
-      stream?.getTracks().forEach(t => t.stop());
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeCallBooking]);
-
-  const toggleCamera = () => {
-    stream?.getVideoTracks().forEach(t => { t.enabled = !isCamOn; });
-    setIsCamOn(v => !v);
-  };
-
-  const toggleMic = () => {
-    stream?.getAudioTracks().forEach(t => { t.enabled = !isMicOn; });
-    setIsMicOn(v => !v);
-  };
+  const [callLoading, setCallLoading] = useState(false);
 
   // ── Copy-link toast ───────────────────────────────────────────────────────
   const [copiedId, setCopiedId] = useState<string | null>(null);
-
   const copyLink = (booking: Booking) => {
-    const link = getMeetingLink(booking.meetingCode);
-    navigator.clipboard.writeText(link).then(() => {
+    navigator.clipboard.writeText(getMeetingLink(booking.meetingCode)).then(() => {
       setCopiedId(booking.id);
       setTimeout(() => setCopiedId(null), 2500);
     });
@@ -230,6 +163,17 @@ export default function Consultation() {
     "● MgSO₄ toxicity antidote → CALCIUM GLUCONATE"
   );
 
+  // ── Enter / leave call ──────────────────────────────────────────────────────
+  const enterCall = (b: Booking) => {
+    setCallLoading(true);
+    setActiveCallBooking(b);
+  };
+
+  // Build the in-app Jitsi embed URL (skips the prejoin page, sets a display name)
+  const jitsiSrc = activeCallBooking
+    ? `${getMeetingLink(activeCallBooking.meetingCode)}#config.prejoinPageEnabled=false&config.disableDeepLinking=true&userInfo.displayName=%22Centered%20Nurse%20Academy%22`
+    : '';
+
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <div className="space-y-6 animate-fade-in text-slate-900 pb-12">
@@ -242,7 +186,7 @@ export default function Consultation() {
             1-on-1 Video Consultation &amp; Mentorship
           </h2>
           <p className="text-xs text-slate-500">
-            Connect with UAE nursing educators. Generate a meeting link and share it with your student — they join instantly, no account needed.
+            Live video calls run inside the app. Generate a meeting link, share it with your student, and they join instantly — no account or download.
           </p>
         </div>
         {activeCallBooking && (
@@ -281,7 +225,6 @@ export default function Consultation() {
                       }`}
                     >
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                        {/* Left info */}
                         <div className="flex items-start gap-3 flex-1 min-w-0">
                           <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-xl shrink-0">
                             {item.avatar}
@@ -321,35 +264,24 @@ export default function Consultation() {
                               >
                                 {copiedId === item.id
                                   ? <><CheckCircle2 className="w-3 h-3" /> Copied!</>
-                                  : <><Copy className="w-3 h-3" /> Copy Link</>
-                                }
+                                  : <><Copy className="w-3 h-3" /> Copy Link</>}
                               </button>
-                              <a
-                                href={getMeetingLink(item.meetingCode)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono bg-slate-100 border border-slate-200 text-slate-600 hover:bg-slate-200 transition-all"
-                              >
-                                <ExternalLink className="w-3 h-3" /> Open
-                              </a>
                             </div>
                           </div>
                         </div>
 
                         {/* Right actions */}
                         <div className="flex sm:flex-col items-stretch justify-end gap-2 shrink-0">
-                          {item.status === 'live' ? (
-                            <button
-                              onClick={() => setActiveCallBooking(item)}
-                              className="py-2 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md animate-bounce text-center"
-                            >
-                              Enter Room
-                            </button>
-                          ) : (
-                            <span className="text-[10px] font-mono text-center font-semibold border border-slate-200 text-slate-600 bg-white px-2.5 py-1 rounded-lg">
-                              Confirmed
-                            </span>
-                          )}
+                          <button
+                            onClick={() => enterCall(item)}
+                            className={`py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md text-center text-white ${
+                              item.status === 'live'
+                                ? 'bg-rose-600 hover:bg-rose-700 animate-bounce'
+                                : 'bg-blue-600 hover:bg-blue-700'
+                            }`}
+                          >
+                            Join Video Call
+                          </button>
                           <button
                             onClick={() => setBookings(prev => prev.filter(b => b.id !== item.id))}
                             className="text-[10px] text-center font-mono font-semibold text-slate-400 hover:text-rose-600 cursor-pointer py-1"
@@ -368,11 +300,10 @@ export default function Consultation() {
             <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex items-start gap-4 text-xs leading-relaxed text-slate-700">
               <Users className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <h4 className="font-bold text-slate-800">How meeting links work</h4>
+                <h4 className="font-bold text-slate-800">How the video room works</h4>
                 <p className="text-[11px] text-slate-600">
-                  Each session generates a unique video room link. Copy it and send to your student via WhatsApp, email, or any messenger.
-                  They click the link and join instantly — no sign-in or app download required.
-                  You can also enter the room yourself using "Enter Room" above.
+                  Tap <strong>Join Video Call</strong> to open the live HD room right inside this app — your camera and microphone work directly here.
+                  Share the meeting link with your student via WhatsApp, email, or any messenger; they tap it and join instantly in their browser.
                 </p>
                 <p className="text-[10px] font-mono text-blue-600 font-semibold pt-1">
                   💡 Admin access: loveline082022@gmail.com / uncledez8@gmail.com
@@ -466,152 +397,69 @@ export default function Consultation() {
 
         </div>
       ) : (
-        /* ═══════════════════ CALL ROOM ═══════════════════ */
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch min-h-[520px]">
+        /* ═══════════════════ CALL ROOM (in-app Jitsi) ═══════════════════ */
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch min-h-[560px]">
 
           {/* Video area (8 cols) */}
-          <div className="lg:col-span-8 flex flex-col gap-4 bg-slate-950 border border-slate-800 rounded-3xl p-5 text-slate-100 shadow-xl">
+          <div className="lg:col-span-8 flex flex-col gap-3">
 
-            {/* Meeting link banner inside room */}
-            <div className="flex items-center gap-3 bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2.5">
-              <Link2 className="w-4 h-4 text-blue-400 shrink-0" />
-              <span className="text-[10px] font-mono text-slate-400 flex-1">Student meeting link:</span>
-              <span className="text-[10px] font-mono text-blue-300 font-bold truncate max-w-[200px]">
+            {/* Meeting link banner */}
+            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm flex-wrap">
+              <Link2 className="w-4 h-4 text-blue-500 shrink-0" />
+              <span className="text-[10px] font-mono text-slate-400">Student link:</span>
+              <span className="text-[10px] font-mono text-blue-700 font-bold truncate max-w-[180px]">
                 {getMeetingLink(activeCallBooking.meetingCode)}
               </span>
               <button
                 onClick={() => copyLink(activeCallBooking)}
-                className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono transition-all cursor-pointer ${
+                className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono transition-all cursor-pointer ml-auto ${
                   copiedId === activeCallBooking.id
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-blue-700 hover:bg-blue-600 text-white'
+                    ? 'bg-emerald-100 border border-emerald-300 text-emerald-700'
+                    : 'bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100'
                 }`}
               >
                 {copiedId === activeCallBooking.id
                   ? <><CheckCircle2 className="w-3 h-3" /> Copied!</>
-                  : <><Copy className="w-3 h-3" /> Copy</>
-                }
+                  : <><Copy className="w-3 h-3" /> Copy &amp; Send</>}
               </button>
               <a
                 href={getMeetingLink(activeCallBooking.meetingCode)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 flex items-center gap-1 px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-[10px] font-bold font-mono transition-all"
+                className="shrink-0 flex items-center gap-1 px-2.5 py-1 bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold font-mono transition-all"
               >
-                <ExternalLink className="w-3 h-3" /> Open Call
+                <ExternalLink className="w-3 h-3" /> Open externally
               </a>
             </div>
 
-            {/* Webcam split */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-
-              {/* Educator panel (simulated) */}
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden relative min-h-[220px] flex items-center justify-center">
-                <div className="text-center space-y-3 z-10 p-4">
-                  <div className="w-16 h-16 rounded-full bg-blue-600 border-2 border-white/40 flex items-center justify-center text-3xl mx-auto shadow-lg animate-pulse">
-                    {activeCallBooking.avatar}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xs tracking-wide">{activeCallBooking.educator}</h4>
-                    <p className="text-[10px] text-emerald-400 font-mono flex items-center justify-center gap-1 mt-0.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                      Connected
-                    </p>
-                  </div>
-                  <a
-                    href={getMeetingLink(activeCallBooking.meetingCode)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold font-mono transition-all mt-1"
-                  >
-                    <ExternalLink className="w-3 h-3" /> Join Full Video Call
-                  </a>
+            {/* In-app Jitsi iframe */}
+            <div className="relative flex-1 min-h-[420px] bg-slate-950 rounded-3xl overflow-hidden border border-slate-800 shadow-xl">
+              {callLoading && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-slate-950 text-slate-300">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+                  <p className="text-xs font-mono">Connecting to secure video room…</p>
+                  <p className="text-[10px] text-slate-500">Allow camera &amp; microphone access when prompted</p>
                 </div>
-                <div className="absolute inset-x-0 bottom-0 py-1 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-center gap-1 px-4 text-[10px] font-mono text-emerald-400">
-                  <span className="w-1 h-3 bg-emerald-500 rounded-sm animate-bounce" style={{ animationDelay: '0.1s' }} />
-                  <span className="w-1 h-4 bg-emerald-500 rounded-sm animate-bounce" style={{ animationDelay: '0.2s' }} />
-                  <span className="w-1 h-2 bg-emerald-500 rounded-sm animate-bounce" style={{ animationDelay: '0.3s' }} />
-                  <span className="w-1 h-5 bg-emerald-500 rounded-sm animate-bounce" style={{ animationDelay: '0.4s' }} />
-                  <span>Educator channel active</span>
-                </div>
-                <div className="absolute bottom-3 right-3 bg-black/60 px-2 py-0.5 rounded text-[10px] font-mono text-slate-400">
-                  EDUCATOR
-                </div>
-              </div>
-
-              {/* Local camera panel */}
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden relative min-h-[220px] flex items-center justify-center">
-                {isCamOn ? (
-                  stream ? (
-                    <video
-                      ref={videoRef}
-                      autoPlay
-                      playsInline
-                      muted
-                      className="w-full h-full object-cover scale-x-[-1]"
-                    />
-                  ) : (
-                    <div className="text-center space-y-3 p-4">
-                      <div className="w-12 h-12 rounded-full bg-rose-600/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-xl mx-auto">
-                        👤
-                      </div>
-                      <p className="text-xs font-semibold text-slate-300">Starting camera…</p>
-                      {cameraError ? (
-                        <p className="text-[10px] text-rose-400 font-mono max-w-[200px] leading-snug">{cameraError}</p>
-                      ) : (
-                        <p className="text-[9px] text-slate-500">Allow camera access when your browser prompts.</p>
-                      )}
-                      <button
-                        onClick={startCamera}
-                        className="mt-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold font-mono cursor-pointer transition-all"
-                      >
-                        Retry Camera
-                      </button>
-                    </div>
-                  )
-                ) : (
-                  <div className="text-center space-y-2 p-4">
-                    <VideoOff className="w-10 h-10 text-rose-400 mx-auto" />
-                    <p className="text-xs text-rose-400 font-mono">CAMERA OFF</p>
-                  </div>
-                )}
-                <div className="absolute bottom-3 right-3 bg-black/60 px-2 py-0.5 rounded text-[10px] font-mono text-slate-400">
-                  YOU {isCamOn ? '● ON' : '✕ OFF'}
-                </div>
-              </div>
+              )}
+              <iframe
+                key={activeCallBooking.meetingCode}
+                src={jitsiSrc}
+                title="In-app video consultation"
+                onLoad={() => setCallLoading(false)}
+                allow="camera; microphone; fullscreen; display-capture; autoplay; clipboard-write; speaker-selection"
+                className="w-full h-full border-0"
+              />
             </div>
 
-            {/* Controls bar */}
-            <div className="bg-slate-900/80 border border-slate-800 px-5 py-3 rounded-2xl flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={toggleMic}
-                  title={isMicOn ? 'Mute' : 'Unmute'}
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer transition-all ${
-                    isMicOn ? 'bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-700'
-                            : 'bg-rose-900/80 border border-rose-700 text-rose-300 animate-pulse'
-                  }`}
-                >
-                  {isMicOn ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-                </button>
-                <button
-                  onClick={toggleCamera}
-                  title={isCamOn ? 'Stop Camera' : 'Start Camera'}
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer transition-all ${
-                    isCamOn ? 'bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-700'
-                            : 'bg-rose-900/80 border border-rose-700 text-rose-300 animate-pulse'
-                  }`}
-                >
-                  {isCamOn ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4" />}
-                </button>
-              </div>
-              <div className="hidden md:flex flex-col items-center text-center">
-                <span className="text-[10px] font-mono text-slate-400 uppercase">Topic</span>
-                <span className="text-xs font-semibold text-rose-400 truncate max-w-[260px]">{activeCallBooking.topic}</span>
+            {/* Footer controls */}
+            <div className="bg-white border border-slate-200 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-3 shadow-sm">
+              <div className="flex flex-col">
+                <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider">Session Topic</span>
+                <span className="text-xs font-semibold text-slate-700 truncate max-w-[280px]">{activeCallBooking.topic}</span>
               </div>
               <button
                 onClick={() => setActiveCallBooking(null)}
-                className="py-2 px-5 bg-rose-600 hover:bg-rose-700 rounded-xl text-xs font-extrabold text-white cursor-pointer flex items-center gap-1.5 transition-all shadow shadow-rose-900/20"
+                className="py-2 px-5 bg-rose-600 hover:bg-rose-700 rounded-xl text-xs font-extrabold text-white cursor-pointer flex items-center gap-1.5 transition-all shadow"
               >
                 <PhoneOff className="w-3.5 h-3.5" /> End Call
               </button>
@@ -622,10 +470,10 @@ export default function Consultation() {
           <div className="lg:col-span-4 flex flex-col gap-4">
 
             {/* Whiteboard */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col shadow-sm flex-1 min-h-[220px]">
+            <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col shadow-sm flex-1 min-h-[200px]">
               <h3 className="text-xs font-bold font-mono tracking-wider text-slate-800 uppercase flex items-center justify-between gap-1 border-b border-slate-100 pb-2 mb-3">
                 <span className="flex items-center gap-1.5"><BookOpen className="w-4 h-4 text-emerald-600" /> Whiteboard</span>
-                <span className="text-[9px] px-1.5 py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold uppercase">Shared</span>
+                <span className="text-[9px] px-1.5 py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold uppercase">Notes</span>
               </h3>
               <textarea
                 value={whiteboardNotes}
@@ -636,7 +484,7 @@ export default function Consultation() {
             </div>
 
             {/* Chat */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col shadow-sm flex-1 min-h-[260px]">
+            <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col shadow-sm flex-1 min-h-[240px]">
               <h3 className="text-xs font-bold font-mono tracking-wider text-slate-800 uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 mb-3">
                 <MessageSquare className="w-4 h-4 text-blue-600" /> Live Chat
               </h3>

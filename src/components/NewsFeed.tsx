@@ -6,7 +6,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Newspaper, RefreshCw, ExternalLink, Play, Globe,
-  AlertCircle, Clock, ChevronRight, Tv2, Stethoscope, Heart
+  AlertCircle, Clock, ChevronRight, Tv2, Stethoscope, Heart,
+  X, BookOpen, Loader2
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -198,6 +199,135 @@ async function fetchFeed(source: FeedSource): Promise<NewsItem[]> {
   return parseXML(xml, source);
 }
 
+// ─── In-app article reader: fetch + extract + sanitize ─────────────────────────
+
+function absolutize(url: string, base: string): string {
+  try { return new URL(url, base).href; } catch { return url; }
+}
+
+// Tags we allow to survive sanitization (everything else is unwrapped/removed)
+const ALLOWED_TAGS = new Set([
+  'P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'LI', 'BLOCKQUOTE',
+  'STRONG', 'EM', 'B', 'I', 'A', 'IMG', 'FIGURE', 'FIGCAPTION', 'BR', 'SPAN',
+  'TABLE', 'THEAD', 'TBODY', 'TR', 'TD', 'TH', 'HR', 'PRE', 'CODE', 'SUB', 'SUP'
+]);
+
+/**
+ * Sanitize untrusted HTML before rendering with dangerouslySetInnerHTML.
+ * - Removes script/style/iframe/form and all event-handler attributes
+ * - Strips every attribute except a tiny whitelist (a[href], img[src|alt])
+ * - Neutralizes javascript: URLs, forces external links to open safely
+ * - Resolves relative image/link URLs against the article origin
+ */
+function sanitizeHtml(container: HTMLElement, baseUrl: string): string {
+  // 1. Remove dangerous / chrome elements entirely
+  container
+    .querySelectorAll('script,style,iframe,noscript,object,embed,form,button,input,svg,link,meta,nav,header,footer,aside,video,audio')
+    .forEach(el => el.remove());
+
+  // 2. Clean attributes on every remaining element
+  container.querySelectorAll('*').forEach(el => {
+    const tag = el.tagName;
+    for (const attr of Array.from(el.attributes)) {
+      const name = attr.name.toLowerCase();
+      const keep =
+        (tag === 'A' && name === 'href') ||
+        (tag === 'IMG' && (name === 'src' || name === 'alt'));
+      if (!keep) el.removeAttribute(attr.name);
+    }
+    if (tag === 'A') {
+      const href = el.getAttribute('href') || '';
+      if (/^\s*javascript:/i.test(href)) {
+        el.removeAttribute('href');
+      } else if (href) {
+        el.setAttribute('href', absolutize(href, baseUrl));
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener noreferrer');
+      }
+    }
+    if (tag === 'IMG') {
+      const src = el.getAttribute('src') || '';
+      if (!src || /^\s*javascript:/i.test(src)) {
+        el.remove();
+      } else {
+        el.setAttribute('src', absolutize(src, baseUrl));
+        el.setAttribute('loading', 'lazy');
+      }
+    }
+  });
+
+  // 3. Unwrap any tag not in the whitelist (keep its inner content)
+  let changed = true;
+  let guard = 0;
+  while (changed && guard < 20) {
+    changed = false;
+    guard++;
+    container.querySelectorAll('*').forEach(el => {
+      if (!ALLOWED_TAGS.has(el.tagName)) {
+        const parent = el.parentNode;
+        if (parent) {
+          while (el.firstChild) parent.insertBefore(el.firstChild, el);
+          parent.removeChild(el);
+          changed = true;
+        }
+      }
+    });
+  }
+
+  return container.innerHTML;
+}
+
+/** Find the main readable content block in a parsed document */
+function extractMainContent(doc: Document): HTMLElement | null {
+  // Prefer a semantic <article> with substantial text
+  const article = doc.querySelector('article');
+  if (article && (article.textContent || '').trim().length > 350) {
+    return article as HTMLElement;
+  }
+
+  // Otherwise score candidate containers by total paragraph text length
+  const candidates = Array.from(
+    doc.querySelectorAll(
+      'main, [role="main"], .article-content, .article-body, .entry-content, .post-content, .story-body, .content__article-body, article, section, div'
+    )
+  );
+
+  let best: HTMLElement | null = null;
+  let bestScore = 0;
+  for (const c of candidates) {
+    const ps = c.querySelectorAll('p');
+    if (ps.length < 2) continue;
+    let score = 0;
+    ps.forEach(p => { score += (p.textContent || '').trim().length; });
+    // Penalize obviously navigational/comment containers
+    const cls = (c.className || '').toString().toLowerCase();
+    if (/comment|sidebar|related|promo|footer|nav|share/.test(cls)) score *= 0.3;
+    if (score > bestScore) { bestScore = score; best = c as HTMLElement; }
+  }
+
+  if (bestScore > 350) return best;
+  return doc.body as HTMLElement;
+}
+
+/** Fetch an article URL and return sanitized readable HTML, or null on failure */
+async function fetchArticleContent(url: string): Promise<string | null> {
+  const html = await fetchProxy(url);
+  if (!html) return null;
+  try {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const main = extractMainContent(doc);
+    if (!main) return null;
+    // Clone so we don't mutate the parsed doc references
+    const clone = main.cloneNode(true) as HTMLElement;
+    const safe = sanitizeHtml(clone, url);
+    // Require a minimum amount of real text to count as success
+    const text = safe.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    return text.length > 300 ? safe : null;
+  } catch {
+    return null;
+  }
+}
+
 async function fetchYouTubeChannel(ch: { id: string; name: string; flag: string }): Promise<NewsItem[]> {
   const ytUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${ch.id}`;
   const xml   = await fetchProxy(ytUrl);
@@ -237,12 +367,20 @@ function SkeletonCard() {
 
 // ─── News card ─────────────────────────────────────────────────────────────────
 
-function NewsCard({ item }: { item: NewsItem }) {
+interface NewsCardProps {
+  item: NewsItem;
+  onOpen: (item: NewsItem) => void;
+}
+
+const NewsCard: React.FC<NewsCardProps> = ({ item, onOpen }) => {
   const badge = badgeForRegion(item.region);
   const [imgOk, setImgOk] = useState(!!item.thumbnail);
 
   return (
-    <article className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition-all group flex flex-col h-full">
+    <article
+      onClick={() => onOpen(item)}
+      className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition-all group flex flex-col h-full cursor-pointer"
+    >
       {/* Thumbnail */}
       <div className="relative h-44 shrink-0 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
         {item.thumbnail && imgOk ? (
@@ -296,21 +434,172 @@ function NewsCard({ item }: { item: NewsItem }) {
             {item.snippet}
           </p>
         )}
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`mt-auto self-start inline-flex items-center gap-1 text-[10px] font-bold font-mono uppercase tracking-wider transition-all hover:gap-2 ${
-            item.type === 'video' ? 'text-rose-600 hover:text-rose-700' : 'text-blue-600 hover:text-blue-700'
+        <span
+          className={`mt-auto self-start inline-flex items-center gap-1 text-[10px] font-bold font-mono uppercase tracking-wider transition-all group-hover:gap-2 ${
+            item.type === 'video' ? 'text-rose-600' : 'text-blue-600'
           }`}
         >
           {item.type === 'video'
-            ? <><Play className="w-3 h-3 fill-current" /> Watch</>
-            : <><ChevronRight className="w-3 h-3" /> Read More</>}
-          <ExternalLink className="w-2.5 h-2.5 opacity-50" />
-        </a>
+            ? <><Play className="w-3 h-3 fill-current" /> Watch in App</>
+            : <><BookOpen className="w-3 h-3" /> Read in App</>}
+          <ChevronRight className="w-3 h-3" />
+        </span>
       </div>
     </article>
+  );
+};
+
+// ─── In-app Reader / Player modal ──────────────────────────────────────────────
+
+function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void }) {
+  const [html, setHtml]       = useState<string | null>(null);
+  const [loading, setLoading] = useState(item.type === 'article');
+  const [failed, setFailed]   = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Lock background scroll while open + close on Escape
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [onClose]);
+
+  // Fetch full article content in-app
+  useEffect(() => {
+    if (item.type !== 'article') return;
+    let alive = true;
+    setLoading(true);
+    setFailed(false);
+    fetchArticleContent(item.url).then(content => {
+      if (!alive) return;
+      if (content) setHtml(content);
+      else setFailed(true);
+      setLoading(false);
+    });
+    return () => { alive = false; };
+  }, [item]);
+
+  const badge = badgeForRegion(item.region);
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white w-full sm:max-w-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-screen sm:max-h-[92vh] overflow-hidden animate-modal-in"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-100 shrink-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className={`text-[9px] font-mono font-extrabold px-2 py-0.5 rounded-full border uppercase tracking-wider ${BADGE_CLS[badge]}`}>
+              {item.flag} {item.source}
+            </span>
+            {item.type === 'video'
+              ? <span className="text-[10px] font-mono text-rose-600 flex items-center gap-1"><Play className="w-3 h-3 fill-current" /> Video</span>
+              : <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1"><BookOpen className="w-3 h-3" /> Article</span>}
+          </div>
+          <button
+            onClick={onClose}
+            className="shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all cursor-pointer"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Body (scrollable) */}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto">
+          {item.type === 'video' && item.videoId ? (
+            /* ── In-app YouTube player ── */
+            <div>
+              <div className="relative w-full bg-black" style={{ aspectRatio: '16 / 9' }}>
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${item.videoId}?autoplay=1&rel=0&modestbranding=1`}
+                  title={item.title}
+                  className="absolute inset-0 w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  allowFullScreen
+                />
+              </div>
+              <div className="p-5 space-y-3">
+                <h2 className="text-lg font-extrabold text-slate-900 leading-snug">{item.title}</h2>
+                {item.publishedAt && (
+                  <p className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
+                    <Clock className="w-3 h-3" /> {timeAgo(item.publishedAt)} · {item.source}
+                  </p>
+                )}
+                {item.snippet && <p className="text-sm text-slate-600 leading-relaxed">{item.snippet}</p>}
+              </div>
+            </div>
+          ) : (
+            /* ── In-app article reader ── */
+            <article className="p-5 sm:p-7">
+              {item.thumbnail && (
+                <img
+                  src={item.thumbnail}
+                  alt=""
+                  className="w-full max-h-72 object-cover rounded-2xl mb-5"
+                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+              )}
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight mb-2">{item.title}</h1>
+              <p className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5 mb-5 pb-5 border-b border-slate-100">
+                <Clock className="w-3 h-3" /> {item.publishedAt ? timeAgo(item.publishedAt) : 'Recent'} · {item.flag} {item.source}
+              </p>
+
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-16 gap-3 text-slate-400">
+                  <Loader2 className="w-7 h-7 animate-spin" />
+                  <p className="text-xs font-mono">Loading full article…</p>
+                </div>
+              ) : failed ? (
+                <div className="space-y-4">
+                  {item.snippet && <p className="article-body">{item.snippet}…</p>}
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center space-y-3">
+                    <p className="text-xs text-slate-500">
+                      This publisher doesn't allow the full article to be embedded. You can read the complete story on the original site.
+                    </p>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" /> Open Original Article
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <div className="article-body" dangerouslySetInnerHTML={{ __html: html || '' }} />
+              )}
+            </article>
+          )}
+        </div>
+
+        {/* Footer — always provide the external source link */}
+        <div className="shrink-0 border-t border-slate-100 px-5 py-3 flex items-center justify-between gap-3 bg-slate-50/60">
+          <span className="text-[10px] font-mono text-slate-400 truncate">
+            Source: {item.source}
+          </span>
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-700 rounded-lg text-[10px] font-bold font-mono uppercase tracking-wider transition-all"
+          >
+            <ExternalLink className="w-3 h-3" />
+            {item.type === 'video' ? 'Open on YouTube' : 'View Original Source'}
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -342,6 +631,7 @@ export default function NewsFeed() {
   const [lastFetched, setLastFetched] = useState<Date | null>(null);
   const [refreshing,  setRefreshing]  = useState(false);
   const [showCount,   setShowCount]   = useState(12);
+  const [reader,      setReader]      = useState<NewsItem | null>(null);
   const cache = useRef<Map<Tab, { items: NewsItem[]; ts: number }>>(new Map());
 
   const loadFeed = useCallback(async (tab: Tab, force = false) => {
@@ -425,6 +715,9 @@ export default function NewsFeed() {
 
   return (
     <div className="space-y-5 animate-fade-in pb-12">
+
+      {/* In-app reader / player modal */}
+      {reader && <ReaderModal item={reader} onClose={() => setReader(null)} />}
 
       {/* ── Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -538,11 +831,9 @@ export default function NewsFeed() {
         <>
           {/* Featured hero card (Africa tab only) */}
           {activeTab === 'africa' && displayed[0] && (
-            <a
-              href={displayed[0].url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block bg-white rounded-2xl border border-emerald-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all overflow-hidden"
+            <div
+              onClick={() => setReader(displayed[0])}
+              className="group block bg-white rounded-2xl border border-emerald-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all overflow-hidden cursor-pointer"
             >
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-2/5 h-52 md:h-auto bg-gradient-to-br from-emerald-50 to-emerald-100 overflow-hidden shrink-0">
@@ -575,18 +866,18 @@ export default function NewsFeed() {
                     <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">{displayed[0].snippet}</p>
                   </div>
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold font-mono uppercase text-emerald-600 group-hover:gap-2 transition-all">
-                    <ChevronRight className="w-3.5 h-3.5" /> Read Full Story
-                    <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                    <BookOpen className="w-3.5 h-3.5" /> Read Full Story in App
+                    <ChevronRight className="w-3 h-3" />
                   </span>
                 </div>
               </div>
-            </a>
+            </div>
           )}
 
           {/* Cards grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {(activeTab === 'africa' ? displayed.slice(1) : displayed).map(item => (
-              <NewsCard key={item.id} item={item} />
+              <NewsCard key={item.id} item={item} onOpen={(it) => setReader(it)} />
             ))}
           </div>
 
