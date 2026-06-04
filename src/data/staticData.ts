@@ -5,6 +5,108 @@
 
 import { StudyTopic, Question } from '../types';
 
+// ── UAE Health Authority reference data (for in-app info panels) ────────────────
+
+export interface AuthorityInfo {
+  id: string;
+  code: string;
+  name: string;
+  emirate: string;
+  flag: string;
+  color: 'blue' | 'emerald' | 'violet';
+  overview: string;
+  passMark: string;
+  examProvider: string;
+  licensingPortal: { label: string; url: string };
+  officialSite: { label: string; url: string };
+  steps: string[];
+  facts: { label: string; value: string }[];
+}
+
+export const UAE_AUTHORITIES: AuthorityInfo[] = [
+  {
+    id: 'dha',
+    code: 'DHA',
+    name: 'Dubai Health Authority',
+    emirate: 'Dubai',
+    flag: '🏙️',
+    color: 'blue',
+    overview:
+      'The Dubai Health Authority regulates all healthcare professionals and facilities in the Emirate of Dubai. Nurses must register through the DHA Sheryan platform and pass the DHA licensing assessment before practising in Dubai (outside free zones such as DHCC).',
+    passMark: 'Typically 60% to pass the DHA computer-based assessment (Prometric-delivered).',
+    examProvider: 'Prometric (computer-based MCQ)',
+    licensingPortal: { label: 'DHA Sheryan Licensing Portal', url: 'https://services.dha.gov.ae/sheryan' },
+    officialSite: { label: 'dha.gov.ae', url: 'https://www.dha.gov.ae' },
+    steps: [
+      'Create a Sheryan unique ID account on the DHA portal.',
+      'Complete DataFlow primary source verification (PSV) of your credentials.',
+      'Submit qualifications + Good Standing Certificate for evaluation.',
+      'Receive eligibility, then book the DHA exam via Prometric.',
+      'Pass the assessment, then apply for the professional licence.'
+    ],
+    facts: [
+      { label: 'Region', value: 'Dubai' },
+      { label: 'Min. Experience', value: '2 years post-graduation (RN)' },
+      { label: 'Qualification', value: 'Bachelor / 3-yr Diploma in Nursing' },
+      { label: 'PSV', value: 'DataFlow required' }
+    ]
+  },
+  {
+    id: 'mohap',
+    code: 'MOHAP',
+    name: 'Ministry of Health & Prevention',
+    emirate: 'Northern Emirates',
+    flag: '🇦🇪',
+    color: 'emerald',
+    overview:
+      'MOHAP licenses healthcare professionals practising in the Northern Emirates (Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah, Fujairah). Registration is handled through the MOHAP unified electronic licensing system, with an MCQ assessment for most nursing cadres.',
+    passMark: 'Typically 60% pass threshold on the MOHAP assessment (Prometric-delivered).',
+    examProvider: 'Prometric (computer-based MCQ)',
+    licensingPortal: { label: 'MOHAP e-Licensing Services', url: 'https://mohap.gov.ae/en/services/practice-license-for-health-professionals' },
+    officialSite: { label: 'mohap.gov.ae', url: 'https://mohap.gov.ae' },
+    steps: [
+      'Register on the MOHAP smart services portal.',
+      'Complete DataFlow primary source verification.',
+      'Submit your degree, transcripts, and Good Standing Certificate.',
+      'Obtain eligibility and schedule the Prometric exam.',
+      'Pass and complete the licensing/evaluation payment.'
+    ],
+    facts: [
+      { label: 'Region', value: 'Northern Emirates' },
+      { label: 'Min. Experience', value: '2 years (varies by cadre)' },
+      { label: 'Qualification', value: 'Recognised Nursing degree/diploma' },
+      { label: 'PSV', value: 'DataFlow required' }
+    ]
+  },
+  {
+    id: 'doh',
+    code: 'DOH / HAAD',
+    name: 'Department of Health – Abu Dhabi',
+    emirate: 'Abu Dhabi',
+    flag: '🏛️',
+    color: 'violet',
+    overview:
+      'The Department of Health Abu Dhabi (formerly HAAD) regulates the healthcare sector in the Emirate of Abu Dhabi. Professionals register through the DOH/Tamm platform and sit the Pearson VUE-delivered DOH examination before licensing.',
+    passMark: 'Typically 60% pass mark on the DOH examination (Pearson VUE-delivered).',
+    examProvider: 'Pearson VUE (computer-based MCQ)',
+    licensingPortal: { label: 'DOH Health Professional Licensing', url: 'https://www.doh.gov.ae/en/license' },
+    officialSite: { label: 'doh.gov.ae', url: 'https://www.doh.gov.ae' },
+    steps: [
+      'Create a DOH account and start the licensing application.',
+      'Complete DataFlow primary source verification.',
+      'Upload qualifications, experience certificates, and Good Standing.',
+      'Receive exam eligibility and book via Pearson VUE.',
+      'Pass the DOH exam, then finalise the professional licence.'
+    ],
+    facts: [
+      { label: 'Region', value: 'Abu Dhabi' },
+      { label: 'Min. Experience', value: '2 years post-graduation' },
+      { label: 'Qualification', value: 'Bachelor / accredited Diploma' },
+      { label: 'Exam Vendor', value: 'Pearson VUE' }
+    ]
+  }
+];
+
 export const STUDY_TOPICS: StudyTopic[] = [
   {
     id: 'ethics-law',

@@ -3,9 +3,105 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
-import { MessageSquare, ThumbsUp, Plus, CornerDownRight, Bookmark, ArrowLeft, Send, Sparkles, UserCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  MessageSquare, ThumbsUp, Plus, CornerDownRight, Bookmark, ArrowLeft, Send,
+  Sparkles, UserCheck, X, ExternalLink, CheckCircle2, ChevronRight, Building2
+} from 'lucide-react';
 import { ForumPost, ForumComment } from '../types';
+import { UAE_AUTHORITIES, AuthorityInfo } from '../data/staticData';
+
+const AUTH_COLORS: Record<string, { badge: string; ring: string; btn: string }> = {
+  blue:    { badge: 'bg-blue-100 text-blue-800 border-blue-200',       ring: 'border-blue-200',    btn: 'bg-blue-600 hover:bg-blue-700' },
+  emerald: { badge: 'bg-emerald-100 text-emerald-800 border-emerald-200', ring: 'border-emerald-200', btn: 'bg-emerald-600 hover:bg-emerald-700' },
+  violet:  { badge: 'bg-violet-100 text-violet-800 border-violet-200',   ring: 'border-violet-200',  btn: 'bg-violet-600 hover:bg-violet-700' },
+};
+
+// In-app authority info panel (gov sites can't be embedded, so we surface the
+// key info in-app and still provide the official external links)
+function AuthorityModal({ authority, onClose }: { authority: AuthorityInfo; onClose: () => void }) {
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
+  }, [onClose]);
+
+  const c = AUTH_COLORS[authority.color];
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={onClose}>
+      <div className="bg-white w-full sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col max-h-screen sm:max-h-[92vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-100 shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="text-2xl">{authority.flag}</span>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className={`text-[9px] font-mono font-extrabold px-2 py-0.5 rounded-full border uppercase tracking-wider ${c.badge}`}>{authority.code}</span>
+                <span className="text-[10px] font-mono text-slate-400">{authority.emirate}</span>
+              </div>
+              <h2 className="text-sm font-extrabold text-slate-900 truncate">{authority.name}</h2>
+            </div>
+          </div>
+          <button onClick={onClose} className="shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all cursor-pointer">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
+          <p className="text-[13px] text-slate-600 leading-relaxed">{authority.overview}</p>
+
+          {/* Quick facts */}
+          <div className="grid grid-cols-2 gap-2.5">
+            {authority.facts.map((f, i) => (
+              <div key={i} className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                <p className="text-[9px] font-mono text-slate-400 uppercase tracking-wider">{f.label}</p>
+                <p className="text-[12px] font-bold text-slate-800 mt-0.5">{f.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Exam info */}
+          <div className={`rounded-2xl border ${c.ring} p-4 space-y-2`}>
+            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Exam &amp; Pass Mark
+            </h3>
+            <p className="text-xs text-slate-600"><strong>Provider:</strong> {authority.examProvider}</p>
+            <p className="text-xs text-slate-600"><strong>Pass mark:</strong> {authority.passMark}</p>
+          </div>
+
+          {/* Steps */}
+          <div className="space-y-2.5">
+            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">Licensing Pathway</h3>
+            <ol className="space-y-2">
+              {authority.steps.map((s, i) => (
+                <li key={i} className="flex gap-2.5 text-xs text-slate-600">
+                  <span className={`shrink-0 w-5 h-5 rounded-full ${c.badge} border flex items-center justify-center text-[10px] font-bold font-mono`}>{i + 1}</span>
+                  <span className="leading-relaxed pt-0.5">{s}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        {/* Footer — official external links */}
+        <div className="shrink-0 border-t border-slate-100 px-5 py-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-slate-50/60">
+          <a href={authority.licensingPortal.url} target="_blank" rel="noopener noreferrer"
+             className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${c.btn} text-white rounded-xl text-[11px] font-bold font-mono uppercase tracking-wider transition-all`}>
+            <ExternalLink className="w-3.5 h-3.5" /> {authority.licensingPortal.label}
+          </a>
+          <a href={authority.officialSite.url} target="_blank" rel="noopener noreferrer"
+             className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-white border border-slate-200 hover:border-slate-300 text-slate-600 rounded-xl text-[11px] font-bold font-mono uppercase tracking-wider transition-all">
+            <ExternalLink className="w-3.5 h-3.5" /> {authority.officialSite.label}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface ForumProps {
   user: any;
@@ -39,6 +135,9 @@ export default function Forum({
 
   // Comment input state
   const [commentContent, setCommentContent] = useState('');
+
+  // In-app authority info panel
+  const [activeAuthority, setActiveAuthority] = useState<AuthorityInfo | null>(null);
 
   const categories = ['All', 'Licensing', 'Study Notes', 'Exam Tips', 'Mentorship'];
 
@@ -77,6 +176,8 @@ export default function Forum({
 
   return (
     <div className="space-y-6 animate-fade-in text-slate-900">
+      {activeAuthority && <AuthorityModal authority={activeAuthority} onClose={() => setActiveAuthority(null)} />}
+
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-xl font-sans font-extrabold text-slate-900 flex items-center gap-1.5">
@@ -130,18 +231,33 @@ export default function Forum({
               ))}
             </div>
 
-            {/* Mentorship Tips */}
+            {/* UAE Authority Resources — open in-app info panels */}
             <div className="pt-4 border-t border-slate-100 space-y-3">
               <h4 className="text-[10px] font-mono tracking-widest text-blue-600 uppercase font-bold flex items-center gap-1">
-                <Bookmark className="w-3 h-3" /> UAE MENTOR RESOURCES:
+                <Bookmark className="w-3 h-3" /> UAE LICENSING AUTHORITIES:
               </h4>
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-150 space-y-2">
-                <p className="text-[10.5px] font-bold text-slate-700">Official Syllabi Links:</p>
-                <div className="space-y-1 font-mono text-[9px] text-slate-500">
-                  <a href="https://www.dha.gov.ae" target="_blank" rel="noopener noreferrer" className="block hover:text-blue-600 underline">DHA Exam Guidelines</a>
-                  <a href="https://www.mohap.gov.ae" target="_blank" rel="noopener noreferrer" className="block hover:text-blue-600 underline">MOHAP Licensing Syllabus</a>
-                  <a href="https://www.doh.gov.ae" target="_blank" rel="noopener noreferrer" className="block hover:text-blue-600 underline">DOH Abu Dhabi Portal</a>
-                </div>
+              <div className="space-y-2">
+                {UAE_AUTHORITIES.map((auth) => {
+                  const c = AUTH_COLORS[auth.color];
+                  return (
+                    <button
+                      key={auth.id}
+                      onClick={() => setActiveAuthority(auth)}
+                      className={`w-full group flex items-center gap-2.5 p-2.5 bg-white border ${c.ring} rounded-xl hover:shadow-md transition-all cursor-pointer text-left`}
+                    >
+                      <span className="text-lg shrink-0">{auth.flag}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[11px] font-bold text-slate-800 truncate">{auth.code}</p>
+                        <p className="text-[9px] text-slate-400 font-mono truncate">{auth.emirate}</p>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+                    </button>
+                  );
+                })}
+                <p className="text-[9px] text-slate-400 leading-relaxed pt-1 flex items-start gap-1">
+                  <Building2 className="w-3 h-3 mt-0.5 shrink-0" />
+                  Tap an authority to view its licensing pathway, pass mark &amp; official portal links in-app.
+                </p>
               </div>
             </div>
           </div>
@@ -217,10 +333,11 @@ export default function Forum({
                 return (
                   <div
                     key={post.id}
-                    className="p-5 bg-white border border-slate-205 rounded-2xl hover:border-blue-300 hover:shadow-md transition-all space-y-4 shadow-xs text-slate-800"
+                    onClick={() => expandPost(post)}
+                    className="group p-5 bg-white border border-slate-205 rounded-2xl hover:border-blue-300 hover:shadow-md transition-all space-y-4 shadow-xs text-slate-800 cursor-pointer"
                   >
                     <div className="flex justify-between items-start gap-4">
-                      <div>
+                      <div className="min-w-0">
                         {/* Tags */}
                         <div className="flex items-center gap-2">
                           <span className="text-[9.5px] font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
@@ -230,14 +347,12 @@ export default function Forum({
                             {new Date(post.createdAt).toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })}
                           </span>
                         </div>
-                        <h4
-                          onClick={() => expandPost(post)}
-                          className="font-bold text-sm text-slate-800 mt-2 font-sans hover:text-blue-600 cursor-pointer transition-all line-clamp-1"
-                        >
+                        <h4 className="font-bold text-sm text-slate-800 mt-2 font-sans group-hover:text-blue-600 transition-all line-clamp-1">
                           {post.title}
                         </h4>
                         <p className="text-xs text-slate-500 leading-relaxed mt-1 line-clamp-2">{post.content}</p>
                       </div>
+                      <CornerDownRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-all shrink-0 rotate-[270deg]" />
                     </div>
 
                     <div className="flex items-center gap-6 border-t border-slate-100 pt-3.5 text-xs text-slate-500 font-semibold">
@@ -249,7 +364,8 @@ export default function Forum({
                       </div>
 
                       <button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           if (!user) {
                             onLogin();
                             return;
@@ -264,7 +380,7 @@ export default function Forum({
                       </button>
 
                       <button
-                        onClick={() => expandPost(post)}
+                        onClick={(e) => { e.stopPropagation(); expandPost(post); }}
                         className="flex items-center gap-1.5 text-xs hover:text-blue-650 transition-all cursor-pointer"
                         aria-label={`Read ${post.commentsCount} comments`}
                       >

@@ -70,13 +70,17 @@ export default function Study({ onAskAI }: StudyProps) {
           {STUDY_TOPICS.map((topic) => (
             <div
               key={topic.id}
-              className="p-6 bg-white border border-slate-200 rounded-2xl hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 shadow-sm"
+              onClick={() => { setSelectedTopic(topic); setStudyMode('reading'); }}
+              className="group p-6 bg-white border border-slate-200 rounded-2xl hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 shadow-sm cursor-pointer"
             >
               <div>
-                <span className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md font-bold">
-                  {topic.category}
-                </span>
-                <h3 className="font-bold text-sm text-slate-800 mt-2 font-sans hover:text-blue-600 cursor-pointer" onClick={() => setSelectedTopic(topic)}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] uppercase tracking-wider font-mono px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md font-bold">
+                    {topic.category}
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h3 className="font-bold text-sm text-slate-800 mt-2 font-sans group-hover:text-blue-600 transition-colors">
                   {topic.title}
                 </h3>
                 <p className="text-xs text-slate-500 mt-1 line-clamp-2">{topic.subtitle}</p>
@@ -84,7 +88,8 @@ export default function Study({ onAskAI }: StudyProps) {
 
               <div className="flex items-center gap-4 text-xs font-semibold pt-1">
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setSelectedTopic(topic);
                     setStudyMode('reading');
                   }}
@@ -93,7 +98,8 @@ export default function Study({ onAskAI }: StudyProps) {
                   <BookOpen className="w-3.5 h-3.5" /> Start Lessons
                 </button>
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setSelectedTopic(topic);
                     setStudyMode('flashcards');
                     setFlashcardIndex(0);
