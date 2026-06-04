@@ -414,7 +414,7 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
       onClick={onClose}
     >
       <div
-        className="bg-white w-full sm:max-w-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-screen sm:max-h-[92vh] overflow-hidden animate-modal-in"
+        className="bg-white w-full sm:max-w-3xl sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden animate-modal-in"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -437,7 +437,7 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
         </div>
 
         {/* Body (scrollable) */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto">
+        <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
           {item.type === 'video' && item.videoId ? (
             /* ── In-app YouTube player ── */
             <div>

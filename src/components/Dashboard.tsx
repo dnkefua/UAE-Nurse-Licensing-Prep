@@ -366,7 +366,7 @@ export default function Dashboard({
       {/* Stat-card detail modal */}
       {detailCard && (
         <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={() => setDetailCard(null)}>
-          <div className="bg-white w-full sm:max-w-lg sm:rounded-3xl shadow-2xl flex flex-col max-h-screen sm:max-h-[90vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
+          <div className="bg-white w-full sm:max-w-lg sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[90vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
             {/* Header */}
             <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-100 shrink-0">
               <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
@@ -379,7 +379,7 @@ export default function Dashboard({
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-4">
               {/* PROGRESS */}
               {detailCard === 'progress' && (
                 <>

@@ -24,7 +24,7 @@ function EmployerModal({ employer, onClose }: { employer: JobEmployer; onClose: 
 
   return (
     <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={onClose}>
-      <div className="bg-white w-full sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col max-h-screen sm:max-h-[92vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
+      <div className="bg-white w-full sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
@@ -47,7 +47,7 @@ function EmployerModal({ employer, onClose }: { employer: JobEmployer; onClose: 
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-5">
           <p className="text-[13px] text-slate-600 leading-relaxed">{employer.about}</p>
 
           {/* Facts */}

@@ -488,7 +488,7 @@ export default function Consultation() {
               <h3 className="text-xs font-bold font-mono tracking-wider text-slate-800 uppercase flex items-center gap-1.5 border-b border-slate-100 pb-2 mb-3">
                 <MessageSquare className="w-4 h-4 text-blue-600" /> Live Chat
               </h3>
-              <div className="flex-1 overflow-y-auto space-y-3 pr-1 pb-2">
+              <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1 pb-2">
                 {chatMessages.map((msg, idx) => (
                   <div key={idx} className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
                     <div className="text-[10px] text-slate-400 font-mono">
