@@ -37,31 +37,30 @@ interface FeedSource {
   badge:  'emerald' | 'blue' | 'violet' | 'rose';
 }
 
-// ─── Feed sources ─────────────────────────────────────────────────────────────
+// ─── Backend news client (server-side aggregation — reliable, no CORS) ──────────
 
-const NEWS_SOURCES: FeedSource[] = [
-  // Africa
-  { url: 'https://allafrica.com/health/rss2.0.xml',                            label: 'AllAfrica',          flag: '🌍', region: 'africa',  badge: 'emerald' },
-  { url: 'https://health-e.org.za/feed/',                                       label: 'Health-e (SA)',      flag: '🇿🇦', region: 'africa',  badge: 'emerald' },
-  { url: 'https://theconversation.com/africa/topics/health-33/articles.atom',  label: 'The Conversation',   flag: '🌍', region: 'africa',  badge: 'emerald' },
-  { url: 'https://www.pulse.ng/lifestyle/health/rss',                           label: 'Pulse Nigeria',      flag: '🇳🇬', region: 'africa',  badge: 'emerald' },
-  // Global
-  { url: 'https://www.who.int/rss-feeds/news-english.xml',                     label: 'WHO',                flag: '🌐', region: 'global',  badge: 'blue'    },
-  { url: 'https://feeds.bbci.co.uk/news/health/rss.xml',                       label: 'BBC Health',         flag: '🇬🇧', region: 'global',  badge: 'blue'    },
-  { url: 'https://rss.medicalnewstoday.com/featurednews.xml',                  label: 'Medical News Today', flag: '🔬', region: 'global',  badge: 'blue'    },
-  // Nursing
-  { url: 'https://www.nursingtimes.net/feed/',                                  label: 'Nursing Times',      flag: '🏥', region: 'nursing', badge: 'violet'  },
-  { url: 'https://www.nurse.com/blog/feed/',                                    label: 'Nurse.com',          flag: '💊', region: 'nursing', badge: 'violet'  },
-  { url: 'https://minoritynurse.com/feed/',                                     label: 'Minority Nurse',     flag: '🩺', region: 'nursing', badge: 'violet'  },
-];
-
-// YouTube channels – RSS via allorigins proxy
-const YT_CHANNELS = [
-  { id: 'UCn_Zn4nUYrziYx-gnGyhmvA', name: 'WHO',               flag: '🌐' },
-  { id: 'UCsRlU-MBkKQ7Pof3A5iKNdA', name: 'RegisteredNurseRN', flag: '🏥' },
-  { id: 'UCNI0qZnA7NKrmv3-O4LaJCA', name: 'Osmosis',           flag: '📚' },
-  { id: 'UCafHopQQkpFyAzXV7hkf3pQ', name: 'Africa CDC',        flag: '🌍' },
-];
+/** Fetch a news tab from the Cloud Function (/api/news). */
+async function fetchNews(tab: Tab): Promise<NewsItem[]> {
+  const res = await fetch(`/api/news?tab=${encodeURIComponent(tab)}`, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) throw new Error(`news ${res.status}`);
+  const data = await res.json();
+  const items: any[] = Array.isArray(data.items) ? data.items : [];
+  return items.map((it, i) => ({
+    id:          `${it.source || 'src'}-${i}-${it.url}`,
+    title:       it.title || '',
+    snippet:     it.snippet || '',
+    url:         it.url || '',
+    thumbnail:   it.thumbnail || '',
+    source:      it.source || 'News',
+    flag:        it.flag || '📰',
+    region:      (it.region || 'global') as Region,
+    publishedAt: it.publishedAt || '',
+    type:        it.type === 'video' ? 'video' : 'article',
+    videoId:     it.videoId || undefined,
+  })) as NewsItem[];
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -86,117 +85,6 @@ function timeAgo(raw: string): string {
   if (h > 0)     return `${h}h ago`;
   if (m > 0)     return `${m}m ago`;
   return 'just now';
-}
-
-/** Timeout-safe fetch compatible with older WebViews */
-function fetchWithTimeout(url: string, ms = 12000): Promise<Response> {
-  const ctrl = new AbortController();
-  const tid  = setTimeout(() => ctrl.abort(), ms);
-  return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
-}
-
-/** Fetch raw text/XML through a CORS proxy, trying two services */
-async function fetchProxy(targetUrl: string): Promise<string | null> {
-  // Primary: allorigins.win returns JSON { contents, status }
-  try {
-    const r = await fetchWithTimeout(
-      `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`, 12000
-    );
-    if (r.ok) {
-      const d = await r.json();
-      if (d?.contents) return d.contents as string;
-    }
-  } catch { /* fall through */ }
-
-  // Backup: corsproxy.io returns raw body
-  try {
-    const r = await fetchWithTimeout(
-      `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`, 12000
-    );
-    if (r.ok) return await r.text();
-  } catch { /* fall through */ }
-
-  return null;
-}
-
-/** Parse RSS 2.0 or Atom XML with the browser's DOMParser */
-function parseXML(xml: string, source: FeedSource): NewsItem[] {
-  try {
-    const doc   = new DOMParser().parseFromString(xml, 'text/xml');
-    const nodes = Array.from(doc.querySelectorAll('item, entry'));
-    if (nodes.length === 0) return [];
-
-    return nodes.slice(0, 8).map((el, i) => {
-      // Title
-      const title = el.querySelector('title')?.textContent?.trim() ?? '';
-
-      // URL – RSS uses <link> text content; Atom uses <link href="..."/>
-      const linkEl = el.querySelector('link');
-      const url    = linkEl?.getAttribute('href') || linkEl?.textContent?.trim() || '';
-
-      // Description / summary
-      const desc =
-        el.querySelector('description')?.textContent?.trim() ||
-        el.querySelector('content\\:encoded')?.textContent?.trim() ||
-        el.querySelector('summary')?.textContent?.trim() || '';
-
-      // Date
-      const pubDate =
-        el.querySelector('pubDate')?.textContent?.trim() ||
-        el.querySelector('published')?.textContent?.trim() ||
-        el.querySelector('updated')?.textContent?.trim() || '';
-
-      // Thumbnail – several formats
-      let thumbnail = '';
-      const byTag = (t: string) => el.getElementsByTagName(t)[0];
-      thumbnail = byTag('media:thumbnail')?.getAttribute('url')
-                || byTag('media:content')?.getAttribute('url')
-                || (() => {
-                     const enc = el.querySelector('enclosure');
-                     return enc?.getAttribute('type')?.startsWith('image/') ? enc.getAttribute('url') ?? '' : '';
-                   })()
-                || '';
-      // Fallback: first <img> inside description HTML
-      if (!thumbnail && desc) {
-        const m = desc.match(/<img[^>]+src=["']([^"']+)["']/i);
-        if (m) thumbnail = m[1];
-      }
-
-      // YouTube video ID (Atom feeds)
-      let videoId = '';
-      const ytIdEl = byTag('yt:videoId');
-      if (ytIdEl?.textContent) {
-        videoId = ytIdEl.textContent.trim();
-      } else {
-        const entryId = el.querySelector('id')?.textContent ?? '';
-        const m       = entryId.match(/video:([A-Za-z0-9_-]+)/);
-        if (m) videoId = m[1];
-      }
-      if (videoId && !thumbnail) thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-
-      return {
-        id:          `${source.label}-${i}-${url}`,
-        title:       stripHtml(title),
-        snippet:     stripHtml(desc).slice(0, 240),
-        url,
-        thumbnail,
-        source:      source.label,
-        flag:        source.flag,
-        region:      source.region,
-        publishedAt: pubDate,
-        type:        videoId ? 'video' : 'article',
-        videoId:     videoId || undefined,
-      } as NewsItem;
-    }).filter(it => it.title.length > 0 && it.url.length > 0);
-  } catch {
-    return [];
-  }
-}
-
-async function fetchFeed(source: FeedSource): Promise<NewsItem[]> {
-  const xml = await fetchProxy(source.url);
-  if (!xml) return [];
-  return parseXML(xml, source);
 }
 
 // ─── In-app article reader: fetch + extract + sanitize ─────────────────────────
@@ -309,30 +197,27 @@ function extractMainContent(doc: Document): HTMLElement | null {
   return doc.body as HTMLElement;
 }
 
-/** Fetch an article URL and return sanitized readable HTML, or null on failure */
+/** Fetch an article's full HTML via the backend, then extract + sanitize it. */
 async function fetchArticleContent(url: string): Promise<string | null> {
-  const html = await fetchProxy(url);
-  if (!html) return null;
   try {
+    const res = await fetch(`/api/article?url=${encodeURIComponent(url)}`, {
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const html: string = data.html || '';
+    if (!html) return null;
+
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const main = extractMainContent(doc);
     if (!main) return null;
-    // Clone so we don't mutate the parsed doc references
     const clone = main.cloneNode(true) as HTMLElement;
     const safe = sanitizeHtml(clone, url);
-    // Require a minimum amount of real text to count as success
     const text = safe.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
     return text.length > 300 ? safe : null;
   } catch {
     return null;
   }
-}
-
-async function fetchYouTubeChannel(ch: { id: string; name: string; flag: string }): Promise<NewsItem[]> {
-  const ytUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${ch.id}`;
-  const xml   = await fetchProxy(ytUrl);
-  if (!xml) return [];
-  return parseXML(xml, { url: ytUrl, label: ch.name, flag: ch.flag, region: 'video', badge: 'rose' });
 }
 
 // ─── Badge colours ─────────────────────────────────────────────────────────────
@@ -648,43 +533,8 @@ export default function NewsFeed() {
     setShowCount(12);
 
     try {
-      let results: NewsItem[] = [];
-
-      if (tab === 'video') {
-        const settled = await Promise.allSettled(YT_CHANNELS.map(fetchYouTubeChannel));
-        for (const r of settled) {
-          if (r.status === 'fulfilled') results.push(...r.value);
-        }
-      } else {
-        const sources = tab === 'all'
-          ? NEWS_SOURCES
-          : NEWS_SOURCES.filter(s => s.region === tab);
-
-        const settled = await Promise.allSettled(sources.map(fetchFeed));
-        for (const r of settled) {
-          if (r.status === 'fulfilled') results.push(...r.value);
-        }
-
-        // Prioritise Africa articles in the "all" tab
-        if (tab === 'all') {
-          results = [
-            ...results.filter(i => i.region === 'africa'),
-            ...results.filter(i => i.region !== 'africa'),
-          ];
-        }
-      }
-
-      // Sort by date, deduplicate by title
-      results.sort((a, b) =>
-        (new Date(b.publishedAt).getTime() || 0) - (new Date(a.publishedAt).getTime() || 0)
-      );
-      const seen = new Set<string>();
-      results = results.filter(it => {
-        const key = it.title.slice(0, 60).toLowerCase();
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
+      // Server-side aggregation handles fetching, sorting, and de-duplication.
+      const results: NewsItem[] = await fetchNews(tab);
 
       if (results.length === 0) {
         setError('No articles could be loaded right now. The external news services may be temporarily unavailable — please try refreshing in a moment.');

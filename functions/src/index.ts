@@ -9,6 +9,7 @@ import { onRequest } from 'firebase-functions/v2/https';
 import { GoogleGenAI } from '@google/genai';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import Parser from 'rss-parser';
 
 // ── Firebase Admin ────────────────────────────────────────────────────────────
 admin.initializeApp();
@@ -59,6 +60,215 @@ app.use(express.json());
 // GET /api/health
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', time: new Date().toISOString(), runtime: 'cloud-function' });
+});
+
+// ── News aggregation (server-side: no CORS, reliable) ──────────────────────────
+
+const BROWSER_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36';
+
+const rssParser = new Parser({
+  timeout: 10000,
+  headers: { 'User-Agent': BROWSER_UA, Accept: 'application/rss+xml, application/xml, text/xml, */*' },
+  customFields: {
+    item: [
+      ['media:thumbnail', 'mediaThumbnail'],
+      ['media:content', 'mediaContent'],
+      ['yt:videoId', 'ytVideoId'],
+      ['content:encoded', 'contentEncoded'],
+    ],
+  },
+});
+
+interface FeedDef { url: string; label: string; flag: string; region: string; }
+
+const NEWS_FEEDS: Record<string, FeedDef[]> = {
+  africa: [
+    { url: 'https://news.google.com/rss/search?q=africa+health+OR+nursing+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌍', region: 'africa' },
+    { url: 'https://theconversation.com/africa/topics/health-33/articles.atom', label: 'The Conversation', flag: '🌍', region: 'africa' },
+    { url: 'https://news.google.com/rss/search?q=Nigeria+OR+Kenya+OR+%22South+Africa%22+health+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌍', region: 'africa' },
+  ],
+  global: [
+    { url: 'https://www.who.int/rss-feeds/news-english.xml', label: 'WHO', flag: '🌐', region: 'global' },
+    { url: 'https://feeds.bbci.co.uk/news/health/rss.xml', label: 'BBC Health', flag: '🇬🇧', region: 'global' },
+    { url: 'https://news.google.com/rss/search?q=health+OR+medicine+when:4d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌐', region: 'global' },
+  ],
+  nursing: [
+    { url: 'https://news.google.com/rss/search?q=nursing+OR+nurses+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🏥', region: 'nursing' },
+    { url: 'https://news.google.com/rss/search?q=NCLEX+OR+%22DHA+exam%22+OR+%22nurse+licensing%22+when:30d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '💊', region: 'nursing' },
+  ],
+};
+
+const YT_CHANNELS: { id: string; name: string; flag: string }[] = [
+  { id: 'UCT7a_fVlSrjOs9jyvtH-uhA', name: 'WHO',               flag: '🌐' },
+  { id: 'UCPyMN8DzkFl2__xnTEiGZ1w', name: 'RegisteredNurseRN', flag: '🏥' },
+  { id: 'UCUxQWmWk1_Hk9iDRKvhH29Q', name: 'SimpleNursing',     flag: '💊' },
+  { id: 'UC0-vwPmp-nmu_Huza_nq0AA', name: 'Osmosis',           flag: '📚' },
+  { id: 'UCc_l99_kG9edqqKCyNTjrtg', name: 'Nurse Zara',        flag: '🩺' },
+  { id: 'UCWRIrWg4as6umiFK_k80pIg', name: 'Africa CDC',        flag: '🌍' },
+];
+
+interface NewsOut {
+  title: string; snippet: string; url: string; thumbnail: string;
+  source: string; flag: string; region: string; publishedAt: string;
+  type: 'article' | 'video'; videoId?: string;
+}
+
+function stripTags(s: string): string {
+  return (s || '').replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function firstImg(html: string): string {
+  const m = (html || '').match(/<img[^>]+src=["']([^"']+)["']/i);
+  return m ? m[1] : '';
+}
+
+async function loadFeed(def: FeedDef): Promise<NewsOut[]> {
+  try {
+    const feed = await rssParser.parseURL(def.url);
+    return (feed.items || []).slice(0, 10).map((it: any) => {
+      const html = it.contentEncoded || it.content || it['content:encoded'] || '';
+      const thumb =
+        it.mediaThumbnail?.$?.url ||
+        it.mediaContent?.$?.url ||
+        (it.enclosure?.type?.startsWith('image/') ? it.enclosure.url : '') ||
+        firstImg(html) || '';
+      // Google News titles end with " - Source"; surface the source
+      let source = def.label;
+      let title = it.title || '';
+      const dash = title.lastIndexOf(' - ');
+      if (def.url.includes('news.google.com') && dash > 0) {
+        source = title.slice(dash + 3).trim() || def.label;
+        title = title.slice(0, dash).trim();
+      }
+      return {
+        title: stripTags(title),
+        snippet: stripTags(html || it.contentSnippet || '').slice(0, 240),
+        url: it.link || '',
+        thumbnail: thumb,
+        source,
+        flag: def.flag,
+        region: def.region,
+        publishedAt: it.isoDate || it.pubDate || '',
+        type: 'article' as const,
+      };
+    }).filter((n: NewsOut) => n.title && n.url);
+  } catch {
+    return [];
+  }
+}
+
+async function loadYouTube(ch: { id: string; name: string; flag: string }): Promise<NewsOut[]> {
+  try {
+    const r = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${ch.id}`, {
+      headers: { 'User-Agent': BROWSER_UA, Accept: 'application/atom+xml, application/xml, text/xml, */*' },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!r.ok) return [];
+    const xml = await r.text();
+
+    // YouTube Atom feed has a fixed structure — parse <entry> blocks directly.
+    const entries = xml.split('<entry>').slice(1);
+    const out: NewsOut[] = [];
+    for (const e of entries.slice(0, 6)) {
+      const vid = (e.match(/<yt:videoId>([^<]+)<\/yt:videoId>/) || [])[1] || '';
+      const title = (e.match(/<title>([^<]+)<\/title>/) || [])[1] || '';
+      const published = (e.match(/<published>([^<]+)<\/published>/) || [])[1] || '';
+      const desc = (e.match(/<media:description>([\s\S]*?)<\/media:description>/) || [])[1] || '';
+      if (!vid || !title) continue;
+      out.push({
+        title: stripTags(title),
+        snippet: stripTags(desc).slice(0, 180),
+        url: `https://www.youtube.com/watch?v=${vid}`,
+        thumbnail: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`,
+        source: ch.name,
+        flag: ch.flag,
+        region: 'video',
+        publishedAt: published,
+        type: 'video' as const,
+        videoId: vid,
+      });
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+// Simple in-memory cache (per warm instance)
+const newsCache = new Map<string, { items: NewsOut[]; ts: number }>();
+const NEWS_TTL = 15 * 60 * 1000;
+
+// GET /api/news?tab=all|africa|global|nursing|video
+app.get('/api/news', async (req: Request, res: Response) => {
+  const tab = String(req.query.tab || 'all').toLowerCase();
+  const cached = newsCache.get(tab);
+  if (cached && Date.now() - cached.ts < NEWS_TTL) {
+    res.json({ items: cached.items, cached: true });
+    return;
+  }
+
+  try {
+    let items: NewsOut[] = [];
+    if (tab === 'video') {
+      const all = await Promise.allSettled(YT_CHANNELS.map(loadYouTube));
+      for (const r of all) if (r.status === 'fulfilled') items.push(...r.value);
+    } else {
+      const defs =
+        tab === 'all'
+          ? [...NEWS_FEEDS.africa, ...NEWS_FEEDS.global, ...NEWS_FEEDS.nursing]
+          : NEWS_FEEDS[tab] || [];
+      const all = await Promise.allSettled(defs.map(loadFeed));
+      for (const r of all) if (r.status === 'fulfilled') items.push(...r.value);
+      if (tab === 'all') {
+        items = [
+          ...items.filter(i => i.region === 'africa'),
+          ...items.filter(i => i.region !== 'africa'),
+        ];
+      }
+    }
+
+    // Sort newest first, dedupe by title
+    items.sort((a, b) => (new Date(b.publishedAt).getTime() || 0) - (new Date(a.publishedAt).getTime() || 0));
+    const seen = new Set<string>();
+    items = items.filter(it => {
+      const k = it.title.slice(0, 60).toLowerCase();
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+
+    newsCache.set(tab, { items, ts: Date.now() });
+    res.json({ items, cached: false });
+  } catch (error) {
+    console.error('[news] error:', error);
+    res.status(500).json({ error: 'Failed to load news.', items: [] });
+  }
+});
+
+// GET /api/article?url=...  → raw HTML of an article (for the in-app reader)
+app.get('/api/article', async (req: Request, res: Response) => {
+  const url = String(req.query.url || '');
+  if (!/^https?:\/\//i.test(url)) {
+    res.status(400).json({ error: 'Valid url required.' });
+    return;
+  }
+  try {
+    const r = await fetch(url, {
+      headers: { 'User-Agent': BROWSER_UA, Accept: 'text/html,*/*' },
+      signal: AbortSignal.timeout(12000),
+    });
+    if (!r.ok) {
+      res.status(502).json({ error: `Upstream ${r.status}` });
+      return;
+    }
+    const html = await r.text();
+    res.set('Cache-Control', 'public, max-age=900');
+    res.json({ html });
+  } catch (error) {
+    console.error('[article] error:', error);
+    res.status(500).json({ error: 'Failed to fetch article.' });
+  }
 });
 
 // POST /api/ai-tutor
