@@ -116,6 +116,28 @@ function sanitizeHtml(container: HTMLElement, baseUrl: string): string {
   // 2. Clean attributes on every remaining element
   container.querySelectorAll('*').forEach(el => {
     const tag = el.tagName;
+    // Resolve lazy-loaded images BEFORE stripping data-* attributes
+    if (tag === 'IMG') {
+      let realSrc =
+        el.getAttribute('src') ||
+        el.getAttribute('data-src') ||
+        el.getAttribute('data-original') ||
+        el.getAttribute('data-lazy-src') ||
+        el.getAttribute('data-srcset') ||
+        el.getAttribute('srcset') || '';
+      // srcset → take the first (or largest) URL
+      if (realSrc.includes(',') || /\s\d+w/.test(realSrc)) {
+        const first = realSrc.split(',')[0].trim().split(/\s+/)[0];
+        if (first) realSrc = first;
+      }
+      // Skip 1x1 trackers / data-URI placeholders
+      if (/^data:image\/(gif|svg)/i.test(realSrc) || /^\s*$/.test(realSrc)) {
+        el.remove();
+        return;
+      }
+      el.setAttribute('src', absolutize(realSrc, baseUrl));
+    }
+
     for (const attr of Array.from(el.attributes)) {
       const name = attr.name.toLowerCase();
       const keep =
@@ -134,13 +156,7 @@ function sanitizeHtml(container: HTMLElement, baseUrl: string): string {
       }
     }
     if (tag === 'IMG') {
-      const src = el.getAttribute('src') || '';
-      if (!src || /^\s*javascript:/i.test(src)) {
-        el.remove();
-      } else {
-        el.setAttribute('src', absolutize(src, baseUrl));
-        el.setAttribute('loading', 'lazy');
-      }
+      el.setAttribute('loading', 'lazy');
     }
   });
 
@@ -197,26 +213,36 @@ function extractMainContent(doc: Document): HTMLElement | null {
   return doc.body as HTMLElement;
 }
 
+interface ArticleMeta { image: string; author: string; siteName: string; title: string; published: string; }
+interface ArticleResult { html: string | null; meta: ArticleMeta; finalUrl: string; }
+
 /** Fetch an article's full HTML via the backend, then extract + sanitize it. */
-async function fetchArticleContent(url: string): Promise<string | null> {
+async function fetchArticleContent(url: string): Promise<ArticleResult> {
+  const empty: ArticleResult = {
+    html: null,
+    meta: { image: '', author: '', siteName: '', title: '', published: '' },
+    finalUrl: url,
+  };
   try {
     const res = await fetch(`/api/article?url=${encodeURIComponent(url)}`, {
       headers: { Accept: 'application/json' },
     });
-    if (!res.ok) return null;
+    if (!res.ok) return empty;
     const data = await res.json();
+    const meta: ArticleMeta = { ...empty.meta, ...(data.meta || {}) };
+    const finalUrl: string = data.finalUrl || url;
     const html: string = data.html || '';
-    if (!html) return null;
+    if (!html) return { ...empty, meta, finalUrl };
 
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const main = extractMainContent(doc);
-    if (!main) return null;
+    if (!main) return { html: null, meta, finalUrl };
     const clone = main.cloneNode(true) as HTMLElement;
-    const safe = sanitizeHtml(clone, url);
+    const safe = sanitizeHtml(clone, finalUrl);
     const text = safe.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-    return text.length > 300 ? safe : null;
+    return { html: text.length > 300 ? safe : null, meta, finalUrl };
   } catch {
-    return null;
+    return empty;
   }
 }
 
@@ -338,6 +364,8 @@ const NewsCard: React.FC<NewsCardProps> = ({ item, onOpen }) => {
 
 function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void }) {
   const [html, setHtml]       = useState<string | null>(null);
+  const [meta, setMeta]       = useState<ArticleMeta>({ image: '', author: '', siteName: '', title: '', published: '' });
+  const [origUrl, setOrigUrl] = useState<string>(item.url);
   const [loading, setLoading] = useState(item.type === 'article');
   const [failed, setFailed]   = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -360,9 +388,11 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
     let alive = true;
     setLoading(true);
     setFailed(false);
-    fetchArticleContent(item.url).then(content => {
+    fetchArticleContent(item.url).then(result => {
       if (!alive) return;
-      if (content) setHtml(content);
+      setMeta(result.meta);
+      setOrigUrl(result.finalUrl || item.url);
+      if (result.html) setHtml(result.html);
       else setFailed(true);
       setLoading(false);
     });
@@ -370,6 +400,9 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
   }, [item]);
 
   const badge = badgeForRegion(item.region);
+  const heroImage = item.thumbnail || meta.image;
+  const sourceName = item.source || meta.siteName || 'Source';
+  const byline = meta.author ? `By ${meta.author}` : '';
 
   return (
     <div
@@ -426,18 +459,22 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
           ) : (
             /* ── In-app article reader ── */
             <article className="p-5 sm:p-7">
-              {item.thumbnail && (
+              {heroImage && (
                 <img
-                  src={item.thumbnail}
+                  src={heroImage}
                   alt=""
                   className="w-full max-h-72 object-cover rounded-2xl mb-5"
                   onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
                 />
               )}
               <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight mb-2">{item.title}</h1>
-              <p className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5 mb-5 pb-5 border-b border-slate-100">
-                <Clock className="w-3 h-3" /> {item.publishedAt ? timeAgo(item.publishedAt) : 'Recent'} · {item.flag} {item.source}
-              </p>
+
+              {/* Byline / credits */}
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-5 pb-5 border-b border-slate-100 text-[11px] font-mono text-slate-400">
+                <span className={`px-1.5 py-0.5 rounded border uppercase tracking-wider ${BADGE_CLS[badge]}`}>{item.flag} {sourceName}</span>
+                {byline && <span className="text-slate-600 font-sans font-semibold">{byline}</span>}
+                <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {item.publishedAt ? timeAgo(item.publishedAt) : (meta.published ? timeAgo(meta.published) : 'Recent')}</span>
+              </div>
 
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-3 text-slate-400">
@@ -449,20 +486,36 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
                   {item.snippet && <p className="article-body">{item.snippet}…</p>}
                   <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center space-y-3">
                     <p className="text-xs text-slate-500">
-                      This publisher doesn't allow the full article to be embedded. You can read the complete story on the original site.
+                      The full article couldn't be embedded from this publisher. Read the complete story on the original site below.
                     </p>
                     <a
-                      href={item.url}
+                      href={origUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all"
                     >
-                      <ExternalLink className="w-3.5 h-3.5" /> Open Original Article
+                      <ExternalLink className="w-3.5 h-3.5" /> Read on {sourceName}
                     </a>
                   </div>
                 </div>
               ) : (
-                <div className="article-body" dangerouslySetInnerHTML={{ __html: html || '' }} />
+                <>
+                  <div className="article-body" dangerouslySetInnerHTML={{ __html: html || '' }} />
+                  {/* Credit + original link at end of article */}
+                  <div className="mt-7 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-[11px] text-slate-500">
+                      {byline ? `${byline} · ` : ''}Originally published by <strong className="text-slate-700">{sourceName}</strong>
+                    </p>
+                    <a
+                      href={origUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[11px] font-bold font-mono uppercase tracking-wider transition-all"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" /> View Original
+                    </a>
+                  </div>
+                </>
               )}
             </article>
           )}
@@ -471,16 +524,16 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
         {/* Footer — always provide the external source link */}
         <div className="shrink-0 border-t border-slate-100 px-5 py-3 flex items-center justify-between gap-3 bg-slate-50/60">
           <span className="text-[10px] font-mono text-slate-400 truncate">
-            Source: {item.source}
+            {byline ? `${byline} · ` : ''}Source: {sourceName}
           </span>
           <a
-            href={item.url}
+            href={item.type === 'video' ? item.url : origUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-700 rounded-lg text-[10px] font-bold font-mono uppercase tracking-wider transition-all"
           >
             <ExternalLink className="w-3 h-3" />
-            {item.type === 'video' ? 'Open on YouTube' : 'View Original Source'}
+            {item.type === 'video' ? 'Open on YouTube' : 'Original Blog'}
           </a>
         </div>
       </div>

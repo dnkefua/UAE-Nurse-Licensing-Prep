@@ -82,20 +82,27 @@ const rssParser = new Parser({
 
 interface FeedDef { url: string; label: string; flag: string; region: string; }
 
+// Direct publisher feeds give real article URLs that read fully in-app with
+// images. Google News feeds add freshness/volume (those open via the source link).
 const NEWS_FEEDS: Record<string, FeedDef[]> = {
   africa: [
-    { url: 'https://news.google.com/rss/search?q=africa+health+OR+nursing+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌍', region: 'africa' },
     { url: 'https://theconversation.com/africa/topics/health-33/articles.atom', label: 'The Conversation', flag: '🌍', region: 'africa' },
-    { url: 'https://news.google.com/rss/search?q=Nigeria+OR+Kenya+OR+%22South+Africa%22+health+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌍', region: 'africa' },
+    { url: 'https://reliefweb.int/updates/rss.xml?search=health%20Africa%20nurse', label: 'ReliefWeb', flag: '🌍', region: 'africa' },
+    { url: 'https://news.google.com/rss/search?q=africa+health+OR+nursing+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌍', region: 'africa' },
+    { url: 'https://news.google.com/rss/search?q=Nigeria+OR+Kenya+OR+Ghana+OR+%22South+Africa%22+health+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌍', region: 'africa' },
   ],
   global: [
     { url: 'https://www.who.int/rss-feeds/news-english.xml', label: 'WHO', flag: '🌐', region: 'global' },
     { url: 'https://feeds.bbci.co.uk/news/health/rss.xml', label: 'BBC Health', flag: '🇬🇧', region: 'global' },
+    { url: 'https://theconversation.com/global/topics/health-1/articles.atom', label: 'The Conversation', flag: '🌐', region: 'global' },
     { url: 'https://news.google.com/rss/search?q=health+OR+medicine+when:4d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🌐', region: 'global' },
   ],
   nursing: [
+    { url: 'https://www.myamericannurse.com/feed/', label: 'American Nurse', flag: '🏥', region: 'nursing' },
+    { url: 'https://dailynurse.com/feed/', label: 'Daily Nurse', flag: '🩺', region: 'nursing' },
+    { url: 'https://nurse.org/feed/', label: 'Nurse.org', flag: '💊', region: 'nursing' },
     { url: 'https://news.google.com/rss/search?q=nursing+OR+nurses+when:10d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '🏥', region: 'nursing' },
-    { url: 'https://news.google.com/rss/search?q=NCLEX+OR+%22DHA+exam%22+OR+%22nurse+licensing%22+when:30d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '💊', region: 'nursing' },
+    { url: 'https://news.google.com/rss/search?q=NCLEX+OR+%22DHA+exam%22+OR+%22nurse+licensing%22+UAE+when:30d&hl=en-US&gl=US&ceid=US:en', label: 'Google News', flag: '💊', region: 'nursing' },
   ],
 };
 
@@ -246,7 +253,24 @@ app.get('/api/news', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/article?url=...  → raw HTML of an article (for the in-app reader)
+// Pull a meta value from <head> by property/name
+function metaContent(html: string, keys: string[]): string {
+  for (const k of keys) {
+    const re = new RegExp(
+      `<meta[^>]+(?:property|name)=["']${k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*content=["']([^"']+)["']`,
+      'i'
+    );
+    const m = html.match(re) ||
+      html.match(new RegExp(
+        `<meta[^>]+content=["']([^"']+)["'][^>]*(?:property|name)=["']${k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']`,
+        'i'
+      ));
+    if (m && m[1]) return m[1].replace(/&amp;/g, '&').trim();
+  }
+  return '';
+}
+
+// GET /api/article?url=...  → { html, finalUrl, meta } for the in-app reader
 app.get('/api/article', async (req: Request, res: Response) => {
   const url = String(req.query.url || '');
   if (!/^https?:\/\//i.test(url)) {
@@ -256,15 +280,26 @@ app.get('/api/article', async (req: Request, res: Response) => {
   try {
     const r = await fetch(url, {
       headers: { 'User-Agent': BROWSER_UA, Accept: 'text/html,*/*' },
-      signal: AbortSignal.timeout(12000),
+      redirect: 'follow',
+      signal: AbortSignal.timeout(14000),
     });
     if (!r.ok) {
       res.status(502).json({ error: `Upstream ${r.status}` });
       return;
     }
     const html = await r.text();
+    const head = html.slice(0, 60000); // meta tags live in <head>
+
+    const meta = {
+      image:    metaContent(head, ['og:image', 'twitter:image', 'twitter:image:src']),
+      author:   metaContent(head, ['author', 'article:author', 'twitter:creator', 'dc.creator']),
+      siteName: metaContent(head, ['og:site_name', 'application-name']),
+      title:    metaContent(head, ['og:title', 'twitter:title']),
+      published: metaContent(head, ['article:published_time', 'datePublished', 'og:updated_time']),
+    };
+
     res.set('Cache-Control', 'public, max-age=900');
-    res.json({ html });
+    res.json({ html, finalUrl: r.url || url, meta });
   } catch (error) {
     console.error('[article] error:', error);
     res.status(500).json({ error: 'Failed to fetch article.' });

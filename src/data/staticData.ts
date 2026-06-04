@@ -5,6 +5,184 @@
 
 import { StudyTopic, Question } from '../types';
 
+// ── UAE Nursing Jobs (curated, legitimate official employers) ───────────────────
+
+export type JobRole = 'Registered Nurse' | 'Nursing Assistant' | 'Specialist Nurse' | 'Midwife' | 'Home Care Nurse';
+
+export interface JobEmployer {
+  id: string;
+  employer: string;
+  logo: string;          // emoji
+  emirate: string;
+  type: 'Hospital Group' | 'Government' | 'Clinic Network' | 'Home Healthcare';
+  roles: JobRole[];
+  about: string;
+  whyLegit: string;      // why this is a verified/legitimate employer
+  careersUrl: string;    // official careers page
+  verified: boolean;
+  facts: { label: string; value: string }[];
+}
+
+/**
+ * Each entry links to the employer's OFFICIAL careers portal — the only place
+ * to apply. These are large, licensed UAE healthcare providers. Applications are
+ * always free: legitimate UAE employers never charge candidates a placement fee.
+ */
+export const JOB_EMPLOYERS: JobEmployer[] = [
+  {
+    id: 'seha',
+    employer: 'SEHA — Abu Dhabi Health Services',
+    logo: '🏥', emirate: 'Abu Dhabi', type: 'Government',
+    roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse', 'Midwife'],
+    about: 'The UAE\'s largest healthcare network, operating public hospitals and clinics across Abu Dhabi (including Sheikh Shakhbout Medical City, Tawam, and Mafraq).',
+    whyLegit: 'Government-owned (Abu Dhabi Health Services Co.). Recruits directly via its official careers portal — no agency fees.',
+    careersUrl: 'https://www.seha.ae/careers/',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'DOH Abu Dhabi' },
+      { label: 'Facilities', value: 'Hospitals + clinics' },
+      { label: 'License', value: 'DOH required' },
+    ],
+  },
+  {
+    id: 'dubai-health',
+    employer: 'Dubai Health (DHA hospitals)',
+    logo: '🏛️', emirate: 'Dubai', type: 'Government',
+    roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse'],
+    about: 'The integrated academic health system of Dubai — Rashid, Dubai, Latifa, and Hatta Hospitals, plus primary care centres.',
+    whyLegit: 'Operated by Dubai Health (government). Official recruitment via Dubai Careers / Dubai Health portal.',
+    careersUrl: 'https://www.dubaihealth.ae/careers',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'DHA' },
+      { label: 'Facilities', value: 'Public hospitals' },
+      { label: 'License', value: 'DHA required' },
+    ],
+  },
+  {
+    id: 'ehs',
+    employer: 'Emirates Health Services (EHS)',
+    logo: '🇦🇪', emirate: 'Northern Emirates', type: 'Government',
+    roles: ['Registered Nurse', 'Nursing Assistant', 'Midwife'],
+    about: 'Federal health services operating hospitals and centres across Sharjah, Ajman, UAQ, RAK, and Fujairah.',
+    whyLegit: 'Federal government body (formerly part of MOHAP). Hires through the official EHS / UAE government jobs portal.',
+    careersUrl: 'https://www.ehs.gov.ae/en/careers',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'MOHAP' },
+      { label: 'Region', value: 'Northern Emirates' },
+      { label: 'License', value: 'MOHAP required' },
+    ],
+  },
+  {
+    id: 'cleveland',
+    employer: 'Cleveland Clinic Abu Dhabi',
+    logo: '🩺', emirate: 'Abu Dhabi', type: 'Hospital Group',
+    roles: ['Registered Nurse', 'Specialist Nurse'],
+    about: 'A multispecialty hospital and a leading US academic medical centre\'s flagship in the Middle East.',
+    whyLegit: 'Part of Mubadala Health. Applications only via the official Cleveland Clinic Abu Dhabi careers site.',
+    careersUrl: 'https://www.clevelandclinicabudhabi.ae/en/careers',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'DOH Abu Dhabi' },
+      { label: 'Type', value: 'Tertiary hospital' },
+      { label: 'Experience', value: '2+ yrs typical' },
+    ],
+  },
+  {
+    id: 'mediclinic',
+    employer: 'Mediclinic Middle East',
+    logo: '➕', emirate: 'Dubai / Abu Dhabi', type: 'Hospital Group',
+    roles: ['Registered Nurse', 'Specialist Nurse', 'Midwife'],
+    about: 'A private hospital and clinic group operating across Dubai, Abu Dhabi, and Al Ain.',
+    whyLegit: 'Part of Mediclinic International (JSE-listed). Recruits via its official careers portal — no candidate fees.',
+    careersUrl: 'https://www.mediclinic.ae/en/corporate/careers.html',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'DHA / DOH' },
+      { label: 'Type', value: 'Private hospitals' },
+      { label: 'Experience', value: '2+ yrs typical' },
+    ],
+  },
+  {
+    id: 'nmc',
+    employer: 'NMC Healthcare',
+    logo: '🏨', emirate: 'UAE-wide', type: 'Hospital Group',
+    roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse'],
+    about: 'One of the largest private healthcare networks in the UAE, with hospitals and medical centres nationwide.',
+    whyLegit: 'Established licensed provider. Official applications via the NMC careers portal.',
+    careersUrl: 'https://nmc.ae/careers/',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'DHA / DOH / MOHAP' },
+      { label: 'Type', value: 'Hospitals + clinics' },
+      { label: 'Network', value: 'UAE-wide' },
+    ],
+  },
+  {
+    id: 'aster',
+    employer: 'Aster DM Healthcare',
+    logo: '💠', emirate: 'UAE-wide', type: 'Hospital Group',
+    roles: ['Registered Nurse', 'Nursing Assistant', 'Home Care Nurse'],
+    about: 'Operates Aster, Medcare, and Aster Clinics across the UAE, plus Aster Home Health Care.',
+    whyLegit: 'Listed healthcare group. Careers managed through the official Aster careers site.',
+    careersUrl: 'https://career.asterdmhealthcare.com/',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'DHA / DOH / MOHAP' },
+      { label: 'Brands', value: 'Aster, Medcare' },
+      { label: 'Home care', value: 'Available' },
+    ],
+  },
+  {
+    id: 'burjeel',
+    employer: 'Burjeel Holdings (VPS)',
+    logo: '🔷', emirate: 'Abu Dhabi / Dubai', type: 'Hospital Group',
+    roles: ['Registered Nurse', 'Specialist Nurse', 'Nursing Assistant'],
+    about: 'A super-specialty hospital group (Burjeel, Medeor, LLH) across the UAE.',
+    whyLegit: 'ADX-listed healthcare provider. Applications via the official Burjeel Holdings careers portal.',
+    careersUrl: 'https://burjeelholdings.com/careers/',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'DOH / DHA' },
+      { label: 'Type', value: 'Super-specialty' },
+      { label: 'Brands', value: 'Burjeel, Medeor' },
+    ],
+  },
+  {
+    id: 'ahd',
+    employer: 'American Hospital Dubai',
+    logo: '🏥', emirate: 'Dubai', type: 'Hospital Group',
+    roles: ['Registered Nurse', 'Specialist Nurse'],
+    about: 'A private American-standard (JCI-accredited) tertiary hospital in Dubai.',
+    whyLegit: 'Long-established licensed hospital. Recruits directly via its official careers page.',
+    careersUrl: 'https://www.ahdubai.com/careers',
+    verified: true,
+    facts: [
+      { label: 'Regulator', value: 'DHA' },
+      { label: 'Accreditation', value: 'JCI' },
+      { label: 'Experience', value: '2+ yrs typical' },
+    ],
+  },
+];
+
+export interface JobBoard {
+  id: string;
+  name: string;
+  note: string;
+  searchUrl: string; // pre-filtered to UAE nursing roles
+  icon: string;
+}
+
+/** Reputable job boards, deep-linked to UAE nursing searches for live listings. */
+export const JOB_BOARDS: JobBoard[] = [
+  { id: 'bayt',    name: 'Bayt.com',    icon: '🔎', note: 'Leading Middle East job site', searchUrl: 'https://www.bayt.com/en/uae/jobs/nurse-jobs/' },
+  { id: 'linkedin',name: 'LinkedIn',    icon: '💼', note: 'Professional network jobs',     searchUrl: 'https://www.linkedin.com/jobs/search/?keywords=nurse&location=United%20Arab%20Emirates' },
+  { id: 'indeed',  name: 'Indeed UAE',  icon: '📋', note: 'Global job aggregator',          searchUrl: 'https://ae.indeed.com/jobs?q=nurse&l=United+Arab+Emirates' },
+  { id: 'naukri',  name: 'NaukriGulf',  icon: '🌊', note: 'Gulf-focused listings',          searchUrl: 'https://www.naukrigulf.com/nursing-jobs-in-uae' },
+  { id: 'gulftalent', name: 'GulfTalent', icon: '⭐', note: 'Gulf professional jobs',        searchUrl: 'https://www.gulftalent.com/uae/jobs/title/nurse' },
+];
+
 // ── UAE Health Authority reference data (for in-app info panels) ────────────────
 
 export interface AuthorityInfo {

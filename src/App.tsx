@@ -43,6 +43,7 @@ import Forum from './components/Forum';
 import CalendarComp from './components/CalendarComp';
 import Consultation from './components/Consultation';
 import NewsFeed from './components/NewsFeed';
+import Jobs from './components/Jobs';
 import CrestLogo from './components/CrestLogo';
 import { Award, Lock, Key, CheckCircle2, ShieldAlert } from 'lucide-react';
 
@@ -836,6 +837,9 @@ export default function App() {
               )}
               {activeTab === 'news' && (
                 <NewsFeed />
+              )}
+              {activeTab === 'jobs' && (
+                <Jobs />
               )}
               {activeTab === 'forum' && (
                 <Forum
