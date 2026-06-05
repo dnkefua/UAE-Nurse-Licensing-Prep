@@ -305,7 +305,9 @@ export default function App() {
       setLoadingAuth(false);
     });
 
-    seedInitialDatabase();
+    // Note: seedInitialDatabase() is intentionally not called — seeded mock
+    // posts use fake authorIds that the Firestore security rules reject. The
+    // forum/calendar populate from real users' content.
 
     // Set initial registration reminders inside notification array
     setNotifications([
@@ -426,7 +428,11 @@ export default function App() {
   const handleCreatePost = async (title: string, content: string, category: 'Licensing' | 'Study Notes' | 'Exam Tips' | 'Mentorship') => {
     if (!user) return;
     try {
-      const newPost: Partial<ForumPost> = {
+      // Pre-generate the doc ref so `id` is written at creation time
+      // (security rules require the id field on create).
+      const postRef = doc(collection(db, 'forumPosts'));
+      const newPost: ForumPost = {
+        id: postRef.id,
         title,
         content,
         category,
@@ -437,9 +443,7 @@ export default function App() {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      const docRef = await addDoc(collection(db, 'forumPosts'), newPost);
-      // Dual-sync id variable according to Fortress specifications
-      await updateDoc(docRef, { id: docRef.id });
+      await setDoc(postRef, newPost);
     } catch (error) {
       handleFirestoreError(error, OperationType.CREATE, 'forumPosts');
     }
@@ -448,15 +452,16 @@ export default function App() {
   const handleCreateComment = async (postId: string, content: string) => {
     if (!user) return;
     try {
-      const newComment: Partial<ForumComment> = {
+      const commRef = doc(collection(db, `forumPosts/${postId}/comments`));
+      const newComment: ForumComment = {
+        id: commRef.id,
         postId,
         content,
         authorId: user.uid,
         authorName: user.displayName || 'Candidate Nurse',
         createdAt: new Date().toISOString()
       };
-      const commRef = await addDoc(collection(db, `forumPosts/${postId}/comments`), newComment);
-      await updateDoc(commRef, { id: commRef.id });
+      await setDoc(commRef, newComment);
 
       // Atomically increment comment counter inside parent post
       const parentPost = posts.find((p) => p.id === postId);
@@ -498,7 +503,9 @@ export default function App() {
   const handleCreateSession = async (title: string, dateTime: string, duration: number, topic: string, isExpertQA: boolean, expertName?: string) => {
     if (!user) return;
     try {
-      const newSession: Partial<StudySession> = {
+      const sessionRef = doc(collection(db, 'studySessions'));
+      const newSession: StudySession = {
+        id: sessionRef.id,
         title,
         dateTime,
         duration,
@@ -507,11 +514,11 @@ export default function App() {
         hostName: user.displayName || 'Candidate Nurse',
         attendees: [],
         isExpertQA,
-        expertName,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        // Only include expertName when provided (Firestore rejects undefined)
+        ...(isExpertQA && expertName ? { expertName } : {})
       };
-      const docRef = await addDoc(collection(db, 'studySessions'), newSession);
-      await updateDoc(docRef, { id: docRef.id });
+      await setDoc(sessionRef, newSession);
     } catch (error) {
       handleFirestoreError(error, OperationType.CREATE, 'studySessions');
     }
@@ -540,7 +547,9 @@ export default function App() {
   const handleSaveAttempt = async (examType: ExamType, score: number, correctAnswers: number, totalQuestions: number) => {
     if (!user) return;
     try {
-      const attempt: Partial<TestAttempt> = {
+      const attemptRef = doc(collection(db, 'testAttempts'));
+      const attempt: TestAttempt = {
+        id: attemptRef.id,
         userId: user.uid,
         examType,
         score,
@@ -548,8 +557,7 @@ export default function App() {
         totalQuestions,
         completedAt: new Date().toISOString()
       };
-      const docRef = await addDoc(collection(db, 'testAttempts'), attempt);
-      await updateDoc(docRef, { id: docRef.id });
+      await setDoc(attemptRef, attempt);
 
       // Daily steak calculator logic bounds
       const currentStreak = profile ? profile.currentStreak : 1;

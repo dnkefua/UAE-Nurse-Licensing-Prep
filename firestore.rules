@@ -129,11 +129,12 @@ service cloud.firestore {
     // -- User Profiles Rules --
     match /userProfiles/{userId} {
       allow get: if isSignedIn() && (isOwner(userId) || resource == null);
-      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming()) 
-        && incoming().createdAt == request.time;
-      allow update: if isOwner(userId) && isValidUserProfile(incoming()) 
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming())
+        && incoming().createdAt is string && incoming().createdAt.size() <= 64
+        && incoming().updatedAt is string && incoming().updatedAt.size() <= 64;
+      allow update: if isOwner(userId) && isValidUserProfile(incoming())
         && incoming().createdAt == existing().createdAt
-        && incoming().updatedAt == request.time
+        && incoming().updatedAt is string && incoming().updatedAt.size() <= 64
         && (
           // Action: Daily Streak / Target Exam / Progress Update
           incoming().diff(existing()).affectedKeys().hasOnly([
@@ -149,18 +150,26 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow get: if isSignedIn();
       allow create: if isSignedIn() && isValidId(postId) && isValidForumPost(incoming())
-        && incoming().createdAt == request.time;
-      allow update: if isSignedIn() && isValidForumPost(incoming())
+        && incoming().createdAt is string && incoming().createdAt.size() <= 64
+        && incoming().updatedAt is string && incoming().updatedAt.size() <= 64;
+      allow update: if isSignedIn()
+        && incoming().id == existing().id
         && incoming().createdAt == existing().createdAt
         && incoming().authorId == existing().authorId
-        && incoming().updatedAt == request.time
+        && incoming().authorName == existing().authorName
+        && incoming().updatedAt is string && incoming().updatedAt.size() <= 64
         && (
-          // Action 1: Self-edit Post content
-          (request.auth.uid == existing().authorId && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'content', 'category', 'updatedAt'])) ||
-          // Action 2: Collaborative Upvote / Like
-          (incoming().diff(existing()).affectedKeys().hasOnly(['likes', 'updatedAt'])) ||
-          // Action 3: Incremented Comment Counter
-          (incoming().diff(existing()).affectedKeys().hasOnly(['commentsCount', 'updatedAt']))
+          // Action 1: Author edits their own post content
+          (request.auth.uid == existing().authorId
+            && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'content', 'category', 'updatedAt'])
+            && incoming().title is string && incoming().title.size() > 0 && incoming().title.size() <= 200
+            && incoming().content is string && incoming().content.size() > 0 && incoming().content.size() <= 5000) ||
+          // Action 2: Any signed-in user upvotes / likes
+          (incoming().diff(existing()).affectedKeys().hasOnly(['likes', 'updatedAt'])
+            && incoming().likes is list && incoming().likes.size() <= 10000) ||
+          // Action 3: Comment counter increment when someone comments
+          (incoming().diff(existing()).affectedKeys().hasOnly(['commentsCount', 'updatedAt'])
+            && incoming().commentsCount is int && incoming().commentsCount >= 0)
         );
       allow delete: if isSignedIn() && (request.auth.uid == existing().authorId);
     }
@@ -170,7 +179,7 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow get: if isSignedIn();
       allow create: if isSignedIn() && isValidId(commentId) && isValidForumComment(incoming())
-        && incoming().createdAt == request.time;
+        && incoming().createdAt is string && incoming().createdAt.size() <= 64;
       allow update: if isSignedIn() && request.auth.uid == existing().authorId && isValidForumComment(incoming())
         && incoming().createdAt == existing().createdAt
         && incoming().postId == existing().postId
@@ -184,7 +193,7 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow get: if isSignedIn();
       allow create: if isSignedIn() && isValidId(sessionId) && isValidStudySession(incoming())
-        && incoming().createdAt == request.time;
+        && incoming().createdAt is string && incoming().createdAt.size() <= 64;
       allow update: if isSignedIn() && isValidStudySession(incoming())
         && (
           // Action 1: Edit Event (Only original Host has host edit rights)
@@ -208,7 +217,7 @@ service cloud.firestore {
       allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow create: if isSignedIn() && isValidId(attemptId) && isValidTestAttempt(incoming())
-        && incoming().completedAt == request.time;
+        && incoming().completedAt is string && incoming().completedAt.size() <= 64;
       // Diagnostic outputs are permanent logs -- block client-side updates/deletes to assure absolute study tracking integrity
       allow update, delete: if false;
     }
