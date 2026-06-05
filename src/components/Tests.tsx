@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Award, CheckCircle2, AlertCircle, RefreshCw, Layers, Clock, HelpCircle, Save, ArrowRight } from 'lucide-react';
+import { Award, CheckCircle2, AlertCircle, RefreshCw, Clock, HelpCircle, Save, ArrowRight, BookOpen, Timer } from 'lucide-react';
 import { MOCK_QUESTIONS } from '../data/staticData';
 import { ExamType, TestAttempt, Question } from '../types';
 
@@ -24,6 +24,12 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [examCompleted, setExamCompleted] = useState(false);
   const [submittingScore, setSubmittingScore] = useState(false);
+  const [timedMode, setTimedMode] = useState(false);
+  const [autoSubmitted, setAutoSubmitted] = useState(false);
+
+  // Real UAE board exam allowance: 150 questions in ~165 minutes
+  const TIMED_SECONDS = 165 * 60;
+  const remainingSeconds = Math.max(0, TIMED_SECONDS - timerCount);
 
   // Each regulator has its own unique 150-question bank. A fresh shuffled set
   // is drawn at the start of every attempt to mimic a real Prometric sitting.
@@ -40,11 +46,22 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
     return () => clearInterval(timer);
   }, [isTimerRunning, isExamActive]);
 
-  const startExam = (type: ExamType) => {
+  // Auto-submit when the 165-minute timed exam runs out
+  useEffect(() => {
+    if (timedMode && isExamActive && !examCompleted && timerCount >= TIMED_SECONDS) {
+      setAutoSubmitted(true);
+      setIsTimerRunning(false);
+      setExamCompleted(true);
+    }
+  }, [timedMode, isExamActive, examCompleted, timerCount, TIMED_SECONDS]);
+
+  const startExam = (type: ExamType, timed: boolean = false) => {
     const pool = MOCK_QUESTIONS.filter(q => q.examType === type);
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
     setExamQuestions(shuffled);
     setExamType(type);
+    setTimedMode(timed);
+    setAutoSubmitted(false);
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setReviewedQuestions({});
@@ -146,12 +163,20 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
                       A distinct mock for the {meta.emirate} regulator, modelled on the real exam blueprint (safe practice, pharmacology, med-surg, maternal-child, critical care, mental health &amp; ethics).
                     </p>
                   </div>
-                  <button
-                    onClick={() => startExam(type)}
-                    className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer text-center shadow-sm shadow-blue-500/10"
-                  >
-                    Launch {type === 'HAAD_DOH' ? 'DOH/HAAD' : type} Mock Exam
-                  </button>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => startExam(type, false)}
+                      className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer text-center shadow-sm shadow-blue-500/10 flex items-center justify-center gap-1.5"
+                    >
+                      <BookOpen className="w-3.5 h-3.5" /> Practice (self-paced)
+                    </button>
+                    <button
+                      onClick={() => startExam(type, true)}
+                      className="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all cursor-pointer text-center shadow-sm flex items-center justify-center gap-1.5"
+                    >
+                      <Timer className="w-3.5 h-3.5" /> Exam Simulation · 165 min
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -202,13 +227,28 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
           {/* Main workspace */}
           <div className="lg:col-span-2 p-6 bg-white border border-slate-200 rounded-2xl space-y-6 shadow-sm text-slate-900">
             {/* Header controls inside simulation */}
-            <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-800">
-              <span className="font-mono text-blue-600 font-bold uppercase tracking-widest">{examType} ACTIVE MODULE</span>
-              <div className="flex items-center gap-2 text-slate-700 font-mono font-bold">
-                <Clock className="w-4 h-4 text-blue-600" />
-                <span>{formatTime(timerCount)}</span>
+            <div className={`flex justify-between items-center p-3 rounded-xl border text-xs ${
+              timedMode && remainingSeconds <= 300 ? 'bg-rose-50 border-rose-200' : 'bg-slate-50 border-slate-200'
+            }`}>
+              <span className="font-mono text-blue-600 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                {timedMode ? <><Timer className="w-3.5 h-3.5" /> {examType} EXAM SIM</> : <>{examType} PRACTICE</>}
+              </span>
+              <div className={`flex items-center gap-2 font-mono font-bold ${
+                timedMode ? (remainingSeconds <= 300 ? 'text-rose-600 animate-pulse' : remainingSeconds <= 900 ? 'text-amber-600' : 'text-slate-800') : 'text-slate-700'
+              }`}>
+                <Clock className="w-4 h-4" />
+                <span>{timedMode ? formatTime(remainingSeconds) : formatTime(timerCount)}</span>
+                <span className="text-[9px] text-slate-400 uppercase">{timedMode ? 'left' : 'elapsed'}</span>
               </div>
             </div>
+
+            {/* Timed-mode banner */}
+            {timedMode && !examCompleted && (
+              <div className="flex items-center gap-2 bg-slate-900 text-white px-3 py-2 rounded-xl text-[11px] font-mono">
+                <Timer className="w-3.5 h-3.5 shrink-0" />
+                <span>Exam-day simulation: {questions.length} questions, 165 minutes. Auto-submits when the timer reaches 0. Rationales are revealed after you submit.</span>
+              </div>
+            )}
 
             {/* Test end screen checks */}
             {examCompleted ? (
@@ -216,9 +256,17 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
                 <div className="inline-flex p-4 bg-blue-50 rounded-full text-blue-600 mb-2">
                   <Award className="w-12 h-12 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-bold font-sans text-slate-930">SIMULATION CONCLUDED</h3>
+                <h3 className="text-xl font-bold font-sans text-slate-930">
+                  {autoSubmitted ? 'TIME EXPIRED — AUTO-SUBMITTED' : 'EXAM CONCLUDED'}
+                </h3>
+                {timedMode && (
+                  <p className="text-xs text-slate-500 font-mono">
+                    {autoSubmitted ? 'The 165-minute limit was reached.' : `Submitted with ${formatTime(remainingSeconds)} remaining.`}
+                    {' '}Answered {Object.keys(selectedAnswers).length} of {total}.
+                  </p>
+                )}
                 <p className="text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
-                  You have answered the Prometric MCQ catalog block. Check your evaluated accuracy percentage below and click save to logs.
+                  Your evaluated accuracy is below. Unanswered questions are scored as incorrect, just like the real exam. Save your score to track progress on your dashboard.
                 </p>
 
                 <div className="bg-slate-50 max-w-xs mx-auto p-5 border border-slate-200 rounded-2xl shadow-inner text-center">
@@ -300,13 +348,13 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
                 </div>
 
                 {/* Question rationale drawer */}
-                {reviewedQuestions[questions[currentQuestionIndex].id] ? (
+                {!timedMode && reviewedQuestions[questions[currentQuestionIndex].id] ? (
                   <div className="p-4 bg-emerald-50 border border-emerald-150 rounded-xl space-y-2 text-xs">
                     <p className="font-mono text-[10.5px] font-bold text-emerald-800 uppercase tracking-wider">CLINICAL REVIEW RATIONALE & FEEDBACK:</p>
                     <p className="text-[11px] text-slate-720 leading-relaxed leading-snug">{questions[currentQuestionIndex].rationale}</p>
                   </div>
                 ) : (
-                  selectedAnswers[questions[currentQuestionIndex].id] !== undefined && (
+                  !timedMode && selectedAnswers[questions[currentQuestionIndex].id] !== undefined && (
                     <button
                       onClick={() => submitQuestionRevision(questions[currentQuestionIndex].id)}
                       className="py-1.5 px-4 bg-amber-100 hover:bg-amber-200 border border-amber-305 text-amber-900 text-xs font-bold rounded-lg cursor-pointer transition-all"
