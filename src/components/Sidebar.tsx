@@ -44,7 +44,7 @@ export default function Sidebar({
   return (
     <>
       {/* Mobile Header */}
-      <header className="lg:hidden h-16 bg-[#0d1b2e] text-slate-100 flex items-center justify-between px-4 sticky top-0 z-40 border-b border-[#1b2b3f] shadow-sm">
+      <header className="lg:hidden min-h-16 pt-safe bg-[#0d1b2e] text-slate-100 flex items-center justify-between px-4 sticky top-0 z-40 border-b border-[#1b2b3f] shadow-sm">
         <div className="flex items-center gap-3">
           <CrestLogo className="w-10 h-10 shrink-0" />
           <div>
@@ -71,7 +71,7 @@ export default function Sidebar({
 
       {/* Primary Navigation Drawer */}
       <aside className={`
-        fixed inset-y-0 left-0 z-50 lg:sticky lg:top-0 w-72 lg:w-76 h-full bg-[#0b1320] text-slate-300 border-r border-[#1a2d44] flex flex-col justify-between transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-50 lg:sticky lg:top-0 w-[82%] max-w-xs lg:w-76 h-full bg-[#0b1320] text-slate-300 border-r border-[#1a2d44] flex flex-col justify-between transition-transform duration-300 ease-in-out pt-safe pb-safe overflow-y-auto
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Upper Control Panel */}

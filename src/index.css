@@ -193,3 +193,65 @@
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* ── Mobile / native-app polish ─────────────────────────────────────────────── */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;        /* stop the rubber-band/pull-to-refresh bounce */
+  overflow-x: hidden;                  /* guard against horizontal overflow on small screens */
+}
+
+/* Remove tap flash, kill the 300ms delay, prevent accidental text selection on controls */
+button, a, [role="button"], summary, label, .no-tap {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+button, [role="button"] { user-select: none; }
+
+/* Momentum scrolling inside scroll areas */
+.overflow-y-auto, .overflow-auto, .overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tactile press feedback on primary controls */
+button:active:not(:disabled), [role="button"]:active { transform: scale(0.98); }
+
+/* Accessible focus: visible for keyboard, hidden for pointer/touch */
+:focus { outline: none; }
+:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 6px; }
+
+/* Safe-area insets (notch / status bar / home indicator) */
+.pt-safe { padding-top: env(safe-area-inset-top); }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.pl-safe { padding-left: env(safe-area-inset-left); }
+.pr-safe { padding-right: env(safe-area-inset-right); }
+.inset-safe-top { top: env(safe-area-inset-top); }
+
+/* Inputs: comfortable touch sizing and no iOS styling quirks */
+input, select, textarea, button { font-family: inherit; }
+input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+@media (max-width: 640px) {
+  /* Slightly larger minimum tap area for inline icon buttons on phones */
+  .tap-target { min-height: 40px; min-width: 40px; }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

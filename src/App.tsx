@@ -34,19 +34,32 @@ import {
   limit
 } from 'firebase/firestore';
 
+import { lazy, Suspense } from 'react';
 import { UserProfile, ForumPost, ForumComment, StudySession, TestAttempt, ExamType } from './types';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
-import Study from './components/Study';
-import Tests from './components/Tests';
-import Forum from './components/Forum';
-import CalendarComp from './components/CalendarComp';
-import Consultation from './components/Consultation';
-import NewsFeed from './components/NewsFeed';
-import Jobs from './components/Jobs';
-import Workshops from './components/Workshops';
-import Scholarships from './components/Scholarships';
 import CrestLogo from './components/CrestLogo';
+
+// Heavy/secondary tabs are code-split so the initial mobile load stays small.
+const Study = lazy(() => import('./components/Study'));
+const Tests = lazy(() => import('./components/Tests'));
+const Forum = lazy(() => import('./components/Forum'));
+const CalendarComp = lazy(() => import('./components/CalendarComp'));
+const Consultation = lazy(() => import('./components/Consultation'));
+const NewsFeed = lazy(() => import('./components/NewsFeed'));
+const Jobs = lazy(() => import('./components/Jobs'));
+const Workshops = lazy(() => import('./components/Workshops'));
+const Scholarships = lazy(() => import('./components/Scholarships'));
+
+// Lightweight loading placeholder for lazily-loaded tabs
+function TabLoader() {
+  return (
+    <div className="flex flex-col items-center justify-center py-24 gap-3 text-slate-400">
+      <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <p className="text-[11px] font-mono uppercase tracking-widest">Loading…</p>
+    </div>
+  );
+}
 import { Award, Lock, Key, CheckCircle2, ShieldAlert } from 'lucide-react';
 
 export default function App() {
@@ -695,7 +708,7 @@ export default function App() {
         notificationCount={notifications.length}
       />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-w-7xl mx-auto w-full flex flex-col justify-center">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto max-w-7xl mx-auto w-full flex flex-col justify-center">
         {user ? (
           !isUnlocked ? (
             /* Secure Client Access Activation Gate Overlay Screen */
@@ -758,7 +771,7 @@ export default function App() {
               </div>
             </div>
           ) : (
-            <>
+            <Suspense fallback={<TabLoader />}>
               {/* Oversight panel section inside Dashboards view for Admins / Owners */}
               {activeTab === 'dashboard' && isAdmin && (
                 <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4 mb-6 border-l-4 border-l-amber-500 animate-fade-in text-slate-900">
@@ -878,7 +891,7 @@ export default function App() {
                   onLogin={handleLogin}
                 />
               )}
-            </>
+            </Suspense>
           )
         ) : (
           <div className="min-h-[75vh] flex flex-col items-center justify-center p-6 sm:p-10 max-w-md mx-auto w-full self-center my-auto">
