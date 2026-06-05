@@ -400,7 +400,7 @@ function normalizeJob(j: any): LiveJob | null {
 }
 
 const jobsCache = new Map<string, { items: LiveJob[]; ts: number }>();
-const JOBS_TTL = 12 * 60 * 60 * 1000; // 12h — conserves the free API quota
+const JOBS_TTL = 24 * 60 * 60 * 1000; // 24h — conserves the free API quota
 
 // GET /api/jobs
 app.get('/api/jobs', async (_req: Request, res: Response) => {
@@ -416,7 +416,9 @@ app.get('/api/jobs', async (_req: Request, res: Response) => {
   try {
     const queries = [
       'registered nurse hospital United Arab Emirates',
-      'staff nurse OR nursing assistant United Arab Emirates',
+      'staff nurse hospital Dubai',
+      'registered nurse OR specialist nurse Abu Dhabi hospital',
+      'nursing assistant OR patient care hospital United Arab Emirates',
     ];
     const settled = await Promise.allSettled(queries.map(q => fetchJSearch(q, key)));
     const raw: any[] = [];
