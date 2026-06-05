@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Newspaper, RefreshCw, ExternalLink, Play, Globe,
   AlertCircle, Clock, ChevronRight, Tv2, Stethoscope, Heart,
@@ -408,7 +409,7 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
   const sourceName = item.source || meta.siteName || 'Source';
   const byline = meta.author ? `By ${meta.author}` : '';
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4"
       onClick={onClose}
@@ -541,7 +542,8 @@ function ReaderModal({ item, onClose }: { item: NewsItem; onClose: () => void })
           </a>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

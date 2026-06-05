@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useTransition, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Award, Calendar, CheckSquare, Square, Zap, Bell, Shield, TrendingUp, AlertCircle, Sparkles, X, ChevronRight, Target, BarChart3, CheckCircle2 } from 'lucide-react';
 import { ExamType, UserProfile, TestAttempt } from '../types';
 
@@ -364,7 +365,7 @@ export default function Dashboard({
       </div>
 
       {/* Stat-card detail modal */}
-      {detailCard && (
+      {detailCard && createPortal(
         <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={() => setDetailCard(null)}>
           <div className="bg-white w-full sm:max-w-lg sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[90vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
             {/* Header */}
@@ -489,7 +490,8 @@ export default function Dashboard({
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Push alerting simulation center & Deadlines Desk */}

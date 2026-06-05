@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Briefcase, MapPin, ExternalLink, X, ShieldCheck, Search, ChevronRight,
   AlertTriangle, Building2, CheckCircle2, Stethoscope
@@ -22,7 +23,7 @@ function EmployerModal({ employer, onClose }: { employer: JobEmployer; onClose: 
     return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={onClose}>
       <div className="bg-white w-full sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
         {/* Header */}
@@ -87,7 +88,8 @@ function EmployerModal({ employer, onClose }: { employer: JobEmployer; onClose: 
           </a>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Calendar, Users, Plus, Clock, Video, UserCheck, X, Link2, Copy,
   CheckCircle2, ExternalLink, PhoneOff, Loader2, CalendarDays
@@ -78,7 +79,7 @@ function SessionModal({ session, user, isAttending, onJoinToggle, onClose, onLog
     `${getSessionLink(session)}#config.prejoinPageEnabled=false&config.disableDeepLinking=true` +
     `&userInfo.displayName=%22${encodeURIComponent(user?.displayName || 'Nurse Candidate')}%22`;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={onClose}>
       <div className={`bg-white w-full ${inCall ? 'sm:max-w-4xl' : 'sm:max-w-lg'} sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden animate-modal-in`} onClick={e => e.stopPropagation()}>
         {/* Header */}
@@ -196,7 +197,8 @@ function SessionModal({ session, user, isAttending, onJoinToggle, onClose, onLog
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

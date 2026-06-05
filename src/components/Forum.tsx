@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   MessageSquare, ThumbsUp, Plus, CornerDownRight, Bookmark, ArrowLeft, Send,
   Sparkles, UserCheck, X, ExternalLink, CheckCircle2, ChevronRight, Building2
@@ -30,7 +31,7 @@ function AuthorityModal({ authority, onClose }: { authority: AuthorityInfo; onCl
 
   const c = AUTH_COLORS[authority.color];
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={onClose}>
       <div className="bg-white w-full sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
         {/* Header */}
@@ -99,7 +100,8 @@ function AuthorityModal({ authority, onClose }: { authority: AuthorityInfo; onCl
           </a>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
