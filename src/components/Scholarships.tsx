@@ -10,6 +10,7 @@ import {
   GraduationCap, CheckCircle2, AlertTriangle, BookMarked
 } from 'lucide-react';
 import { SCHOLARSHIPS, Scholarship, ScholarshipRegion } from '../data/staticData';
+import { InAppArticle } from '../lib/readable';
 
 const REGION_FILTERS: (ScholarshipRegion | 'All')[] = ['All', 'International', 'USA', 'UK', 'Canada', 'Australia', 'UAE'];
 
@@ -84,6 +85,11 @@ function ScholarshipModal({ sc, onClose }: { sc: Scholarship; onClose: () => voi
             <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" />
             Deadlines and amounts change each cycle. Confirm current details and never pay a fee to "apply" — legitimate scholarships are free to enter.
           </p>
+
+          {/* Full official details loaded in-app */}
+          <div className="pt-2 border-t border-slate-100">
+            <InAppArticle url={sc.url} sourceName={sc.provider} label="Full details & eligibility" />
+          </div>
         </div>
 
         <div className="shrink-0 border-t border-slate-100 px-5 py-3 bg-slate-50/60">

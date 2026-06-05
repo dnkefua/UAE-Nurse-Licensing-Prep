@@ -10,6 +10,7 @@ import {
   ChevronRight, Sparkles, Globe2, CheckCircle2
 } from 'lucide-react';
 import { WORKSHOPS, Workshop, WorkshopCountry } from '../data/staticData';
+import { InAppArticle } from '../lib/readable';
 
 const COUNTRY_FILTERS: (WorkshopCountry | 'All')[] = ['All', 'UAE', 'USA', 'UK', 'Canada', 'Australia'];
 
@@ -74,6 +75,11 @@ function WorkshopModal({ ws, onClose }: { ws: Workshop; onClose: () => void }) {
           </div>
 
           <p className="text-[10px] text-slate-400">Dates vary each year — confirm the exact schedule, fees, and CPD accreditation on the official event page.</p>
+
+          {/* Full official details loaded in-app */}
+          <div className="pt-2 border-t border-slate-100">
+            <InAppArticle url={ws.url} sourceName={ws.organizer} label="Programme & details" />
+          </div>
         </div>
 
         <div className="shrink-0 border-t border-slate-100 px-5 py-3 bg-slate-50/60">

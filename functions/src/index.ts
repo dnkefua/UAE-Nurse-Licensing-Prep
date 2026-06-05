@@ -285,7 +285,7 @@ app.get('/api/article', async (req: Request, res: Response) => {
     const r = await fetch(url, {
       headers: { 'User-Agent': BROWSER_UA, Accept: 'text/html,*/*' },
       redirect: 'follow',
-      signal: AbortSignal.timeout(14000),
+      signal: AbortSignal.timeout(9000),
     });
     if (!r.ok) {
       res.status(502).json({ error: `Upstream ${r.status}` });
