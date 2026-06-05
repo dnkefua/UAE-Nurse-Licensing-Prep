@@ -10,7 +10,7 @@ import {
   AlertTriangle, Building2, CheckCircle2, Stethoscope, Clock, Wallet,
   CalendarClock, ListChecks, GraduationCap, Gift
 } from 'lucide-react';
-import { JOB_EMPLOYERS, JOB_BOARDS, JOB_POSTINGS, JobEmployer, JobPosting, JobRole } from '../data/staticData';
+import { JOB_EMPLOYERS, JOB_BOARDS, JOB_POSTINGS, LINKEDIN_SEARCHES, JobEmployer, JobPosting, JobRole } from '../data/staticData';
 
 const ROLE_FILTERS: (JobRole | 'All')[] = ['All', 'Registered Nurse', 'Nursing Assistant', 'Specialist Nurse', 'Midwife', 'Home Care Nurse'];
 
@@ -331,6 +331,36 @@ export default function Jobs() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* LinkedIn live jobs — recruiters, hospitals & clinics */}
+      <div>
+        <h3 className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+          <span className="text-[#0a66c2]">in</span> LinkedIn — Live Jobs (Recruiters, Hospitals &amp; Clinics)
+        </h3>
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
+            Opens LinkedIn's live results (posted in the last week) where verified hospitals, clinics, and healthcare recruiters post UAE nursing roles. Apply directly through the official LinkedIn posting.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+            {LINKEDIN_SEARCHES.map(s => (
+              <a
+                key={s.id}
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 p-3 bg-[#0a66c2]/5 border border-[#0a66c2]/20 rounded-xl hover:border-[#0a66c2]/50 hover:bg-[#0a66c2]/10 transition-all"
+              >
+                <span className="shrink-0 w-7 h-7 rounded bg-[#0a66c2] text-white text-xs font-extrabold flex items-center justify-center">in</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-slate-800 group-hover:text-[#0a66c2] transition-colors">{s.label}</p>
+                  <p className="text-[10px] text-slate-400 truncate">{s.note}</p>
+                </div>
+                <ExternalLink className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#0a66c2] transition-colors shrink-0" />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { BookOpen, Award, MessageSquare, Calendar, User, BrainCircuit, Menu, X, LogOut, Video, Newspaper, Briefcase } from 'lucide-react';
+import { BookOpen, Award, MessageSquare, Calendar, User, BrainCircuit, Menu, X, LogOut, Video, Newspaper, Briefcase, GraduationCap, Trophy } from 'lucide-react';
 import CrestLogo from './CrestLogo';
 
 interface SidebarProps {
@@ -35,6 +35,8 @@ export default function Sidebar({
     { id: 'consultation', label: '1-on-1 Consultation', icon: Video },
     { id: 'news', label: 'Health News & Resources', icon: Newspaper },
     { id: 'jobs', label: 'UAE Nursing Jobs', icon: Briefcase },
+    { id: 'workshops', label: 'Workshops & Seminars', icon: GraduationCap },
+    { id: 'scholarships', label: 'Scholarships & Grants', icon: Trophy },
     { id: 'forum', label: 'Collaborative Forum', icon: MessageSquare },
     { id: 'calendar', label: 'Study Calendar & Q&A', icon: Calendar },
   ];

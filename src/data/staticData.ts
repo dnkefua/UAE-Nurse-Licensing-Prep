@@ -453,6 +453,246 @@ export const JOB_BOARDS: JobBoard[] = [
   { id: 'gulftalent', name: 'GulfTalent', icon: '⭐', note: 'Gulf professional jobs',        searchUrl: 'https://www.gulftalent.com/uae/jobs/title/nurse' },
 ];
 
+// LinkedIn live searches — authentic recruiters, hospitals & clinics post here.
+// Each opens LinkedIn's live job results filtered for UAE nursing roles.
+export const LINKEDIN_SEARCHES: { id: string; label: string; note: string; url: string }[] = [
+  { id: 'li-rn',  label: 'Registered Nurse — UAE', note: 'Hospitals & clinics hiring RNs', url: 'https://www.linkedin.com/jobs/search/?keywords=registered%20nurse&location=United%20Arab%20Emirates&f_TPR=r604800' },
+  { id: 'li-na',  label: 'Nursing Assistant — UAE', note: 'PCA / nursing assistant roles',  url: 'https://www.linkedin.com/jobs/search/?keywords=nursing%20assistant&location=United%20Arab%20Emirates&f_TPR=r604800' },
+  { id: 'li-staff', label: 'Staff / Specialist Nurse — UAE', note: 'ICU, ED, OT, theatre, etc.', url: 'https://www.linkedin.com/jobs/search/?keywords=staff%20nurse&location=United%20Arab%20Emirates&f_TPR=r604800' },
+  { id: 'li-dubai', label: 'Nurse jobs in Dubai', note: 'All nursing roles in Dubai',       url: 'https://www.linkedin.com/jobs/search/?keywords=nurse&location=Dubai%2C%20United%20Arab%20Emirates&f_TPR=r604800' },
+  { id: 'li-auh', label: 'Nurse jobs in Abu Dhabi', note: 'All nursing roles in Abu Dhabi', url: 'https://www.linkedin.com/jobs/search/?keywords=nurse&location=Abu%20Dhabi%2C%20United%20Arab%20Emirates&f_TPR=r604800' },
+  { id: 'li-recruit', label: 'Healthcare recruiters — UAE', note: 'Verified agency recruiters', url: 'https://www.linkedin.com/search/results/people/?keywords=nurse%20recruiter%20UAE' },
+];
+
+// ── Nursing Workshops, Seminars & Conferences (curated, authentic organisers) ───
+
+export type WorkshopCountry = 'UAE' | 'USA' | 'Canada' | 'UK' | 'Australia';
+
+export interface Workshop {
+  id: string;
+  title: string;
+  organizer: string;
+  country: WorkshopCountry;
+  flag: string;
+  city: string;
+  format: 'In-person' | 'Virtual' | 'Hybrid';
+  dateLabel: string;   // e.g. "Annual · Jan" — confirm exact dates on the site
+  topic: string;
+  cpd: string;         // CPD / CE credit note
+  cost: string;
+  summary: string;
+  highlights: string[];
+  url: string;         // official event/registration page
+}
+
+export const WORKSHOPS: Workshop[] = [
+  // ── UAE ──
+  {
+    id: 'w-arabhealth', title: 'Arab Health Congress', organizer: 'Informa Markets',
+    country: 'UAE', flag: '🇦🇪', city: 'Dubai', format: 'In-person', dateLabel: 'Annual · January',
+    topic: 'Multi-specialty CME/CPD + nursing track', cpd: 'CPD-accredited (DHA/DOH)', cost: 'Free expo; paid conference tracks',
+    summary: 'The largest healthcare exhibition and congress in the Middle East, with dedicated nursing and CPD-accredited sessions across specialties.',
+    highlights: ['Nursing & midwifery conference track', 'Hands-on clinical workshops', 'DHA/DOH CPD points', 'Global networking & exhibitors'],
+    url: 'https://www.arabhealthonline.com/',
+  },
+  {
+    id: 'w-eccc', title: 'Emirates Critical Care Conference (ECCC)', organizer: 'ECCC',
+    country: 'UAE', flag: '🇦🇪', city: 'Dubai', format: 'In-person', dateLabel: 'Annual · April',
+    topic: 'Critical care & emergency nursing', cpd: 'CPD-accredited', cost: 'Paid registration (nurse rates available)',
+    summary: 'A leading regional conference for critical-care physicians and nurses, featuring ICU, ED, and acute-care workshops.',
+    highlights: ['ICU & emergency nursing streams', 'Simulation workshops', 'Regional & international faculty'],
+    url: 'https://www.eccc-dubai.com/',
+  },
+  {
+    id: 'w-ghw', title: 'Abu Dhabi Global Healthcare Week', organizer: 'Abu Dhabi DoH / Informa',
+    country: 'UAE', flag: '🇦🇪', city: 'Abu Dhabi', format: 'Hybrid', dateLabel: 'Annual · May',
+    topic: 'Health system, innovation & workforce', cpd: 'CPD sessions available', cost: 'Free & paid passes',
+    summary: 'A major Abu Dhabi gathering on healthcare innovation and workforce development, including nursing leadership sessions.',
+    highlights: ['Nursing leadership & workforce talks', 'Digital health & innovation', 'Policy and CPD content'],
+    url: 'https://www.globalhealthcareweek.com/',
+  },
+  // ── USA ──
+  {
+    id: 'w-nti', title: 'AACN National Teaching Institute (NTI)', organizer: 'Amer. Assoc. of Critical-Care Nurses',
+    country: 'USA', flag: '🇺🇸', city: 'Rotating cities', format: 'Hybrid', dateLabel: 'Annual · May',
+    topic: 'Critical & acute care nursing', cpd: 'CE/CNE contact hours', cost: 'Member & non-member rates',
+    summary: 'One of the largest critical-care nursing conferences in the world, with hundreds of CE sessions and skills labs.',
+    highlights: ['500+ CE sessions', 'Hands-on skills stations', 'Certification review courses'],
+    url: 'https://www.aacn.org/nti',
+  },
+  {
+    id: 'w-sigma', title: 'Sigma Nursing Conferences & Conventions', organizer: 'Sigma Theta Tau International',
+    country: 'USA', flag: '🇺🇸', city: 'Various / Virtual', format: 'Hybrid', dateLabel: 'Multiple per year',
+    topic: 'Research, leadership & EBP', cpd: 'CNE contact hours', cost: 'Member & non-member rates',
+    summary: 'Global nursing honor society events focused on evidence-based practice, research, and leadership development.',
+    highlights: ['Research & EBP sessions', 'Leadership academies', 'Global nursing network'],
+    url: 'https://www.sigmanursing.org/connect-engage/meetings-events',
+  },
+  {
+    id: 'w-ana', title: 'ANA Events & Nursing Conferences', organizer: 'American Nurses Association',
+    country: 'USA', flag: '🇺🇸', city: 'Various / Virtual', format: 'Hybrid', dateLabel: 'Year-round',
+    topic: 'Practice, policy & professional development', cpd: 'CNE contact hours', cost: 'Member & non-member rates',
+    summary: 'A calendar of webinars, conferences, and CE events from the leading US nursing body.',
+    highlights: ['Live & on-demand CE', 'Policy & advocacy', 'Specialty webinars'],
+    url: 'https://www.nursingworld.org/education-events/',
+  },
+  // ── UK ──
+  {
+    id: 'w-rcn', title: 'RCN Congress & Events', organizer: 'Royal College of Nursing',
+    country: 'UK', flag: '🇬🇧', city: 'Various / Online', format: 'Hybrid', dateLabel: 'Annual · May + year-round',
+    topic: 'Practice, policy & professional issues', cpd: 'CPD-recognised', cost: 'Free & paid (member discounts)',
+    summary: 'The UK\'s foremost nursing congress plus a programme of CPD events, webinars, and clinical updates.',
+    highlights: ['Congress debates & policy', 'Clinical CPD webinars', 'Career & revalidation support'],
+    url: 'https://www.rcn.org.uk/news-and-events/events',
+  },
+  {
+    id: 'w-nt', title: 'Nursing Times Events & Summits', organizer: 'Nursing Times',
+    country: 'UK', flag: '🇬🇧', city: 'UK / Online', format: 'Hybrid', dateLabel: 'Year-round',
+    topic: 'Clinical updates & workforce', cpd: 'CPD-aligned', cost: 'Free & paid',
+    summary: 'Summits, awards, and CPD webinars covering clinical practice, leadership, and workforce wellbeing.',
+    highlights: ['Clinical CPD webinars', 'Leadership summits', 'Nursing Times Awards'],
+    url: 'https://www.nursingtimes.net/events/',
+  },
+  // ── Canada ──
+  {
+    id: 'w-cna', title: 'Canadian Nurses Association Events', organizer: 'Canadian Nurses Association (CNA)',
+    country: 'Canada', flag: '🇨🇦', city: 'Various / Virtual', format: 'Hybrid', dateLabel: 'Year-round',
+    topic: 'Practice, policy & certification', cpd: 'CNA-recognised learning', cost: 'Member & non-member rates',
+    summary: 'National nursing association events, webinars, and certification programmes for Canadian and internationally educated nurses.',
+    highlights: ['Certification prep', 'Policy & practice webinars', 'NurseONE resources'],
+    url: 'https://www.cna-aiic.ca/en/professional-development',
+  },
+  // ── Australia ──
+  {
+    id: 'w-acn', title: 'ACN National Nursing Forum & CPD', organizer: 'Australian College of Nursing',
+    country: 'Australia', flag: '🇦🇺', city: 'Various / Online', format: 'Hybrid', dateLabel: 'Annual · Aug + year-round',
+    topic: 'Leadership, practice & specialty CPD', cpd: 'CPD hours (AHPRA-aligned)', cost: 'Member & non-member rates',
+    summary: 'The flagship Australian nursing forum plus an extensive CPD library aligned with AHPRA registration requirements.',
+    highlights: ['National Nursing Forum', 'Specialty CPD courses', 'Leadership programmes'],
+    url: 'https://www.acn.edu.au/events',
+  },
+  {
+    id: 'w-crana', title: 'CRANAplus Conference (Remote & Rural)', organizer: 'CRANAplus',
+    country: 'Australia', flag: '🇦🇺', city: 'Rotating', format: 'In-person', dateLabel: 'Annual · September',
+    topic: 'Remote & rural health nursing', cpd: 'CPD hours', cost: 'Member & non-member rates',
+    summary: 'Australia\'s peak body for remote and rural health, with hands-on workshops for nurses working in isolated settings.',
+    highlights: ['Remote emergency care workshops', 'Rural & Indigenous health', 'Networking for bush nurses'],
+    url: 'https://crana.org.au/education/conference',
+  },
+];
+
+// ── Nursing Scholarships, Grants & Bursaries (curated, authentic providers) ─────
+
+export type ScholarshipRegion = 'International' | 'USA' | 'UK' | 'Canada' | 'Australia' | 'UAE';
+
+export interface Scholarship {
+  id: string;
+  name: string;
+  provider: string;
+  region: ScholarshipRegion;
+  flag: string;
+  type: 'Scholarship' | 'Grant' | 'Bursary' | 'Fellowship' | 'Award';
+  amount: string;
+  level: string;          // e.g. 'BSN / Undergraduate', 'Graduate', 'All levels'
+  deadlineLabel: string;  // e.g. 'Annual · varies'
+  summary: string;
+  eligibility: string[];
+  url: string;            // official apply/info page
+}
+
+export const SCHOLARSHIPS: Scholarship[] = [
+  // ── International ──
+  {
+    id: 's-sigma', name: 'Sigma Global Nursing Research Grants', provider: 'Sigma Theta Tau International',
+    region: 'International', flag: '🌍', type: 'Grant', amount: 'Up to US$5,000+', level: 'Graduate / researchers',
+    deadlineLabel: 'Annual cycles', summary: 'Research grants supporting nurses conducting evidence-based and clinical research worldwide.',
+    eligibility: ['Registered nurse conducting research', 'Sigma membership for some grants', 'Defined research proposal'],
+    url: 'https://www.sigmanursing.org/advance-elevate/research/research-grants',
+  },
+  {
+    id: 's-jnj', name: 'Johnson & Johnson Nursing Scholarships Hub', provider: 'Johnson & Johnson (Discover Nursing)',
+    region: 'International', flag: '🌍', type: 'Scholarship', amount: 'Varies (directory)', level: 'All levels',
+    deadlineLabel: 'Varies by award', summary: 'A searchable directory of hundreds of nursing scholarships and funding opportunities curated by J&J.',
+    eligibility: ['Nursing students & RNs', 'Criteria vary by listed award'],
+    url: 'https://nursing.jnj.com/specialties-and-pathways/scholarships',
+  },
+  // ── USA ──
+  {
+    id: 's-anf', name: 'American Nurses Foundation Scholarships', provider: 'American Nurses Foundation',
+    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Varies', level: 'All levels',
+    deadlineLabel: 'Annual · varies', summary: 'Scholarships and grants supporting nursing education, research, and professional advancement in the US.',
+    eligibility: ['US nursing students / RNs', 'Academic & financial-need criteria'],
+    url: 'https://www.nursingworld.org/foundation/',
+  },
+  {
+    id: 's-nhsc', name: 'NHSC Scholarship Program', provider: 'Health Resources & Services Admin (HRSA)',
+    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Full tuition + stipend', level: 'Undergraduate / Graduate',
+    deadlineLabel: 'Annual · Spring', summary: 'Pays tuition and fees in exchange for service in a high-need US community after graduation.',
+    eligibility: ['US citizen', 'Eligible nursing/health program', 'Commit to service obligation'],
+    url: 'https://nhsc.hrsa.gov/scholarships',
+  },
+  {
+    id: 's-fnsna', name: 'FNSNA Scholarships', provider: 'Foundation of the National Student Nurses\' Association',
+    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'US$1,000 – $7,500', level: 'Nursing students',
+    deadlineLabel: 'Annual · January', summary: 'General and specialty scholarships for enrolled nursing students across the US.',
+    eligibility: ['Enrolled in a US nursing program', 'Academic merit & involvement'],
+    url: 'https://www.nsna.org/foundation.html',
+  },
+  {
+    id: 's-tylenol', name: 'Tylenol Future Care Scholarship', provider: 'Tylenol (Kenvue)',
+    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Up to US$10,000', level: 'Undergraduate / Graduate',
+    deadlineLabel: 'Annual · Summer', summary: 'Long-running scholarship for students pursuing nursing and other healthcare degrees.',
+    eligibility: ['Pursuing healthcare/nursing degree', 'US-based study', 'Essay & academic record'],
+    url: 'https://www.tylenol.com/news/scholarship',
+  },
+  // ── UK ──
+  {
+    id: 's-rcnf', name: 'RCN Foundation Grants & Bursaries', provider: 'RCN Foundation',
+    region: 'UK', flag: '🇬🇧', type: 'Bursary', amount: 'Varies', level: 'Nurses & students',
+    deadlineLabel: 'Open cycles', summary: 'Education bursaries and hardship grants for nurses, midwives, and healthcare support workers in the UK.',
+    eligibility: ['UK-based nurses/midwives/HCSWs', 'Education or hardship criteria'],
+    url: 'https://www.rcnfoundation.rcn.org.uk/',
+  },
+  {
+    id: 's-fnf', name: 'Florence Nightingale Foundation Scholarships', provider: 'Florence Nightingale Foundation',
+    region: 'UK', flag: '🇬🇧', type: 'Scholarship', amount: 'Varies', level: 'Registered nurses/midwives',
+    deadlineLabel: 'Annual · varies', summary: 'Leadership, research, and travel scholarships to develop nurse and midwife leaders.',
+    eligibility: ['Registered nurse/midwife', 'Leadership/research development focus'],
+    url: 'https://florence-nightingale-foundation.org.uk/our-work/scholars-academy/',
+  },
+  // ── Canada ──
+  {
+    id: 's-cnf', name: 'Canadian Nurses Foundation Awards', provider: 'Canadian Nurses Foundation',
+    region: 'Canada', flag: '🇨🇦', type: 'Award', amount: 'CA$1,000 – $10,000+', level: 'Students & RNs',
+    deadlineLabel: 'Annual · Spring', summary: 'Scholarships and research awards for Canadian nursing students and registered nurses pursuing further study.',
+    eligibility: ['Canadian nursing student or RN', 'Academic merit & goals'],
+    url: 'https://cnf-fiic.ca/scholarships-awards/',
+  },
+  // ── Australia ──
+  {
+    id: 's-acn', name: 'ACN Scholarships', provider: 'Australian College of Nursing',
+    region: 'Australia', flag: '🇦🇺', type: 'Scholarship', amount: 'Varies (incl. gov-funded)', level: 'All levels',
+    deadlineLabel: 'Multiple rounds', summary: 'A range of scholarships, including Australian Government–funded places, for CPD, postgraduate study, and specialty training.',
+    eligibility: ['Australian nurses/students', 'Program-specific criteria'],
+    url: 'https://www.acn.edu.au/scholarships',
+  },
+  // ── UAE / Region ──
+  {
+    id: 's-hamdan', name: 'Hamdan Bin Rashid Al Maktoum Awards', provider: 'Hamdan Medical Award (Dubai)',
+    region: 'UAE', flag: '🇦🇪', type: 'Grant', amount: 'Varies (research & training)', level: 'Health professionals',
+    deadlineLabel: 'Biennial cycles', summary: 'Regional medical awards and research/training grants recognising excellence in healthcare, including nursing.',
+    eligibility: ['Health professionals / researchers', 'Award-specific criteria'],
+    url: 'https://www.hmaward.org.ae/',
+  },
+  {
+    id: 's-who-emro', name: 'WHO EMRO Fellowships', provider: 'World Health Organization — Eastern Mediterranean',
+    region: 'UAE', flag: '🌍', type: 'Fellowship', amount: 'Funded training', level: 'Health workforce',
+    deadlineLabel: 'Via national health authority', summary: 'WHO fellowships and training opportunities for health workforce capacity-building across the region (applied through your Ministry of Health).',
+    eligibility: ['Nominated via national health authority', 'Public-health/clinical focus'],
+    url: 'https://www.emro.who.int/health-workforce/fellowships/',
+  },
+];
+
 // ── UAE Health Authority reference data (for in-app info panels) ────────────────
 
 export interface AuthorityInfo {
