@@ -25,8 +25,10 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
   const [examCompleted, setExamCompleted] = useState(false);
   const [submittingScore, setSubmittingScore] = useState(false);
 
-  // Filter by currently chosen regulator to serve 3 completely different premium exams
-  const questions: Question[] = MOCK_QUESTIONS.filter(q => q.examType === examType);
+  // Each regulator has its own unique 150-question bank. A fresh shuffled set
+  // is drawn at the start of every attempt to mimic a real Prometric sitting.
+  const [examQuestions, setExamQuestions] = useState<Question[]>([]);
+  const questions: Question[] = examQuestions;
 
   useEffect(() => {
     let timer: any;
@@ -39,6 +41,9 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
   }, [isTimerRunning, isExamActive]);
 
   const startExam = (type: ExamType) => {
+    const pool = MOCK_QUESTIONS.filter(q => q.examType === type);
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    setExamQuestions(shuffled);
     setExamType(type);
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
@@ -113,9 +118,9 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {(['DHA', 'MOH', 'HAAD_DOH'] as ExamType[]).map((type) => {
               const meta = {
-                DHA:      { label: 'DHA — Dubai Health Authority', emirate: 'Dubai', provider: 'Prometric (Sheryan licensing)', flag: '🏙️' },
-                MOH:      { label: 'MOHAP — Ministry of Health', emirate: 'Northern Emirates', provider: 'Prometric', flag: '🇦🇪' },
-                HAAD_DOH: { label: 'DOH Abu Dhabi (HAAD)', emirate: 'Abu Dhabi', provider: 'Pearson VUE', flag: '🏛️' },
+                DHA:      { label: 'DHA — Dubai Health Authority', emirate: 'Dubai', provider: 'Prometric (Sheryan)', duration: '150 Qs · ~165 min', flag: '🏙️' },
+                MOH:      { label: 'MOHAP — Ministry of Health', emirate: 'Northern Emirates', provider: 'Prometric', duration: '150 Qs · self-paced', flag: '🇦🇪' },
+                HAAD_DOH: { label: 'DOH Abu Dhabi (HAAD)', emirate: 'Abu Dhabi', provider: 'Pearson VUE', duration: '150 Qs · ~150 min', flag: '🏛️' },
               }[type];
               const count = MOCK_QUESTIONS.filter(q => q.examType === type).length;
               return (
@@ -132,7 +137,8 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
                     </div>
                     <h3 className="font-bold text-sm text-slate-800 mt-2 font-sans">{meta.label}</h3>
                     <div className="text-[11px] text-slate-500 mt-2 space-y-1 font-mono">
-                      <p>● Questions: {count} board-style items</p>
+                      <p>● Format: {meta.duration}</p>
+                      <p>● In this app: {count} unique items, shuffled each attempt</p>
                       <p>● Exam provider: {meta.provider}</p>
                       <p>● Pass mark: ~60% · scored timer</p>
                     </div>

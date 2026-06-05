@@ -6993,5 +6993,4177 @@ export const MOCK_QUESTIONS: Question[] = [
     "rationale": "Stable sodium and hydration keep lithium levels in the safe therapeutic range.",
     "category": "Pharmacology",
     "examType": "HAAD_DOH"
+  },
+  {
+    "id": 153,
+    "question": "A patient with left-sided heart failure is most likely to present with:",
+    "options": [
+      "Peripheral oedema and ascites",
+      "Pulmonary crackles and dyspnoea",
+      "Jugular venous distension only",
+      "Hepatomegaly"
+    ],
+    "correctIndex": 1,
+    "rationale": "Left-sided failure backs up into the lungs, causing crackles, dyspnoea and orthopnoea; right-sided failure causes peripheral/venous congestion.",
+    "category": "Cardiac",
+    "examType": "DHA"
+  },
+  {
+    "id": 154,
+    "question": "A patient is admitted with deep vein thrombosis. The nurse should:",
+    "options": [
+      "Massage the affected leg",
+      "Maintain bed rest as ordered, elevate the limb and avoid massaging it",
+      "Apply firm pressure to the calf",
+      "Encourage vigorous leg exercises"
+    ],
+    "correctIndex": 1,
+    "rationale": "Massaging or pressing a DVT can dislodge the clot causing embolism; elevate and avoid manipulation.",
+    "category": "Vascular",
+    "examType": "DHA"
+  },
+  {
+    "id": 155,
+    "question": "The priority assessment after a patient receives a new prescription for furosemide is:",
+    "options": [
+      "Blood glucose",
+      "Serum potassium and fluid/electrolyte status",
+      "Liver enzymes",
+      "White cell count"
+    ],
+    "correctIndex": 1,
+    "rationale": "Loop diuretics cause potassium loss; monitor potassium and fluid/electrolyte balance.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 156,
+    "question": "A patient with cirrhosis develops confusion and asterixis. The priority is to:",
+    "options": [
+      "Increase dietary protein",
+      "Administer lactulose as ordered and monitor neuro status",
+      "Restrict all fluids",
+      "Give an iron supplement"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hepatic encephalopathy is managed by lowering ammonia with lactulose; protein may be moderated.",
+    "category": "Gastrointestinal",
+    "examType": "DHA"
+  },
+  {
+    "id": 157,
+    "question": "A nurse is teaching a patient about a 24-hour urine collection. The correct instruction is:",
+    "options": [
+      "Save only the first morning void",
+      "Discard the first void, then collect all urine for 24 hours including the final void",
+      "Collect random samples",
+      "Refrigeration is never needed"
+    ],
+    "correctIndex": 1,
+    "rationale": "Discard the first void to start timing, then collect everything for 24 hours and keep it cool.",
+    "category": "Diagnostics",
+    "examType": "DHA"
+  },
+  {
+    "id": 158,
+    "question": "A patient with Addison's disease is at risk for:",
+    "options": [
+      "Hypertension and hypernatremia",
+      "Hypotension, hyponatremia and hyperkalemia",
+      "Hyperglycaemia",
+      "Fluid overload"
+    ],
+    "correctIndex": 1,
+    "rationale": "Adrenal insufficiency causes low cortisol/aldosterone, leading to hypotension, low sodium and high potassium.",
+    "category": "Endocrine",
+    "examType": "DHA"
+  },
+  {
+    "id": 159,
+    "question": "A patient with hyperthyroidism (thyroid storm) presents with high fever and tachycardia. The priority is to:",
+    "options": [
+      "Warm the patient",
+      "Reduce temperature, support cardiac function and give prescribed antithyroid therapy",
+      "Encourage activity",
+      "Restrict fluids"
+    ],
+    "correctIndex": 1,
+    "rationale": "Thyroid storm is a hypermetabolic emergency; cool the patient, protect the heart and treat the thyroid.",
+    "category": "Endocrine",
+    "examType": "DHA"
+  },
+  {
+    "id": 160,
+    "question": "Which finding in a patient receiving a blood transfusion suggests fluid overload (TACO)?",
+    "options": [
+      "Hypothermia",
+      "Dyspnoea, crackles, hypertension and distended neck veins",
+      "A drop in blood pressure",
+      "Decreased respiratory rate"
+    ],
+    "correctIndex": 1,
+    "rationale": "Transfusion-associated circulatory overload causes dyspnoea, crackles, hypertension and JVD; slow/stop and treat.",
+    "category": "Transfusion",
+    "examType": "DHA"
+  },
+  {
+    "id": 161,
+    "question": "A patient with a nasogastric tube for decompression should be positioned:",
+    "options": [
+      "Flat supine",
+      "With the head of the bed elevated 30-45 degrees",
+      "In Trendelenburg",
+      "Prone"
+    ],
+    "correctIndex": 1,
+    "rationale": "Head-of-bed elevation reduces reflux and aspiration risk with an NG tube.",
+    "category": "Fundamentals",
+    "examType": "DHA"
+  },
+  {
+    "id": 162,
+    "question": "The nurse should verify NG tube placement most reliably by:",
+    "options": [
+      "Auscultating air over the stomach",
+      "Checking pH of aspirate and confirming with X-ray as policy requires",
+      "Asking the patient to talk",
+      "Observing for bubbling"
+    ],
+    "correctIndex": 1,
+    "rationale": "pH testing of aspirate and radiographic confirmation are reliable; the air-auscultation method is unreliable.",
+    "category": "Fundamentals",
+    "examType": "DHA"
+  },
+  {
+    "id": 163,
+    "question": "A patient on prolonged corticosteroids should be monitored for:",
+    "options": [
+      "Hypoglycaemia and weight loss",
+      "Hyperglycaemia, infection risk and osteoporosis",
+      "Bradycardia",
+      "Hyperkalemia"
+    ],
+    "correctIndex": 1,
+    "rationale": "Long-term steroids raise glucose, mask/increase infection risk and cause bone loss; do not stop abruptly.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 164,
+    "question": "A patient is scheduled for a contrast CT. The nurse must check for allergy to:",
+    "options": [
+      "Penicillin",
+      "Iodine/contrast media and assess renal function",
+      "Latex only",
+      "Eggs only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Iodinated contrast can cause reactions and nephropathy; check allergy and renal function (creatinine).",
+    "category": "Diagnostics",
+    "examType": "DHA"
+  },
+  {
+    "id": 165,
+    "question": "Which is the priority nursing diagnosis for a patient in acute respiratory distress?",
+    "options": [
+      "Anxiety",
+      "Ineffective airway clearance/impaired gas exchange",
+      "Knowledge deficit",
+      "Disturbed sleep"
+    ],
+    "correctIndex": 1,
+    "rationale": "Airway and gas exchange take priority over psychosocial needs in respiratory distress.",
+    "category": "Respiratory",
+    "examType": "DHA"
+  },
+  {
+    "id": 166,
+    "question": "A patient with a seizure disorder begins a generalised tonic-clonic seizure. The nurse should:",
+    "options": [
+      "Restrain the limbs",
+      "Protect the head, turn the patient to the side, and time the seizure",
+      "Insert a tongue blade",
+      "Give oral medication"
+    ],
+    "correctIndex": 1,
+    "rationale": "Protect from injury, position side-lying for airway, and time the event; never force objects into the mouth.",
+    "category": "Neurology",
+    "examType": "DHA"
+  },
+  {
+    "id": 167,
+    "question": "A patient with diabetes asks about foot care. The nurse teaches to:",
+    "options": [
+      "Walk barefoot at home",
+      "Inspect feet daily, wear protective footwear and avoid cutting corns",
+      "Soak feet in hot water nightly",
+      "Use a heating pad on the feet"
+    ],
+    "correctIndex": 1,
+    "rationale": "Diabetic neuropathy increases injury risk; daily inspection and protective footwear prevent ulcers.",
+    "category": "Endocrine",
+    "examType": "DHA"
+  },
+  {
+    "id": 168,
+    "question": "A patient develops a pressure injury with intact skin and non-blanchable redness. This is:",
+    "options": [
+      "Stage 1",
+      "Stage 2",
+      "Stage 3",
+      "Stage 4"
+    ],
+    "correctIndex": 0,
+    "rationale": "Non-blanchable erythema of intact skin is a stage 1 pressure injury.",
+    "category": "Skin Integrity",
+    "examType": "DHA"
+  },
+  {
+    "id": 169,
+    "question": "Before a paracentesis, the nurse asks the patient to:",
+    "options": [
+      "Drink large amounts of fluid",
+      "Empty the bladder to reduce the risk of injury",
+      "Lie flat",
+      "Eat a heavy meal"
+    ],
+    "correctIndex": 1,
+    "rationale": "Emptying the bladder reduces the risk of bladder puncture during abdominal paracentesis.",
+    "category": "Procedures",
+    "examType": "DHA"
+  },
+  {
+    "id": 170,
+    "question": "A patient is receiving total parenteral nutrition (TPN). The nurse monitors closely for:",
+    "options": [
+      "Hypothermia",
+      "Hyperglycaemia and infection at the central line",
+      "Bradycardia",
+      "Hair loss"
+    ],
+    "correctIndex": 1,
+    "rationale": "TPN raises infection risk (central line) and glucose; monitor blood sugar and the site.",
+    "category": "Nutrition",
+    "examType": "DHA"
+  },
+  {
+    "id": 171,
+    "question": "Which instruction is correct for a patient using a metered-dose inhaler with a corticosteroid?",
+    "options": [
+      "Avoid rinsing the mouth",
+      "Rinse the mouth after use to prevent oral thrush",
+      "Use it only during attacks",
+      "Hold the breath for 1 second only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Rinsing after inhaled corticosteroids prevents oral candidiasis.",
+    "category": "Respiratory",
+    "examType": "DHA"
+  },
+  {
+    "id": 172,
+    "question": "A patient post-cataract surgery should be taught to avoid:",
+    "options": [
+      "Wearing the eye shield",
+      "Bending at the waist and heavy lifting",
+      "Instilling prescribed drops",
+      "Wearing sunglasses"
+    ],
+    "correctIndex": 1,
+    "rationale": "Bending and lifting raise intraocular pressure; avoid them after eye surgery.",
+    "category": "Sensory",
+    "examType": "DHA"
+  },
+  {
+    "id": 173,
+    "question": "A patient with gout is advised to limit:",
+    "options": [
+      "Water",
+      "Purine-rich foods such as organ meats and shellfish",
+      "Whole grains",
+      "Fresh fruit"
+    ],
+    "correctIndex": 1,
+    "rationale": "High-purine foods raise uric acid; limiting them helps manage gout.",
+    "category": "Musculoskeletal",
+    "examType": "DHA"
+  },
+  {
+    "id": 174,
+    "question": "The nurse notes a patient's INR is 5.5 on warfarin with minor bleeding. The nurse anticipates:",
+    "options": [
+      "Increasing warfarin",
+      "Holding warfarin and possibly giving vitamin K",
+      "Giving aspirin",
+      "Giving heparin"
+    ],
+    "correctIndex": 1,
+    "rationale": "A high INR with bleeding requires holding warfarin; vitamin K reverses it.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 175,
+    "question": "A patient with chronic kidney disease should limit dietary:",
+    "options": [
+      "Carbohydrates only",
+      "Potassium, phosphorus and sodium as prescribed",
+      "Vitamin C",
+      "Fibre"
+    ],
+    "correctIndex": 1,
+    "rationale": "CKD diets restrict potassium, phosphorus and sodium to reduce complications.",
+    "category": "Renal",
+    "examType": "DHA"
+  },
+  {
+    "id": 176,
+    "question": "Which is an early sign of shock the nurse should not overlook?",
+    "options": [
+      "Bradycardia",
+      "Restlessness/anxiety and tachycardia",
+      "Warm dry skin",
+      "Increased urine output"
+    ],
+    "correctIndex": 1,
+    "rationale": "Early compensated shock shows tachycardia and restlessness before hypotension develops.",
+    "category": "Shock",
+    "examType": "DHA"
+  },
+  {
+    "id": 177,
+    "question": "A patient receiving morphine for pain develops a respiratory rate of 8. The nurse should:",
+    "options": [
+      "Give more morphine",
+      "Hold the opioid, stimulate the patient and prepare naloxone if needed",
+      "Increase IV fluids only",
+      "Apply oxygen and continue morphine"
+    ],
+    "correctIndex": 1,
+    "rationale": "Opioid-induced respiratory depression requires holding the drug and readiness to give naloxone.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 178,
+    "question": "A patient with a new colostomy expresses fear about the change. The nurse should:",
+    "options": [
+      "Avoid discussing it",
+      "Acknowledge feelings, provide teaching and involve a stoma nurse",
+      "Tell them it is nothing to worry about",
+      "Delay all teaching"
+    ],
+    "correctIndex": 1,
+    "rationale": "Acknowledge emotions and provide support/education to promote adjustment and self-care.",
+    "category": "Psychosocial",
+    "examType": "DHA"
+  },
+  {
+    "id": 179,
+    "question": "Which lab result requires the nurse to hold a scheduled dose of metformin before contrast imaging?",
+    "options": [
+      "Normal creatinine",
+      "Elevated creatinine/impaired renal function",
+      "Low cholesterol",
+      "Normal glucose"
+    ],
+    "correctIndex": 1,
+    "rationale": "Metformin is held around contrast in renal impairment due to lactic-acidosis risk.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 180,
+    "question": "A patient is on droplet precautions for influenza. Visitors should:",
+    "options": [
+      "Enter without any protection",
+      "Wear a surgical mask within the patient's room",
+      "Wear an N95 always",
+      "Avoid hand hygiene"
+    ],
+    "correctIndex": 1,
+    "rationale": "Droplet precautions require a surgical mask near the patient; hand hygiene is always performed.",
+    "category": "Infection Control",
+    "examType": "DHA"
+  },
+  {
+    "id": 181,
+    "question": "The nurse is caring for a patient after a stroke with dysphagia. The priority is to:",
+    "options": [
+      "Offer thin liquids freely",
+      "Assess swallowing, keep upright and follow the prescribed texture-modified diet",
+      "Feed quickly",
+      "Lay the patient flat to eat"
+    ],
+    "correctIndex": 1,
+    "rationale": "Dysphagia raises aspiration risk; assess swallowing, sit upright and modify diet textures.",
+    "category": "Neurology",
+    "examType": "DHA"
+  },
+  {
+    "id": 182,
+    "question": "A patient's chest tube becomes disconnected from the drainage system. The nurse should:",
+    "options": [
+      "Clamp the tube and call later",
+      "Submerge the tube end in sterile water and obtain a new system",
+      "Reconnect with tape only",
+      "Remove the chest tube"
+    ],
+    "correctIndex": 1,
+    "rationale": "Placing the tube end in sterile water restores a water seal and prevents air entry while a new unit is obtained.",
+    "category": "Respiratory",
+    "examType": "DHA"
+  },
+  {
+    "id": 183,
+    "question": "Which finding indicates effective patient teaching about nitroglycerin for angina?",
+    "options": [
+      "'I will take up to three tablets, five minutes apart, and call emergency services if pain persists.'",
+      "'I will take ten tablets at once.'",
+      "'I will store it in sunlight.'",
+      "'I will take it only after pain stops.'"
+    ],
+    "correctIndex": 0,
+    "rationale": "Patients take a tablet every 5 minutes up to three doses and seek emergency help if pain persists.",
+    "category": "Cardiac",
+    "examType": "DHA"
+  },
+  {
+    "id": 184,
+    "question": "A patient with Parkinson's disease is at greatest risk for:",
+    "options": [
+      "Hypertension",
+      "Falls due to bradykinesia and postural instability",
+      "Hyperthermia",
+      "Polyuria"
+    ],
+    "correctIndex": 1,
+    "rationale": "Rigidity, bradykinesia and postural instability markedly increase fall risk.",
+    "category": "Neurology",
+    "examType": "DHA"
+  },
+  {
+    "id": 185,
+    "question": "The nurse should question an order to give potassium to a patient with:",
+    "options": [
+      "Hypokalemia",
+      "Anuria/renal failure with hyperkalemia",
+      "Diuretic-induced low potassium",
+      "Vomiting and low potassium"
+    ],
+    "correctIndex": 1,
+    "rationale": "Giving potassium to an anuric/hyperkalemic patient is dangerous; clarify the order.",
+    "category": "Pharmacology Safety",
+    "examType": "DHA"
+  },
+  {
+    "id": 186,
+    "question": "A patient with COPD and chronic CO2 retention should receive oxygen via:",
+    "options": [
+      "A non-rebreather at 15 L/min routinely",
+      "Controlled low-flow oxygen titrated to target SpO2",
+      "No oxygen ever",
+      "High-flow regardless of saturation"
+    ],
+    "correctIndex": 1,
+    "rationale": "Controlled low-flow oxygen titrated to target avoids suppressing the hypoxic drive.",
+    "category": "Respiratory",
+    "examType": "DHA"
+  },
+  {
+    "id": 187,
+    "question": "Which is the correct technique for a subcutaneous insulin injection?",
+    "options": [
+      "Inject at 90 degrees into a pinched fold (or 45 if thin) and rotate sites",
+      "Always aspirate vigorously",
+      "Massage the site firmly afterwards",
+      "Use the same site daily"
+    ],
+    "correctIndex": 0,
+    "rationale": "Subcutaneous insulin is given at 45-90 degrees into a fold with site rotation; massaging is avoided.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 188,
+    "question": "A patient with acute kidney injury has a urine output of 15 mL/hr. The nurse should:",
+    "options": [
+      "Document and ignore",
+      "Notify the physician; this is below the adequate output of about 30 mL/hr",
+      "Increase potassium",
+      "Restrict oxygen"
+    ],
+    "correctIndex": 1,
+    "rationale": "Output under ~0.5 mL/kg/hr (about 30 mL/hr) signals inadequate perfusion/renal function; report it.",
+    "category": "Renal",
+    "examType": "DHA"
+  },
+  {
+    "id": 189,
+    "question": "A patient with a fractured femur suddenly develops dyspnoea, confusion and petechiae. The nurse suspects:",
+    "options": [
+      "Hypoglycaemia",
+      "Fat embolism syndrome",
+      "Anxiety",
+      "Constipation"
+    ],
+    "correctIndex": 1,
+    "rationale": "Long-bone fractures can cause fat embolism, presenting with respiratory distress, neuro changes and petechiae.",
+    "category": "Musculoskeletal",
+    "examType": "DHA"
+  },
+  {
+    "id": 190,
+    "question": "A patient is prescribed iron supplements. The nurse teaches to:",
+    "options": [
+      "Take with antacids",
+      "Take with vitamin C/orange juice to enhance absorption and expect dark stools",
+      "Avoid all fluids",
+      "Crush enteric-coated tablets"
+    ],
+    "correctIndex": 1,
+    "rationale": "Vitamin C improves iron absorption; stools darken normally; avoid antacids that reduce absorption.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 191,
+    "question": "Which action prevents catheter-associated urinary tract infection?",
+    "options": [
+      "Routine catheter irrigation",
+      "Keeping the drainage bag below bladder level and removing the catheter early",
+      "Opening the system frequently",
+      "Raising the bag above the bladder"
+    ],
+    "correctIndex": 1,
+    "rationale": "Keep a closed system, bag below bladder level and remove the catheter as soon as possible.",
+    "category": "Infection Control",
+    "examType": "DHA"
+  },
+  {
+    "id": 192,
+    "question": "A patient on a low-sodium diet should avoid:",
+    "options": [
+      "Fresh vegetables",
+      "Processed and canned foods high in sodium",
+      "Plain rice",
+      "Fresh fruit"
+    ],
+    "correctIndex": 1,
+    "rationale": "Processed/canned foods are high in sodium and should be limited.",
+    "category": "Nutrition",
+    "examType": "DHA"
+  },
+  {
+    "id": 193,
+    "question": "A patient with myasthenia gravis is most at risk for:",
+    "options": [
+      "Hypertension",
+      "Respiratory failure from muscle weakness",
+      "Hyperglycaemia",
+      "Polyuria"
+    ],
+    "correctIndex": 1,
+    "rationale": "Progressive muscle weakness can impair respiratory muscles, risking respiratory failure (myasthenic crisis).",
+    "category": "Neurology",
+    "examType": "DHA"
+  },
+  {
+    "id": 194,
+    "question": "The nurse is reviewing a patient's potassium of 2.9 mEq/L. An expected ECG change is:",
+    "options": [
+      "Tall peaked T-waves",
+      "Flat T-waves and U-waves",
+      "No change",
+      "Shortened QT"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hypokalemia causes flat T-waves and prominent U-waves.",
+    "category": "Fluid & Electrolytes",
+    "examType": "DHA"
+  },
+  {
+    "id": 195,
+    "question": "A patient post-abdominal surgery has not passed flatus and has a distended abdomen. This suggests:",
+    "options": [
+      "Normal recovery",
+      "Paralytic ileus",
+      "Improved peristalsis",
+      "Diarrhoea"
+    ],
+    "correctIndex": 1,
+    "rationale": "Absent flatus with distension after surgery suggests paralytic ileus; keep NPO and assess bowel sounds.",
+    "category": "Post-operative",
+    "examType": "DHA"
+  },
+  {
+    "id": 196,
+    "question": "Which is a priority when caring for a patient with neutropenia?",
+    "options": [
+      "Encourage fresh flowers in the room",
+      "Strict protective (neutropenic) precautions and avoid sources of infection",
+      "Share equipment freely",
+      "Skip hand hygiene"
+    ],
+    "correctIndex": 1,
+    "rationale": "Neutropenic patients need protective precautions and infection-source avoidance (no fresh flowers/raw foods).",
+    "category": "Oncology",
+    "examType": "DHA"
+  },
+  {
+    "id": 197,
+    "question": "A patient receiving chemotherapy reports tingling and numbness in the hands and feet. This indicates:",
+    "options": [
+      "Normal hydration",
+      "Peripheral neuropathy - report it",
+      "Improved circulation",
+      "Hyperkalemia"
+    ],
+    "correctIndex": 1,
+    "rationale": "Chemotherapy can cause peripheral neuropathy; report it for dose review and safety measures.",
+    "category": "Oncology",
+    "examType": "DHA"
+  },
+  {
+    "id": 198,
+    "question": "A patient with suspected meningitis has a stiff neck and photophobia. Priority precautions are:",
+    "options": [
+      "Contact only",
+      "Droplet precautions until the cause is known",
+      "No precautions",
+      "Airborne only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Bacterial meningitis (e.g., meningococcal) requires droplet precautions until ruled out.",
+    "category": "Infection Control",
+    "examType": "DHA"
+  },
+  {
+    "id": 199,
+    "question": "Which assessment finding indicates compartment syndrome in a casted limb?",
+    "options": [
+      "Warm pink toes",
+      "Severe pain unrelieved by analgesia, pallor and paraesthesia",
+      "Strong pulses with no pain",
+      "Mild itching"
+    ],
+    "correctIndex": 1,
+    "rationale": "Unrelenting pain with pallor, paraesthesia and pulselessness signals compartment syndrome - an emergency.",
+    "category": "Musculoskeletal",
+    "examType": "DHA"
+  },
+  {
+    "id": 200,
+    "question": "A patient on a fluid restriction repeatedly asks for water. The nurse should:",
+    "options": [
+      "Allow unlimited water",
+      "Offer ice chips/oral care within the restriction and explain the rationale",
+      "Ignore the request",
+      "Remove all fluids"
+    ],
+    "correctIndex": 1,
+    "rationale": "Within the restriction, ice chips and oral care relieve thirst; explain the reason to support adherence.",
+    "category": "Fundamentals",
+    "examType": "DHA"
+  },
+  {
+    "id": 201,
+    "question": "The nurse should give priority to which postoperative patient?",
+    "options": [
+      "A patient with mild incisional pain",
+      "A patient with oxygen saturation 88% and decreased breath sounds",
+      "A patient requesting a blanket",
+      "A patient asking about visiting hours"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hypoxaemia with decreased breath sounds (possible atelectasis) is the priority requiring intervention.",
+    "category": "Post-operative",
+    "examType": "DHA"
+  },
+  {
+    "id": 202,
+    "question": "A patient with hypertension is started on an ACE inhibitor. The nurse teaches to report:",
+    "options": [
+      "Mild headache that resolves",
+      "Swelling of the lips/tongue (angioedema) immediately",
+      "Improved blood pressure",
+      "Normal urination"
+    ],
+    "correctIndex": 1,
+    "rationale": "Angioedema is a serious ACE-inhibitor reaction requiring immediate attention.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 203,
+    "question": "Synchronised cardioversion is appropriate for:",
+    "options": [
+      "Pulseless VT",
+      "Ventricular fibrillation",
+      "Unstable SVT with a pulse",
+      "Asystole"
+    ],
+    "correctIndex": 2,
+    "rationale": "Cardioversion is for unstable rhythms that still have a pulse.",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 204,
+    "question": "Adult one-rescuer CPR ratio is:",
+    "options": [
+      "15:2",
+      "30:2",
+      "5:1",
+      "10:2"
+    ],
+    "correctIndex": 1,
+    "rationale": "One-rescuer adult CPR uses 30 compressions to 2 breaths.",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 205,
+    "question": "Infuse 500 mL over 4 h with macrodrip 15 gtt/mL. Rate (gtt/min)?",
+    "options": [
+      "~21",
+      "~31",
+      "~45",
+      "~60"
+    ],
+    "correctIndex": 1,
+    "rationale": "(500 x 15)/(4 x 60) = 7500/240 = ~31 gtt/min.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 206,
+    "question": "A manic patient has not eaten for a day due to constant activity. The nurse should provide:",
+    "options": [
+      "A formal sit-down multi-course meal",
+      "Portable high-calorie finger foods",
+      "Only fluids",
+      "Nothing until calm"
+    ],
+    "correctIndex": 1,
+    "rationale": "Finger foods allow nutrition intake while the patient remains active.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 207,
+    "question": "Before administering an antipsychotic long-term, the nurse monitors for:",
+    "options": [
+      "Hair growth",
+      "Metabolic effects and movement disorders (EPS/tardive dyskinesia)",
+      "Improved vision",
+      "Lowered cholesterol"
+    ],
+    "correctIndex": 1,
+    "rationale": "Long-term antipsychotics require monitoring for metabolic effects and movement disorders.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 208,
+    "question": "Which adult vital sign is abnormal and needs action?",
+    "options": [
+      "Temp 36.8 C",
+      "HR 72",
+      "RR 30",
+      "BP 118/76"
+    ],
+    "correctIndex": 2,
+    "rationale": "Normal RR is 12-20; 30 (tachypnoea) is abnormal.",
+    "category": "Fundamentals",
+    "examType": "DHA"
+  },
+  {
+    "id": 209,
+    "question": "A patient in suspected sepsis should have which obtained BEFORE antibiotics?",
+    "options": [
+      "A meal",
+      "Blood cultures",
+      "Discharge papers",
+      "Physiotherapy"
+    ],
+    "correctIndex": 1,
+    "rationale": "Blood cultures are drawn before antibiotics to identify the organism.",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 210,
+    "question": "Improvement of energy before mood lifts in depression is concerning because:",
+    "options": [
+      "It means recovery is complete",
+      "The patient may now have energy to act on suicidal thoughts",
+      "It is unrelated to risk",
+      "Medication has failed"
+    ],
+    "correctIndex": 1,
+    "rationale": "This is a higher-risk window for suicide attempts; maintain vigilance.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 211,
+    "question": "Which principle means 'do no harm'?",
+    "options": [
+      "Beneficence",
+      "Autonomy",
+      "Non-maleficence",
+      "Justice"
+    ],
+    "correctIndex": 2,
+    "rationale": "Non-maleficence is the duty to avoid causing harm.",
+    "category": "Ethics & Regulations",
+    "examType": "DHA"
+  },
+  {
+    "id": 212,
+    "question": "Antipsychotic patient develops high fever, rigidity and altered consciousness. Recognise:",
+    "options": [
+      "Sedation",
+      "Neuroleptic malignant syndrome",
+      "Mild dystonia",
+      "Caffeine withdrawal"
+    ],
+    "correctIndex": 1,
+    "rationale": "This is NMS - stop the drug and treat as a medical emergency.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 213,
+    "question": "A patient on an MAOI should avoid:",
+    "options": [
+      "Water",
+      "Aged cheese and cured meats",
+      "Rice",
+      "Apples"
+    ],
+    "correctIndex": 1,
+    "rationale": "Tyramine-rich foods can trigger a hypertensive crisis with MAOIs.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 214,
+    "question": "A patient develops agitation, fever and hyperreflexia on an SSRI plus another serotonergic drug. Suspect:",
+    "options": [
+      "Anaphylaxis",
+      "Serotonin syndrome",
+      "Hypoglycaemia",
+      "Normal effect"
+    ],
+    "correctIndex": 1,
+    "rationale": "This triad suggests serotonin syndrome; stop serotonergic agents and treat.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 215,
+    "question": "A patient with bowel obstruction is typically kept:",
+    "options": [
+      "On a full diet",
+      "NPO with NG decompression",
+      "On laxatives only",
+      "Ambulating with meals"
+    ],
+    "correctIndex": 1,
+    "rationale": "Bowel obstruction is managed with NPO status and NG tube decompression.",
+    "category": "Clinical Core",
+    "examType": "DHA"
+  },
+  {
+    "id": 216,
+    "question": "Priority assessment for a patient with an AV fistula?",
+    "options": [
+      "Apply a BP cuff to that arm",
+      "Palpate for a thrill and auscultate a bruit",
+      "Start an IV in that arm",
+      "Keep the arm dependent"
+    ],
+    "correctIndex": 1,
+    "rationale": "Patency is confirmed by a palpable thrill and audible bruit; protect the arm.",
+    "category": "Clinical Core",
+    "examType": "DHA"
+  },
+  {
+    "id": 217,
+    "question": "A patient's BP is 86/54 with dizziness. The nurse should FIRST:",
+    "options": [
+      "Ambulate the patient",
+      "Lay the patient down/raise legs and reassess, notify as needed",
+      "Give an antihypertensive",
+      "Encourage caffeine"
+    ],
+    "correctIndex": 1,
+    "rationale": "For hypotension, position supine with legs elevated, ensure safety, reassess, and escalate.",
+    "category": "Fundamentals",
+    "examType": "DHA"
+  },
+  {
+    "id": 218,
+    "question": "Naloxone is given and the patient improves but becomes drowsy again after 30 minutes. The nurse should:",
+    "options": [
+      "Do nothing",
+      "Reassess and anticipate repeat dosing",
+      "Discharge the patient",
+      "Give a sedative"
+    ],
+    "correctIndex": 1,
+    "rationale": "Naloxone has a short half-life; opioids may outlast it, so reassess and repeat as ordered.",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 219,
+    "question": "Potassium 6.8 with peaked T-waves. Give FIRST:",
+    "options": [
+      "Oral potassium",
+      "IV calcium gluconate",
+      "A potassium-sparing diuretic",
+      "Saline only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Calcium gluconate protects the myocardium first; then lower the potassium.",
+    "category": "Clinical Core",
+    "examType": "DHA"
+  },
+  {
+    "id": 220,
+    "question": "Earliest sign of rising intracranial pressure is:",
+    "options": [
+      "Fixed dilated pupil",
+      "Decerebrate posturing",
+      "Change in level of consciousness",
+      "Cushing's triad"
+    ],
+    "correctIndex": 2,
+    "rationale": "A change in LOC is the earliest, most sensitive sign; the others are late.",
+    "category": "Clinical Core",
+    "examType": "DHA"
+  },
+  {
+    "id": 221,
+    "question": "Which is NOT one of the rights of medication administration?",
+    "options": [
+      "Right dose",
+      "Right route",
+      "Right colour",
+      "Right time"
+    ],
+    "correctIndex": 2,
+    "rationale": "'Right colour' is not a recognised medication right.",
+    "category": "Fundamentals",
+    "examType": "DHA"
+  },
+  {
+    "id": 222,
+    "question": "The drug given to prevent eclamptic seizures is:",
+    "options": [
+      "Oxytocin",
+      "Magnesium sulfate",
+      "Insulin",
+      "Heparin"
+    ],
+    "correctIndex": 1,
+    "rationale": "Magnesium sulfate prevents seizures in pre-eclampsia.",
+    "category": "Maternity & Child Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 223,
+    "question": "A reliable sign of return of spontaneous circulation/effective CPR is:",
+    "options": [
+      "Falling EtCO2",
+      "Rising end-tidal CO2 and a palpable pulse",
+      "Dilated pupils",
+      "Cold skin"
+    ],
+    "correctIndex": 1,
+    "rationale": "A sharp rise in EtCO2 and a pulse indicate ROSC/effective CPR.",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 224,
+    "question": "The priority assessment after birth of the placenta is:",
+    "options": [
+      "Newborn weight",
+      "Maternal fundal tone and bleeding",
+      "Visitor list",
+      "Room temperature"
+    ],
+    "correctIndex": 1,
+    "rationale": "Assess fundal tone and lochia to detect early postpartum haemorrhage.",
+    "category": "Maternity & Child Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 225,
+    "question": "Which statement is non-therapeutic?",
+    "options": [
+      "'Tell me more about that.'",
+      "'Everything happens for a reason.'",
+      "'You sound frustrated.'",
+      "'I'm here to listen.'"
+    ],
+    "correctIndex": 1,
+    "rationale": "'Everything happens for a reason' minimises feelings and is non-therapeutic.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 226,
+    "question": "A 15-year-old needs surgery. Consent is obtained from:",
+    "options": [
+      "The minor alone",
+      "A friend",
+      "The parent/legal guardian",
+      "The nurse"
+    ],
+    "correctIndex": 2,
+    "rationale": "Minors require consent from a parent or legal guardian (except where emancipated/emergency).",
+    "category": "Ethics & Regulations",
+    "examType": "DHA"
+  },
+  {
+    "id": 227,
+    "question": "PEA is best described as:",
+    "options": [
+      "A shockable rhythm",
+      "An organised rhythm without a pulse",
+      "Normal sinus rhythm",
+      "Sinus bradycardia"
+    ],
+    "correctIndex": 1,
+    "rationale": "PEA shows electrical activity but no pulse and is non-shockable.",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 228,
+    "question": "Shoulder dystocia is managed with:",
+    "options": [
+      "Fundal pressure",
+      "McRoberts maneuver and suprapubic pressure",
+      "Immediate forceps",
+      "Maternal pushing only"
+    ],
+    "correctIndex": 1,
+    "rationale": "McRoberts with suprapubic pressure relieves dystocia; fundal pressure is contraindicated.",
+    "category": "Maternity & Child Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 229,
+    "question": "Which is a reversible cause of cardiac arrest (an 'H' or 'T')?",
+    "options": [
+      "Hyperlipidaemia",
+      "Hypoxia",
+      "Hypertension",
+      "Hyperthyroid history"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hypoxia is a reversible 'H' cause; others include hypovolaemia, hypo/hyperkalemia, tension pneumothorax, tamponade, thrombosis, toxins.",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 230,
+    "question": "A patient with hyponatremia and confusion needs:",
+    "options": [
+      "Rapid sodium correction",
+      "Slow, controlled sodium correction",
+      "Free water boluses",
+      "No intervention"
+    ],
+    "correctIndex": 1,
+    "rationale": "Correct sodium slowly to avoid osmotic demyelination.",
+    "category": "Clinical Core",
+    "examType": "DHA"
+  },
+  {
+    "id": 231,
+    "question": "A patient on an SSRI plus another serotonergic drug develops fever and hyperreflexia. The nurse should:",
+    "options": [
+      "Continue both drugs",
+      "Stop serotonergic agents and notify the physician",
+      "Give more SSRI",
+      "Encourage exercise"
+    ],
+    "correctIndex": 1,
+    "rationale": "Suspected serotonin syndrome requires stopping the offending agents and urgent management.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 232,
+    "question": "After caring for a C. difficile patient, the nurse should:",
+    "options": [
+      "Use alcohol rub and move on",
+      "Wash hands with soap and water",
+      "Skip hand hygiene",
+      "Re-use the gown"
+    ],
+    "correctIndex": 1,
+    "rationale": "Soap-and-water washing physically removes C. difficile spores.",
+    "category": "Infection Control",
+    "examType": "DHA"
+  },
+  {
+    "id": 233,
+    "question": "A postpartum patient has heavy lochia and a boggy fundus. FIRST action:",
+    "options": [
+      "Give oxytocin",
+      "Massage the fundus",
+      "Call the physician",
+      "Insert a catheter"
+    ],
+    "correctIndex": 1,
+    "rationale": "Fundal massage is the immediate first action for uterine atony.",
+    "category": "Maternity & Child Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 234,
+    "question": "The correct order to don PPE is:",
+    "options": [
+      "Gloves, gown, mask",
+      "Gown, mask, goggles, gloves",
+      "Mask, gloves, gown",
+      "Goggles, gloves, gown"
+    ],
+    "correctIndex": 1,
+    "rationale": "Don gown, then mask, then goggles/face shield, then gloves.",
+    "category": "Infection Control",
+    "examType": "DHA"
+  },
+  {
+    "id": 235,
+    "question": "Cushing's triad (hypertension with widening pulse pressure, bradycardia, irregular breathing) indicates:",
+    "options": [
+      "Sepsis",
+      "Rising intracranial pressure/herniation",
+      "Hypoglycaemia",
+      "Anaphylaxis"
+    ],
+    "correctIndex": 1,
+    "rationale": "Cushing's triad is a late, ominous sign of raised ICP.",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 236,
+    "question": "Best position for a dyspneic patient is:",
+    "options": [
+      "Supine flat",
+      "High-Fowler's",
+      "Trendelenburg",
+      "Prone"
+    ],
+    "correctIndex": 1,
+    "rationale": "Upright high-Fowler's improves lung expansion and eases breathing.",
+    "category": "Fundamentals",
+    "examType": "DHA"
+  },
+  {
+    "id": 237,
+    "question": "The therapeutic milieu aims to:",
+    "options": [
+      "Isolate patients",
+      "Provide a safe, structured, healing environment",
+      "Maximise stimulation",
+      "Replace medication"
+    ],
+    "correctIndex": 1,
+    "rationale": "A therapeutic milieu offers a safe, structured environment that supports recovery.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 238,
+    "question": "Varicella (chickenpox) requires which precautions?",
+    "options": [
+      "Contact only",
+      "Droplet only",
+      "Airborne (and contact)",
+      "Standard only"
+    ],
+    "correctIndex": 2,
+    "rationale": "Varicella is spread by the airborne route (with contact precautions for lesions).",
+    "category": "Infection Control",
+    "examType": "DHA"
+  },
+  {
+    "id": 239,
+    "question": "A patient vomiting for 3 days likely has which acid-base imbalance?",
+    "options": [
+      "Metabolic acidosis",
+      "Metabolic alkalosis",
+      "Respiratory acidosis",
+      "Respiratory alkalosis"
+    ],
+    "correctIndex": 1,
+    "rationale": "Loss of gastric acid from vomiting causes metabolic alkalosis.",
+    "category": "Clinical Core",
+    "examType": "DHA"
+  },
+  {
+    "id": 240,
+    "question": "A patient with chest pain receives nitroglycerin. The nurse monitors for:",
+    "options": [
+      "Hypertension",
+      "Hypotension and headache",
+      "Bradycardia only",
+      "Hyperglycaemia"
+    ],
+    "correctIndex": 1,
+    "rationale": "Nitroglycerin is a vasodilator; watch for hypotension and headache.",
+    "category": "Clinical Core",
+    "examType": "DHA"
+  },
+  {
+    "id": 241,
+    "question": "A burn patient with facial burns, soot and hoarseness needs priority attention to the:",
+    "options": [
+      "Skin only",
+      "Airway (inhalation injury)",
+      "Diet",
+      "Mobility"
+    ],
+    "correctIndex": 1,
+    "rationale": "Inhalation injury threatens the airway; secure it early.",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 242,
+    "question": "A patient with a delusion insists staff are poisoning him. The nurse should:",
+    "options": [
+      "Agree to build trust",
+      "Argue with evidence",
+      "Acknowledge the feeling without reinforcing the belief",
+      "Avoid the patient"
+    ],
+    "correctIndex": 2,
+    "rationale": "Acknowledge the underlying feeling (fear) without confirming or arguing the delusion.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 243,
+    "question": "Warfarin therapy is monitored with:",
+    "options": [
+      "aPTT",
+      "PT/INR",
+      "CBC only",
+      "Blood glucose"
+    ],
+    "correctIndex": 1,
+    "rationale": "Warfarin is monitored with PT/INR (target 2-3).",
+    "category": "Pharmacology",
+    "examType": "DHA"
+  },
+  {
+    "id": 244,
+    "question": "Which vaccine is contraindicated in pregnancy?",
+    "options": [
+      "Inactivated influenza",
+      "Tetanus toxoid",
+      "MMR (live)",
+      "Hepatitis B"
+    ],
+    "correctIndex": 2,
+    "rationale": "Live vaccines such as MMR are avoided in pregnancy.",
+    "category": "Infection Control",
+    "examType": "DHA"
+  },
+  {
+    "id": 245,
+    "question": "A patient on a heparin infusion is monitored with:",
+    "options": [
+      "INR",
+      "aPTT",
+      "Blood glucose",
+      "Lipid panel"
+    ],
+    "correctIndex": 1,
+    "rationale": "Heparin therapy is monitored with aPTT (warfarin uses INR).",
+    "category": "Clinical Core",
+    "examType": "DHA"
+  },
+  {
+    "id": 246,
+    "question": "Reporting suspected child abuse is:",
+    "options": [
+      "Optional",
+      "A mandatory legal/ethical duty",
+      "A breach of confidentiality to avoid",
+      "Only the physician's job"
+    ],
+    "correctIndex": 1,
+    "rationale": "Suspected abuse must be reported under child/vulnerable-person protection requirements; it overrides ordinary confidentiality.",
+    "category": "Ethics & Regulations",
+    "examType": "DHA"
+  },
+  {
+    "id": 247,
+    "question": "Treating all patients equally regardless of nationality reflects:",
+    "options": [
+      "Autonomy",
+      "Justice",
+      "Beneficence",
+      "Fidelity"
+    ],
+    "correctIndex": 1,
+    "rationale": "Justice is fair, equal treatment for all.",
+    "category": "Ethics & Regulations",
+    "examType": "DHA"
+  },
+  {
+    "id": 248,
+    "question": "The nurse believes an order is unsafe. The best action is to:",
+    "options": [
+      "Carry it out anyway",
+      "Ignore it silently",
+      "Question and clarify it, escalating if needed",
+      "Have a UAP do it"
+    ],
+    "correctIndex": 2,
+    "rationale": "As advocate, the nurse clarifies and questions unsafe orders and escalates through the chain of command.",
+    "category": "Ethics & Regulations",
+    "examType": "DHA"
+  },
+  {
+    "id": 249,
+    "question": "A patient experiencing a flashback (PTSD) is best helped by:",
+    "options": [
+      "Restraining immediately",
+      "Grounding techniques and reorientation to the present and safety",
+      "Leaving them alone",
+      "Arguing it is not real"
+    ],
+    "correctIndex": 1,
+    "rationale": "Grounding and reorientation to present safety help during a flashback.",
+    "category": "Mental Health",
+    "examType": "DHA"
+  },
+  {
+    "id": 250,
+    "question": "Informed consent is valid only if the patient is:",
+    "options": [
+      "Related to staff",
+      "Competent, informed, and voluntary",
+      "Over 40 years old",
+      "Accompanied by family"
+    ],
+    "correctIndex": 1,
+    "rationale": "Valid consent requires a competent, adequately informed patient deciding voluntarily.",
+    "category": "Ethics & Regulations",
+    "examType": "DHA"
+  },
+  {
+    "id": 251,
+    "question": "A patient with major burns receives IV fluids primarily to:",
+    "options": [
+      "Prevent infection",
+      "Maintain circulating volume and perfusion",
+      "Improve nutrition",
+      "Reduce pain"
+    ],
+    "correctIndex": 1,
+    "rationale": "Large fluid shifts in burns require resuscitation to maintain perfusion (e.g., Parkland formula).",
+    "category": "Critical Care",
+    "examType": "DHA"
+  },
+  {
+    "id": 252,
+    "question": "A type 1 diabetic has glucose 28 mmol/L, ketones, Kussmaul breathing. This is:",
+    "options": [
+      "Hypoglycaemia",
+      "DKA",
+      "HHS only",
+      "Normal"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hyperglycaemia with ketones and Kussmaul breathing indicates DKA.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 253,
+    "question": "Which food must a patient on an MAOI avoid?",
+    "options": [
+      "Water",
+      "Aged cheese",
+      "Rice",
+      "Bananas in moderation"
+    ],
+    "correctIndex": 1,
+    "rationale": "Tyramine-rich aged cheese can cause a hypertensive crisis with MAOIs.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 254,
+    "question": "A COPD patient on high-flow O2 becomes drowsy with slow breathing. The nurse should:",
+    "options": [
+      "Increase oxygen",
+      "Reduce O2 to a controlled target and reassess",
+      "Leave to rest",
+      "Give a sedative"
+    ],
+    "correctIndex": 1,
+    "rationale": "Excess O2 can suppress the hypoxic drive; titrate down and reassess.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 255,
+    "question": "Apical pulse is 54 before digoxin. The nurse should:",
+    "options": [
+      "Give the dose",
+      "Hold and notify the physician",
+      "Give half",
+      "Recheck in 4 h then give"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hold digoxin for an apical pulse below 60 and notify the physician.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 256,
+    "question": "Herd immunity protects:",
+    "options": [
+      "Only the vaccinated",
+      "The unvaccinated and vulnerable when coverage is high",
+      "No one",
+      "Only adults"
+    ],
+    "correctIndex": 1,
+    "rationale": "High vaccination coverage indirectly protects those who cannot be vaccinated.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 257,
+    "question": "FAST is used to identify:",
+    "options": [
+      "Heart attack",
+      "Stroke",
+      "Sepsis",
+      "Fracture"
+    ],
+    "correctIndex": 1,
+    "rationale": "FAST (Face, Arm, Speech, Time) screens for stroke.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 258,
+    "question": "The MOST appropriate first step in any ethical dilemma is to:",
+    "options": [
+      "Act on personal values",
+      "Gather the facts and identify the patient's wishes",
+      "Ask the family to decide",
+      "Refuse to participate"
+    ],
+    "correctIndex": 1,
+    "rationale": "Ethical decision-making begins with gathering facts and clarifying the patient's values/wishes.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 259,
+    "question": "A patient with a suspected stroke has a last-known-well time 1 hour ago. The priority is to:",
+    "options": [
+      "Delay imaging",
+      "Expedite assessment and CT to determine eligibility for treatment",
+      "Give food",
+      "Encourage sleep"
+    ],
+    "correctIndex": 1,
+    "rationale": "Time is brain - rapid assessment/imaging determines thrombolysis/thrombectomy eligibility.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 260,
+    "question": "The MOST important assessment for a depressed patient is:",
+    "options": [
+      "Sleep pattern",
+      "Risk of suicide",
+      "Appetite",
+      "Hobbies"
+    ],
+    "correctIndex": 1,
+    "rationale": "Safety - suicide risk - is the priority assessment.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 261,
+    "question": "A restraint should be tied to the:",
+    "options": [
+      "Side rail",
+      "Bed frame with a quick-release knot",
+      "Headboard tightly",
+      "IV pole"
+    ],
+    "correctIndex": 1,
+    "rationale": "Tie to the bed frame with a quick-release knot - never to side rails.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 262,
+    "question": "Primary prevention is best illustrated by:",
+    "options": [
+      "Mammography screening",
+      "Immunisation and health education",
+      "Stroke rehabilitation",
+      "Wound care"
+    ],
+    "correctIndex": 1,
+    "rationale": "Primary prevention stops disease before it occurs (e.g., vaccination, education).",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 263,
+    "question": "A trauma patient is restless, tachycardic and hypotensive after blunt abdominal injury. Suspect:",
+    "options": [
+      "Anxiety",
+      "Internal haemorrhage/hypovolemic shock",
+      "Simple pain",
+      "Dehydration only"
+    ],
+    "correctIndex": 1,
+    "rationale": "These signs suggest internal bleeding and hypovolemic shock; act urgently.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 264,
+    "question": "Late decelerations on the fetal monitor indicate:",
+    "options": [
+      "Head compression",
+      "Uteroplacental insufficiency",
+      "Normal variability",
+      "Cord around neck only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Late decelerations reflect uteroplacental insufficiency; reposition, give O2, stop oxytocin, notify provider.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 265,
+    "question": "Before giving a beta-blocker, the nurse checks:",
+    "options": [
+      "Temperature only",
+      "Heart rate and blood pressure",
+      "Blood glucose",
+      "Urine output"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hold beta-blockers for bradycardia/hypotension.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 266,
+    "question": "To prevent aspiration during feeding, position the patient:",
+    "options": [
+      "Flat supine",
+      "Upright at 90 degrees (high-Fowler's)",
+      "Trendelenburg",
+      "Left side flat"
+    ],
+    "correctIndex": 1,
+    "rationale": "Sitting upright reduces aspiration risk during and after meals.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 267,
+    "question": "A nurse gives a medication to the wrong patient but no harm occurs. The nurse should:",
+    "options": [
+      "Say nothing",
+      "Complete an incident report and monitor the patient",
+      "Document it in another patient's chart",
+      "Blame the pharmacy"
+    ],
+    "correctIndex": 1,
+    "rationale": "Errors are reported via an incident report and the patient is monitored, regardless of harm.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 268,
+    "question": "Sudden dyspnoea, pleuritic chest pain and tachycardia post-op suggests:",
+    "options": [
+      "Pneumonia",
+      "Pulmonary embolism",
+      "Asthma",
+      "Anxiety only"
+    ],
+    "correctIndex": 1,
+    "rationale": "This classic picture suggests PE - give oxygen and anticipate anticoagulation.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 269,
+    "question": "Which statement about IV potassium is correct?",
+    "options": [
+      "Give by rapid push",
+      "Always dilute and infuse via pump",
+      "Give undiluted slowly",
+      "Mix with the patient's blood"
+    ],
+    "correctIndex": 1,
+    "rationale": "KCl must be diluted and infused via pump - never pushed.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 270,
+    "question": "Before any medication, the nurse must verify:",
+    "options": [
+      "The patient's insurance",
+      "Allergies",
+      "Room number",
+      "Visiting hours"
+    ],
+    "correctIndex": 1,
+    "rationale": "Allergy status must be confirmed before administration.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 271,
+    "question": "Two-identifier checking applies to:",
+    "options": [
+      "Only high-risk drugs",
+      "All medications, procedures and specimens",
+      "Only IV drugs",
+      "Only new patients"
+    ],
+    "correctIndex": 1,
+    "rationale": "Two-identifier verification applies to all medications, procedures, and specimen collection.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 272,
+    "question": "In DKA, as insulin is given the nurse closely monitors:",
+    "options": [
+      "Sodium only",
+      "Potassium",
+      "Calcium",
+      "Magnesium"
+    ],
+    "correctIndex": 1,
+    "rationale": "Insulin drives potassium into cells, risking hypokalemia; monitor closely.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 273,
+    "question": "Infuse 1 L over 10 hours. Pump rate (mL/hr)?",
+    "options": [
+      "50",
+      "100",
+      "125",
+      "200"
+    ],
+    "correctIndex": 1,
+    "rationale": "1000 mL / 10 h = 100 mL/hr.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 274,
+    "question": "Which finding requires immediate defibrillation?",
+    "options": [
+      "Sinus tachycardia with a pulse",
+      "Pulseless ventricular tachycardia",
+      "Atrial fibrillation with a pulse",
+      "Sinus bradycardia"
+    ],
+    "correctIndex": 1,
+    "rationale": "Pulseless VT is shockable and requires immediate defibrillation.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 275,
+    "question": "A competent adult refuses a blood transfusion for religious reasons. The nurse should:",
+    "options": [
+      "Administer it because it is life-saving",
+      "Respect the refusal, document it, and notify the physician",
+      "Ask the family to consent instead",
+      "Wait until the patient is unconscious"
+    ],
+    "correctIndex": 1,
+    "rationale": "A competent adult has the right to refuse treatment (autonomy). The nurse documents the informed refusal and notifies the physician.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 276,
+    "question": "Priority for a newborn immediately after birth:",
+    "options": [
+      "Weigh the baby",
+      "Maintain airway/breathing and warmth",
+      "Give a bath",
+      "Footprint the baby"
+    ],
+    "correctIndex": 1,
+    "rationale": "Airway, breathing and thermoregulation take priority at birth.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 277,
+    "question": "According to Maslow, which need is highest priority?",
+    "options": [
+      "Self-esteem",
+      "Belonging",
+      "Oxygenation",
+      "Spiritual support"
+    ],
+    "correctIndex": 2,
+    "rationale": "Physiological needs like oxygenation are the base of the hierarchy.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 278,
+    "question": "Carboprost (Hemabate) for PPH is avoided in patients with:",
+    "options": [
+      "Diabetes",
+      "Asthma",
+      "Anaemia",
+      "Hypothyroidism"
+    ],
+    "correctIndex": 1,
+    "rationale": "Carboprost can cause bronchospasm and is avoided in asthma.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 279,
+    "question": "First nursing action for surgical wound evisceration:",
+    "options": [
+      "Push organs back in",
+      "Cover with sterile saline-soaked gauze and notify surgeon",
+      "Apply a tight dry bandage",
+      "Give oral fluids"
+    ],
+    "correctIndex": 1,
+    "rationale": "Keep exposed viscera moist with sterile saline gauze; position low-Fowler's, knees flexed; notify surgeon.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 280,
+    "question": "First action when a monitored patient suddenly becomes unresponsive and pulseless:",
+    "options": [
+      "Call family",
+      "Start CPR and activate the code/defibrillator",
+      "Document the time only",
+      "Give oral glucose"
+    ],
+    "correctIndex": 1,
+    "rationale": "Begin CPR immediately and activate emergency response/defibrillation.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 281,
+    "question": "Which task is appropriate to delegate to a UAP?",
+    "options": [
+      "Assessing a new admission",
+      "Administering oral medication",
+      "Assisting a stable patient to ambulate",
+      "Teaching wound care"
+    ],
+    "correctIndex": 2,
+    "rationale": "Routine ambulation of a stable patient is delegable. Assessment, medication, and teaching require the licensed nurse.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 282,
+    "question": "A suicidal patient with a detailed plan and access to means requires:",
+    "options": [
+      "Discharge with follow-up",
+      "Continuous one-to-one observation and removal of means",
+      "A group session",
+      "No special action"
+    ],
+    "correctIndex": 1,
+    "rationale": "High-risk patients need continuous observation and a safe environment.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 283,
+    "question": "A newborn has APGAR 5 at one minute. The nurse should:",
+    "options": [
+      "Document only",
+      "Provide stimulation and oxygen, reassess",
+      "Start compressions",
+      "Delay the 5-minute score"
+    ],
+    "correctIndex": 1,
+    "rationale": "Score 4-6 needs stimulation and oxygen with reassessment.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 284,
+    "question": "Which finding in a dialysis patient needs urgent attention?",
+    "options": [
+      "Bruit over the fistula",
+      "Absent thrill over the fistula",
+      "Healed access site",
+      "Patient resting"
+    ],
+    "correctIndex": 1,
+    "rationale": "Loss of thrill/bruit suggests clotting of the access - an urgent vascular concern.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 285,
+    "question": "Hand hygiene after glove removal is needed because:",
+    "options": [
+      "It is optional",
+      "Gloves may have micro-tears and hands can be contaminated during doffing",
+      "Gloves are sterile always",
+      "It wastes time"
+    ],
+    "correctIndex": 1,
+    "rationale": "Gloves do not replace hand hygiene; hands may be contaminated.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 286,
+    "question": "Calculate gtt/min: 1000 mL over 12 h, macrodrip 20 gtt/mL.",
+    "options": [
+      "~14",
+      "~28",
+      "~42",
+      "~33"
+    ],
+    "correctIndex": 1,
+    "rationale": "(1000 x 20)/(12 x 60) = 20000/720 = ~28 gtt/min.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 287,
+    "question": "A laboring patient suddenly has a rigid abdomen and dark bleeding. The nurse should:",
+    "options": [
+      "Encourage ambulation",
+      "Notify the provider urgently and prepare for emergency care",
+      "Perform a vaginal exam",
+      "Offer a meal"
+    ],
+    "correctIndex": 1,
+    "rationale": "This suggests abruptio placentae - an emergency requiring urgent provider notification.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 288,
+    "question": "Which action demonstrates respect for autonomy?",
+    "options": [
+      "Deciding for the patient",
+      "Providing information and supporting the patient's own choice",
+      "Persuading the patient to agree with staff",
+      "Withholding options"
+    ],
+    "correctIndex": 1,
+    "rationale": "Supporting the patient's informed, voluntary choice respects autonomy.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 289,
+    "question": "Lithium patients should be taught to:",
+    "options": [
+      "Restrict all fluids",
+      "Maintain hydration and stable salt intake",
+      "Take with grapefruit",
+      "Skip doses when well"
+    ],
+    "correctIndex": 1,
+    "rationale": "Stable fluid and sodium intake keep lithium levels safe.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 290,
+    "question": "Methylergonovine is contraindicated in patients with:",
+    "options": [
+      "Diabetes",
+      "Hypertension",
+      "Anaemia",
+      "Asthma"
+    ],
+    "correctIndex": 1,
+    "rationale": "Methylergonovine causes vasoconstriction and is contraindicated in hypertension.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 291,
+    "question": "Standard precautions are used for:",
+    "options": [
+      "Only patients with known infection",
+      "Every patient, every time",
+      "Only ICU patients",
+      "Only during procedures"
+    ],
+    "correctIndex": 1,
+    "rationale": "Standard precautions apply to all patients regardless of diagnosis.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 292,
+    "question": "A nurse with a productive cough and fever should:",
+    "options": [
+      "Work as normal",
+      "Report and follow occupational-health/return-to-work policy",
+      "Hide symptoms",
+      "Only wear gloves"
+    ],
+    "correctIndex": 1,
+    "rationale": "Symptomatic staff must report to occupational health to prevent transmission.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 293,
+    "question": "The nurse identifies the patient before medication using:",
+    "options": [
+      "Bed number",
+      "Two identifiers (name + DOB/MRN)",
+      "Diagnosis",
+      "Appearance"
+    ],
+    "correctIndex": 1,
+    "rationale": "Two identifiers are required; room/bed numbers are not acceptable.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 294,
+    "question": "A confused patient keeps climbing out of bed. The FIRST intervention is to:",
+    "options": [
+      "Apply restraints",
+      "Use least-restrictive measures: rounding, bed alarm, move closer to the station",
+      "Sedate the patient",
+      "Raise all four side rails"
+    ],
+    "correctIndex": 1,
+    "rationale": "Least-restrictive safety measures are tried first; restraints/4 side rails are a last resort.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 295,
+    "question": "A child weighing 15 kg is ordered 10 mg/kg. Total dose:",
+    "options": [
+      "100 mg",
+      "150 mg",
+      "15 mg",
+      "1500 mg"
+    ],
+    "correctIndex": 1,
+    "rationale": "10 mg/kg x 15 kg = 150 mg.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 296,
+    "question": "Hand hygiene with alcohol rub is appropriate when:",
+    "options": [
+      "Hands are visibly soiled",
+      "Caring for C. difficile",
+      "Hands are not visibly soiled",
+      "After using the toilet"
+    ],
+    "correctIndex": 2,
+    "rationale": "Alcohol rub is used when hands are not visibly soiled; soap/water for soiling and spores.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 297,
+    "question": "Beck's triad (hypotension, muffled heart sounds, JVD) indicates:",
+    "options": [
+      "Pneumothorax",
+      "Cardiac tamponade",
+      "MI",
+      "PE"
+    ],
+    "correctIndex": 1,
+    "rationale": "Beck's triad indicates cardiac tamponade - prepare for pericardiocentesis.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 298,
+    "question": "A postoperative patient refuses to deep-breathe due to pain. The nurse should:",
+    "options": [
+      "Skip breathing exercises",
+      "Provide analgesia then encourage incentive spirometry",
+      "Force the exercise",
+      "Document refusal only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Treating pain enables effective breathing exercises that prevent atelectasis/pneumonia.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 299,
+    "question": "Painful dark-red bleeding with a rigid uterus suggests:",
+    "options": [
+      "Placenta previa",
+      "Abruptio placentae",
+      "Normal show",
+      "Cord prolapse"
+    ],
+    "correctIndex": 1,
+    "rationale": "Painful bleeding with a board-like uterus indicates placental abruption.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 300,
+    "question": "Before administering a blood-thinner, the nurse should:",
+    "options": [
+      "Encourage a high-vitamin-K diet",
+      "Assess for bleeding and check the relevant clotting test",
+      "Give it with aspirin routinely",
+      "Skip allergy checks"
+    ],
+    "correctIndex": 1,
+    "rationale": "Assess for bleeding and verify the monitoring test (aPTT/INR) before anticoagulants.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 301,
+    "question": "Which is therapeutic communication?",
+    "options": [
+      "'I'm sure it'll be fine.'",
+      "'If I were you...'",
+      "'You seem worried; tell me more.'",
+      "'Why are you upset?'"
+    ],
+    "correctIndex": 2,
+    "rationale": "Reflecting feeling and inviting elaboration is therapeutic.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 302,
+    "question": "The recovery position is used to:",
+    "options": [
+      "Improve circulation only",
+      "Maintain a patent airway in an unconscious breathing patient",
+      "Treat shock",
+      "Reduce fever"
+    ],
+    "correctIndex": 1,
+    "rationale": "The recovery (left-lateral) position keeps the airway clear and reduces aspiration risk.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 303,
+    "question": "The priority when a patient threatens another patient is to:",
+    "options": [
+      "Document later",
+      "Ensure the safety of others and de-escalate, intervening per policy",
+      "Ignore unless contact occurs",
+      "Discharge the patient"
+    ],
+    "correctIndex": 1,
+    "rationale": "Protecting others and safe de-escalation are the immediate priority.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 304,
+    "question": "When delegating vital signs to a UAP, the RN must:",
+    "options": [
+      "Stop assessing the patient",
+      "Still interpret the values and act on abnormalities",
+      "Transfer accountability",
+      "Avoid double-checking"
+    ],
+    "correctIndex": 1,
+    "rationale": "Data collection may be delegated, but the RN interprets results and remains accountable.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 305,
+    "question": "A confirmed measles case must be:",
+    "options": [
+      "Kept confidential",
+      "Reported to preventive medicine",
+      "Discharged at once",
+      "Reported after recovery"
+    ],
+    "correctIndex": 1,
+    "rationale": "Measles is a notifiable disease requiring prompt public-health reporting.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 306,
+    "question": "Which insulin may be administered IV?",
+    "options": [
+      "NPH",
+      "Glargine",
+      "Regular",
+      "Detemir"
+    ],
+    "correctIndex": 2,
+    "rationale": "Only regular (short-acting) insulin is given IV.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 307,
+    "question": "An HAI is defined as an infection that:",
+    "options": [
+      "Was present on admission",
+      "Was acquired in the facility and not incubating on admission",
+      "Only occurs at home",
+      "Is never preventable"
+    ],
+    "correctIndex": 1,
+    "rationale": "HAIs are acquired in healthcare and were not present/incubating on admission.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 308,
+    "question": "Rh immunoglobulin is given to:",
+    "options": [
+      "Rh-positive mothers",
+      "Rh-negative mothers around 28 weeks and after delivery of an Rh-positive baby",
+      "All newborns",
+      "Only fathers"
+    ],
+    "correctIndex": 1,
+    "rationale": "Anti-D prevents Rh sensitisation in Rh-negative mothers.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 309,
+    "question": "A patient on an aminoglycoside should be monitored for:",
+    "options": [
+      "Hyperglycaemia",
+      "Nephrotoxicity and ototoxicity",
+      "Weight gain",
+      "Cough"
+    ],
+    "correctIndex": 1,
+    "rationale": "Aminoglycosides are nephro- and ototoxic; monitor renal function and levels.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 310,
+    "question": "Which best protects the nurse legally after an adverse event?",
+    "options": [
+      "Avoiding documentation",
+      "Accurate, complete, contemporaneous documentation",
+      "Discussing it on social media",
+      "Changing the record later"
+    ],
+    "correctIndex": 1,
+    "rationale": "Accurate, timely documentation is the nurse's best legal protection; records must never be altered improperly.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 311,
+    "question": "Acting in the patient's best interest describes:",
+    "options": [
+      "Beneficence",
+      "Veracity",
+      "Fidelity",
+      "Justice"
+    ],
+    "correctIndex": 0,
+    "rationale": "Beneficence is acting to benefit the patient.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 312,
+    "question": "For a patient with C. difficile, the nurse should:",
+    "options": [
+      "Use alcohol gel only",
+      "Wash with soap and water and use contact precautions",
+      "Use airborne precautions",
+      "Use no precautions"
+    ],
+    "correctIndex": 1,
+    "rationale": "C. difficile spores resist alcohol; soap-and-water plus contact precautions are required.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 313,
+    "question": "Which organism is spread by contact and needs gown/gloves?",
+    "options": [
+      "Tuberculosis",
+      "Measles",
+      "MRSA",
+      "Influenza"
+    ],
+    "correctIndex": 2,
+    "rationale": "MRSA is contact-spread and requires gown and gloves.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 314,
+    "question": "Extrapyramidal side effects of antipsychotics include:",
+    "options": [
+      "Hypertension",
+      "Tremor, rigidity and akathisia",
+      "Hyperglycaemia",
+      "Diarrhoea"
+    ],
+    "correctIndex": 1,
+    "rationale": "EPS include parkinsonism (tremor/rigidity), akathisia and dystonia.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 315,
+    "question": "Which is a sentinel event requiring formal reporting?",
+    "options": [
+      "A patient refusing a meal",
+      "Wrong-site surgery",
+      "A late medication by 10 minutes",
+      "A patient request for water"
+    ],
+    "correctIndex": 1,
+    "rationale": "Wrong-site surgery is a sentinel event reported to quality/risk management.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 316,
+    "question": "Which is the correct assessment sequence for the abdomen?",
+    "options": [
+      "Inspect, palpate, percuss, auscultate",
+      "Inspect, auscultate, percuss, palpate",
+      "Palpate first",
+      "Percuss first"
+    ],
+    "correctIndex": 1,
+    "rationale": "For the abdomen, auscultate before percussion/palpation to avoid altering bowel sounds.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 317,
+    "question": "A post-op patient has BP 88/60, HR 122, cool clammy skin, low urine output. Priority:",
+    "options": [
+      "Antipyretic",
+      "Restore volume (fluids/blood) and find the bleeding source",
+      "Reverse Trendelenburg",
+      "Restrict fluids"
+    ],
+    "correctIndex": 1,
+    "rationale": "Signs of hypovolemic shock - restore circulating volume and control the source.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 318,
+    "question": "A confirmed case of pulmonary TB requires the nurse to:",
+    "options": [
+      "Keep it confidential",
+      "Report it to preventive medicine",
+      "Tell only the family",
+      "Wait until discharge"
+    ],
+    "correctIndex": 1,
+    "rationale": "Notifiable communicable diseases such as TB must be reported to public health - an exception to confidentiality.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 319,
+    "question": "The earliest indicator of clinical deterioration is often:",
+    "options": [
+      "A change in level of consciousness",
+      "Hair loss",
+      "Increased appetite",
+      "Dry skin"
+    ],
+    "correctIndex": 0,
+    "rationale": "An altered LOC (restlessness, confusion) is an early, sensitive sign of deterioration.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 320,
+    "question": "A patient with pneumonia should be encouraged to:",
+    "options": [
+      "Stay flat and still",
+      "Deep breathe, cough, mobilise and hydrate",
+      "Restrict all fluids",
+      "Avoid coughing"
+    ],
+    "correctIndex": 1,
+    "rationale": "Deep breathing, coughing, mobility and hydration help clear secretions and prevent complications.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 321,
+    "question": "Which is the correct nursing action if a drug dose seems unusually high?",
+    "options": [
+      "Give it as written",
+      "Hold, verify with the prescriber and reference, and clarify",
+      "Give half",
+      "Ask a UAP"
+    ],
+    "correctIndex": 1,
+    "rationale": "Question and verify doses that appear unsafe before administering.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 322,
+    "question": "Normal capillary refill time is:",
+    "options": [
+      "Less than 3 seconds",
+      "5-8 seconds",
+      "10 seconds",
+      "Instant only"
+    ],
+    "correctIndex": 0,
+    "rationale": "Capillary refill under ~3 seconds indicates adequate peripheral perfusion.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 323,
+    "question": "Order 250 mg; available 125 mg/5 mL. Give:",
+    "options": [
+      "5 mL",
+      "10 mL",
+      "12.5 mL",
+      "2.5 mL"
+    ],
+    "correctIndex": 1,
+    "rationale": "(250/125) x 5 = 10 mL.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 324,
+    "question": "Naloxone is used to reverse:",
+    "options": [
+      "Benzodiazepine overdose",
+      "Opioid overdose",
+      "Lithium toxicity",
+      "Alcohol withdrawal"
+    ],
+    "correctIndex": 1,
+    "rationale": "Naloxone reverses opioid-induced respiratory depression.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 325,
+    "question": "Which breaks the sterile field?",
+    "options": [
+      "Items above waist level",
+      "A sterile item touching the drape edge",
+      "Facing the field",
+      "Holding items in front"
+    ],
+    "correctIndex": 1,
+    "rationale": "The outer 2.5 cm of the drape is contaminated.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 326,
+    "question": "A statin patient reports muscle pain and dark urine. The nurse suspects:",
+    "options": [
+      "Normal effect",
+      "Rhabdomyolysis - report and check CK",
+      "Dehydration only",
+      "Allergy"
+    ],
+    "correctIndex": 1,
+    "rationale": "Muscle pain with dark urine suggests rhabdomyolysis; hold and report, check creatine kinase.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 327,
+    "question": "A meningococcal meningitis patient requires:",
+    "options": [
+      "Airborne precautions",
+      "Droplet precautions",
+      "No precautions",
+      "Contact only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Meningococcus is droplet-spread; use a surgical mask and a private room.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 328,
+    "question": "For severe external haemorrhage, the FIRST action is:",
+    "options": [
+      "Elevate and observe",
+      "Apply direct pressure",
+      "Give oral fluids",
+      "Obtain consent"
+    ],
+    "correctIndex": 1,
+    "rationale": "Direct pressure is the immediate action to control bleeding.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 329,
+    "question": "A patient on contact precautions is transferred to radiology. The nurse should:",
+    "options": [
+      "Skip notifying radiology",
+      "Communicate the precautions and ensure they are maintained during transport",
+      "Remove all PPE first",
+      "Cancel the test"
+    ],
+    "correctIndex": 1,
+    "rationale": "Precautions continue during transport; receiving departments must be informed.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 330,
+    "question": "A patient with MI is given aspirin to:",
+    "options": [
+      "Relieve fever",
+      "Inhibit platelet aggregation",
+      "Lower glucose",
+      "Sedate the patient"
+    ],
+    "correctIndex": 1,
+    "rationale": "Aspirin's antiplatelet effect limits clot extension in acute coronary syndrome.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 331,
+    "question": "A patient says, 'There's no point anymore.' The BEST response is:",
+    "options": [
+      "'Don't talk like that.'",
+      "'Are you having thoughts of harming yourself?'",
+      "'Why do you feel that way?'",
+      "'Let's discuss something positive.'"
+    ],
+    "correctIndex": 1,
+    "rationale": "Directly assessing suicidal ideation is therapeutic and essential for safety.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 332,
+    "question": "First-line medication class for alcohol withdrawal is:",
+    "options": [
+      "Opioids",
+      "Benzodiazepines",
+      "Antipsychotics only",
+      "Stimulants"
+    ],
+    "correctIndex": 1,
+    "rationale": "Benzodiazepines are used to manage alcohol withdrawal and prevent seizures.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 333,
+    "question": "Painless, bright-red vaginal bleeding in the third trimester suggests:",
+    "options": [
+      "Abruptio placentae",
+      "Placenta previa",
+      "Normal labour",
+      "Ruptured uterus"
+    ],
+    "correctIndex": 1,
+    "rationale": "Painless bright-red bleeding is classic for placenta previa; avoid vaginal exams.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 334,
+    "question": "A conscious patient with glucose 3.2 mmol/L should receive:",
+    "options": [
+      "IV insulin",
+      "15 g fast-acting carbohydrate",
+      "Nothing by mouth",
+      "A long-acting carbohydrate only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Treat hypoglycaemia with fast-acting carbohydrate and recheck in 15 minutes.",
+    "category": "Clinical Core",
+    "examType": "MOH"
+  },
+  {
+    "id": 335,
+    "question": "To prevent CAUTI, the nurse should:",
+    "options": [
+      "Keep the catheter as long as possible",
+      "Remove the catheter as early as clinically appropriate",
+      "Open the system frequently",
+      "Place the bag above the bladder"
+    ],
+    "correctIndex": 1,
+    "rationale": "Early removal and a closed system reduce catheter-associated UTI; keep the bag below bladder level.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 336,
+    "question": "Screening a population for high blood pressure is:",
+    "options": [
+      "Primary prevention",
+      "Secondary prevention",
+      "Tertiary prevention",
+      "Not prevention"
+    ],
+    "correctIndex": 1,
+    "rationale": "Screening for early detection is secondary prevention.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 337,
+    "question": "A patient reports hearing voices telling him he is worthless. The nurse should:",
+    "options": [
+      "Argue the voices are not real",
+      "Acknowledge his fear and assess for command hallucinations/safety",
+      "Ignore it",
+      "Tell him to stop listening"
+    ],
+    "correctIndex": 1,
+    "rationale": "Acknowledge feelings, assess content (especially command hallucinations) and ensure safety.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 338,
+    "question": "The nurse should interrupt CPR compressions:",
+    "options": [
+      "Frequently to rest",
+      "As little as possible",
+      "Every 30 seconds",
+      "Only to chart"
+    ],
+    "correctIndex": 1,
+    "rationale": "Interruptions reduce perfusion; minimise them for high-quality CPR.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 339,
+    "question": "A patient on heparin is bleeding. Anticipate giving:",
+    "options": [
+      "Vitamin K",
+      "Protamine sulfate",
+      "Naloxone",
+      "Flumazenil"
+    ],
+    "correctIndex": 1,
+    "rationale": "Protamine sulfate reverses heparin.",
+    "category": "Pharmacology",
+    "examType": "MOH"
+  },
+  {
+    "id": 340,
+    "question": "A patient on lithium has vomiting, coarse tremor and confusion. This suggests:",
+    "options": [
+      "Therapeutic effect",
+      "Lithium toxicity",
+      "An allergy",
+      "Normal side effects"
+    ],
+    "correctIndex": 1,
+    "rationale": "These indicate lithium toxicity; hold the dose, check the level and notify the physician.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 341,
+    "question": "A community health nurse promoting healthy diet and exercise is performing:",
+    "options": [
+      "Tertiary prevention",
+      "Health promotion / primary prevention",
+      "Acute care",
+      "Screening"
+    ],
+    "correctIndex": 1,
+    "rationale": "Promoting healthy behaviours to prevent disease is primary prevention/health promotion.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 342,
+    "question": "A nurse is asked to perform a task outside their scope of practice. The nurse should:",
+    "options": [
+      "Do it to help the team",
+      "Decline and notify the supervisor",
+      "Delegate it to a UAP",
+      "Attempt it carefully"
+    ],
+    "correctIndex": 1,
+    "rationale": "Practising outside one's scope is unsafe and unlawful; decline and escalate.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 343,
+    "question": "An unconscious trauma patient needs emergency surgery and has no guardian present. The basis to proceed is:",
+    "options": [
+      "Expressed consent",
+      "Implied (emergency) consent",
+      "Written consent",
+      "No consent needed ever"
+    ],
+    "correctIndex": 1,
+    "rationale": "In a life-threatening emergency with no one to consent, implied consent applies.",
+    "category": "Ethics & Regulations",
+    "examType": "MOH"
+  },
+  {
+    "id": 344,
+    "question": "When a patient is escalating toward aggression, the nurse should FIRST:",
+    "options": [
+      "Touch them to reassure",
+      "Maintain a safe distance and use a calm voice in a low-stimulus setting",
+      "Apply restraints",
+      "Raise their voice"
+    ],
+    "correctIndex": 1,
+    "rationale": "De-escalation with space and calm is first; restraints are a last resort.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 345,
+    "question": "A normal fetal heart rate is:",
+    "options": [
+      "60-100",
+      "110-160",
+      "170-200",
+      "80-110"
+    ],
+    "correctIndex": 1,
+    "rationale": "Normal FHR is 110-160 bpm.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 346,
+    "question": "The purpose of standard precautions is to:",
+    "options": [
+      "Apply only to infected patients",
+      "Protect against blood/body fluids for ALL patients",
+      "Replace transmission-based precautions",
+      "Be used only in surgery"
+    ],
+    "correctIndex": 1,
+    "rationale": "Standard precautions protect against blood and body fluids for every patient.",
+    "category": "Infection Control",
+    "examType": "MOH"
+  },
+  {
+    "id": 347,
+    "question": "The first medication in anaphylaxis is:",
+    "options": [
+      "Antihistamine",
+      "IM epinephrine",
+      "Corticosteroid",
+      "Salbutamol"
+    ],
+    "correctIndex": 1,
+    "rationale": "IM epinephrine is given first in anaphylaxis.",
+    "category": "Critical Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 348,
+    "question": "Restraints require:",
+    "options": [
+      "A standing indefinite order",
+      "A time-limited physician order and frequent monitoring",
+      "Family permission only",
+      "No order if brief"
+    ],
+    "correctIndex": 1,
+    "rationale": "Restraints need a time-limited order, least-restrictive type, and frequent checks.",
+    "category": "Fundamentals",
+    "examType": "MOH"
+  },
+  {
+    "id": 349,
+    "question": "Which response best uses silence therapeutically?",
+    "options": [
+      "Filling every pause with advice",
+      "Allowing a pause so the patient can reflect and continue",
+      "Leaving the room",
+      "Changing the topic"
+    ],
+    "correctIndex": 1,
+    "rationale": "Therapeutic silence gives the patient space to reflect and continue.",
+    "category": "Mental Health",
+    "examType": "MOH"
+  },
+  {
+    "id": 350,
+    "question": "First-line uterotonic for PPH is:",
+    "options": [
+      "Carboprost",
+      "Oxytocin",
+      "Methylergonovine",
+      "Misoprostol"
+    ],
+    "correctIndex": 1,
+    "rationale": "Oxytocin is first-line; others follow if needed with their contraindications.",
+    "category": "Maternity & Child Care",
+    "examType": "MOH"
+  },
+  {
+    "id": 351,
+    "question": "Serotonin syndrome is caused by:",
+    "options": [
+      "Too little serotonin",
+      "Excess serotonergic activity, often from drug combinations",
+      "Low blood sugar",
+      "Dehydration only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Excess serotonergic activity (e.g., combined serotonergic drugs) causes serotonin syndrome.",
+    "category": "Mental Health",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 352,
+    "question": "Epidemiology helps public health by:",
+    "options": [
+      "Treating individuals only",
+      "Tracking incidence and prevalence to guide interventions",
+      "Replacing vaccination",
+      "Ignoring populations"
+    ],
+    "correctIndex": 1,
+    "rationale": "Epidemiology studies disease patterns to direct public-health action.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 353,
+    "question": "Severe diarrhoea most likely causes:",
+    "options": [
+      "Metabolic alkalosis",
+      "Metabolic acidosis",
+      "Respiratory alkalosis",
+      "No change"
+    ],
+    "correctIndex": 1,
+    "rationale": "Loss of bicarbonate-rich stool causes metabolic acidosis.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 354,
+    "question": "A patient refuses a prescribed medication. The nurse should:",
+    "options": [
+      "Hide it in food",
+      "Respect the refusal, document, and notify the prescriber",
+      "Force administration",
+      "Chart it as given"
+    ],
+    "correctIndex": 1,
+    "rationale": "Patients may refuse; document the refusal and inform the prescriber.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 355,
+    "question": "The priority for active upper GI bleeding is to:",
+    "options": [
+      "Give oral iron",
+      "Maintain airway, replace volume, monitor for shock",
+      "Encourage ambulation",
+      "Offer a large meal"
+    ],
+    "correctIndex": 1,
+    "rationale": "Airway protection, fluid/blood replacement and shock monitoring are priorities in GI bleeding.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 356,
+    "question": "An infant with gestational-diabetic mother is at risk for:",
+    "options": [
+      "Hyperthermia",
+      "Hypoglycaemia",
+      "Hypertension",
+      "Polycythaemia only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Infants of diabetic mothers commonly develop neonatal hypoglycaemia.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 357,
+    "question": "A reassuring sign of fetal wellbeing is:",
+    "options": [
+      "Late decelerations",
+      "Moderate variability with accelerations",
+      "Bradycardia",
+      "Absent variability"
+    ],
+    "correctIndex": 1,
+    "rationale": "Moderate variability with accelerations indicates fetal wellbeing.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 358,
+    "question": "The single most effective measure to prevent HAIs is:",
+    "options": [
+      "Gowns",
+      "Hand hygiene",
+      "Routine antibiotics",
+      "Room disinfection"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hand hygiene is the most effective single intervention.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 359,
+    "question": "A patient refuses medication and is not an imminent danger. The nurse should:",
+    "options": [
+      "Force the medication",
+      "Respect the right to refuse, document and notify the prescriber",
+      "Hide it in food",
+      "Discharge immediately"
+    ],
+    "correctIndex": 1,
+    "rationale": "A competent patient may refuse medication unless legal criteria for involuntary treatment are met.",
+    "category": "Mental Health",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 360,
+    "question": "Keeping a promise to return and check on a patient reflects:",
+    "options": [
+      "Fidelity",
+      "Justice",
+      "Autonomy",
+      "Veracity"
+    ],
+    "correctIndex": 0,
+    "rationale": "Fidelity is keeping commitments and being trustworthy.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 361,
+    "question": "When infusing IV KCl the nurse must:",
+    "options": [
+      "Give a rapid bolus",
+      "Dilute and infuse via a pump",
+      "Push it undiluted",
+      "Mix it with blood"
+    ],
+    "correctIndex": 1,
+    "rationale": "KCl must be diluted and infused slowly via pump.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 362,
+    "question": "A patient in alcohol withdrawal becomes confused with tremor and tachycardia. This may progress to:",
+    "options": [
+      "Mania",
+      "Delirium tremens",
+      "Serotonin syndrome",
+      "NMS"
+    ],
+    "correctIndex": 1,
+    "rationale": "Severe alcohol withdrawal can progress to life-threatening delirium tremens.",
+    "category": "Mental Health",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 363,
+    "question": "Which finding indicates hypocalcemia?",
+    "options": [
+      "Positive Trousseau's/Chvostek's signs",
+      "Peaked T-waves",
+      "Warm flushed skin",
+      "Bounding pulses"
+    ],
+    "correctIndex": 0,
+    "rationale": "Hypocalcemia raises neuromuscular excitability, causing positive Chvostek's/Trousseau's and tetany.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 364,
+    "question": "Hyperkalemia is most dangerous because it can cause:",
+    "options": [
+      "Skin rash",
+      "Fatal cardiac dysrhythmias",
+      "Hair loss",
+      "Constipation only"
+    ],
+    "correctIndex": 1,
+    "rationale": "High potassium destabilises cardiac conduction, risking lethal dysrhythmias.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 365,
+    "question": "Which drugs require an independent double-check?",
+    "options": [
+      "Vitamins and antacids",
+      "Insulin and IV opioids",
+      "Topical creams",
+      "Oral paracetamol"
+    ],
+    "correctIndex": 1,
+    "rationale": "Insulin and IV opioids (and anticoagulants) are high-alert and need a double-check.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 366,
+    "question": "A pulsating cord is palpated in the vagina. Priority action:",
+    "options": [
+      "Push the cord back",
+      "Apply fundal pressure",
+      "Lift the presenting part off the cord, knee-chest position",
+      "Encourage pushing"
+    ],
+    "correctIndex": 2,
+    "rationale": "Relieve cord compression and position knee-chest/Trendelenburg; prepare for emergency C-section.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 367,
+    "question": "Which is true about confidentiality in psychiatry?",
+    "options": [
+      "It never applies",
+      "It applies, but may be broken if there is a serious risk of harm to self or others",
+      "It applies only to physicians",
+      "It is optional"
+    ],
+    "correctIndex": 1,
+    "rationale": "Confidentiality applies but may be overridden when there is a serious, imminent risk of harm.",
+    "category": "Mental Health",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 368,
+    "question": "A 4-year-old with drooling, fever and tripod posture (epiglottitis). AVOID:",
+    "options": [
+      "Humidified oxygen",
+      "Keeping the child calm",
+      "Examining the throat with a tongue blade",
+      "Preparing airway equipment"
+    ],
+    "correctIndex": 2,
+    "rationale": "Throat inspection can cause laryngospasm and airway obstruction.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 369,
+    "question": "Normal serum sodium is:",
+    "options": [
+      "115-125",
+      "135-145",
+      "150-160",
+      "100-110"
+    ],
+    "correctIndex": 1,
+    "rationale": "Normal sodium is 135-145 mEq/L.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 370,
+    "question": "A patient weighs 20 kg; order is 10 mg/kg. Total dose?",
+    "options": [
+      "100 mg",
+      "200 mg",
+      "20 mg",
+      "2000 mg"
+    ],
+    "correctIndex": 1,
+    "rationale": "10 mg/kg x 20 kg = 200 mg.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 371,
+    "question": "A mother on magnesium sulfate must have available at the bedside:",
+    "options": [
+      "Insulin",
+      "Calcium gluconate",
+      "Heparin",
+      "Naloxone"
+    ],
+    "correctIndex": 1,
+    "rationale": "Calcium gluconate (the antidote) must be readily available during magnesium therapy.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 372,
+    "question": "Signs of infant dehydration include:",
+    "options": [
+      "Bulging fontanelle",
+      "Sunken fontanelle and no tears",
+      "Increased wet diapers",
+      "Bounding pulses"
+    ],
+    "correctIndex": 1,
+    "rationale": "Sunken fontanelle, absent tears and fewer wet diapers indicate dehydration.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 373,
+    "question": "Which finding requires immediate action?",
+    "options": [
+      "Temp 37.0 C",
+      "RR 10 and shallow with SpO2 88%",
+      "HR 78",
+      "BP 122/80"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hypoventilation with hypoxaemia is an airway/breathing emergency.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 374,
+    "question": "The priority for an unconscious, spontaneously breathing patient is to:",
+    "options": [
+      "Sit them upright",
+      "Protect the airway (recovery position) and monitor",
+      "Give oral fluids",
+      "Restrain them"
+    ],
+    "correctIndex": 1,
+    "rationale": "Protecting the airway prevents aspiration in the unconscious patient.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 375,
+    "question": "Which intervention reduces the need for restraint?",
+    "options": [
+      "Maximising noise",
+      "Early de-escalation and a calm environment",
+      "Confrontation",
+      "Isolation without monitoring"
+    ],
+    "correctIndex": 1,
+    "rationale": "Early de-escalation and a calm milieu reduce the need for restraint.",
+    "category": "Mental Health",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 376,
+    "question": "Influenza requires which precautions?",
+    "options": [
+      "Airborne",
+      "Droplet",
+      "Contact only",
+      "None"
+    ],
+    "correctIndex": 1,
+    "rationale": "Influenza spreads by droplets - a surgical mask within ~1-2 m and a private room are preferred.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 377,
+    "question": "Negligence requires proof of all EXCEPT:",
+    "options": [
+      "Duty",
+      "Breach",
+      "Harm",
+      "Intent to harm"
+    ],
+    "correctIndex": 3,
+    "rationale": "Negligence requires duty, breach, harm and causation - intent is not required (intent relates to other torts).",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 378,
+    "question": "Eye prophylaxis and vitamin K for the newborn are given to:",
+    "options": [
+      "Treat infection already present",
+      "Prevent ophthalmia neonatorum and haemorrhagic disease",
+      "Sedate the infant",
+      "Improve feeding"
+    ],
+    "correctIndex": 1,
+    "rationale": "Eye prophylaxis prevents neonatal conjunctivitis; vitamin K prevents bleeding.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 379,
+    "question": "The best way to prevent surgical-site infection includes:",
+    "options": [
+      "Skipping antibiotics",
+      "Aseptic technique, glucose control and timely prophylactic antibiotics",
+      "Shaving with a razor immediately",
+      "Leaving wounds open"
+    ],
+    "correctIndex": 1,
+    "rationale": "Asepsis, glycaemic control and correctly timed prophylaxis reduce SSIs.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 380,
+    "question": "A patient on an ACE inhibitor reports a persistent dry cough. The nurse knows this is:",
+    "options": [
+      "An allergic emergency",
+      "A known class side effect to report",
+      "A sign of infection",
+      "Unrelated"
+    ],
+    "correctIndex": 1,
+    "rationale": "Dry cough is a recognised ACE-inhibitor effect; report for possible change to an ARB.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 381,
+    "question": "Which patient is at highest fall risk?",
+    "options": [
+      "A young athlete",
+      "An older adult on sedatives with unsteady gait",
+      "A patient on bed rest who is alert",
+      "A visitor"
+    ],
+    "correctIndex": 1,
+    "rationale": "Age, sedating drugs, and unsteady gait markedly increase fall risk.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 382,
+    "question": "The nurse notes SpO2 84% with accessory muscle use. The FIRST action is to:",
+    "options": [
+      "Document and wait",
+      "Apply higher-concentration oxygen and reassess, escalate",
+      "Encourage oral fluids",
+      "Lay the patient flat"
+    ],
+    "correctIndex": 1,
+    "rationale": "Provide oxygen, position upright, reassess and escalate - hypoxaemia with distress is urgent.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 383,
+    "question": "A patient with panic-level anxiety needs the nurse to:",
+    "options": [
+      "Leave them alone",
+      "Stay with them, reduce stimuli and guide slow breathing",
+      "Give detailed teaching now",
+      "Encourage a crowd"
+    ],
+    "correctIndex": 1,
+    "rationale": "Staying present, reducing stimuli and slow breathing help a panicking patient.",
+    "category": "Mental Health",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 384,
+    "question": "A COPD patient given high-flow O2 becomes drowsy and hypoventilates. The nurse should:",
+    "options": [
+      "Increase O2",
+      "Titrate O2 down to a target SpO2 and reassess",
+      "Leave to rest",
+      "Give a sedative"
+    ],
+    "correctIndex": 1,
+    "rationale": "Excess O2 suppresses the hypoxic drive; titrate down and reassess.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 385,
+    "question": "A nurse documents care that was not actually performed. This is:",
+    "options": [
+      "Acceptable if busy",
+      "Falsification - a serious professional/legal violation",
+      "Standard practice",
+      "Only a minor issue"
+    ],
+    "correctIndex": 1,
+    "rationale": "Charting care not done is falsification and a serious legal/ethical breach.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 386,
+    "question": "A nurse finds a medication error after administration. The priority is to:",
+    "options": [
+      "Hide it",
+      "Assess and monitor the patient, then report",
+      "Chart it as given correctly",
+      "Wait for symptoms"
+    ],
+    "correctIndex": 1,
+    "rationale": "Patient safety first - assess/monitor the patient, then complete an incident report.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 387,
+    "question": "Priority for an acutely manic, pacing patient:",
+    "options": [
+      "A group activity",
+      "Low-stimulation environment and portable high-calorie food",
+      "Restraints",
+      "Public confrontation"
+    ],
+    "correctIndex": 1,
+    "rationale": "Reducing stimulation calms mania; portable food meets metabolic demands while active.",
+    "category": "Mental Health",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 388,
+    "question": "If a newborn is apneic and limp at birth, the FIRST step is to:",
+    "options": [
+      "Weigh the baby",
+      "Stimulate, position the airway and begin resuscitation",
+      "Give a bath",
+      "Call the family"
+    ],
+    "correctIndex": 1,
+    "rationale": "Airway, stimulation and resuscitation are the immediate priority for a depressed newborn.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 389,
+    "question": "The priority for an unresponsive patient is to:",
+    "options": [
+      "Check glucose",
+      "Assess airway, breathing, circulation",
+      "Obtain history",
+      "Give oxygen by mask only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Always assess ABCs first in an unresponsive patient.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 390,
+    "question": "Which ED patient is seen FIRST?",
+    "options": [
+      "A sprained ankle",
+      "A sutured laceration",
+      "A patient with stridor and difficulty breathing",
+      "A migraine"
+    ],
+    "correctIndex": 2,
+    "rationale": "Stridor indicates airway compromise - the top priority.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 391,
+    "question": "Four patients need attention. Who is seen FIRST?",
+    "options": [
+      "Due for routine meds",
+      "New dyspnoea with SpO2 86%",
+      "Requesting the bathroom",
+      "Asking about discharge"
+    ],
+    "correctIndex": 1,
+    "rationale": "Airway/Breathing problems are the top priority; new dyspnoea with low SpO2 is life-threatening.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 392,
+    "question": "To reduce neonatal heat loss, the nurse should:",
+    "options": [
+      "Bathe immediately",
+      "Dry the infant, provide skin-to-skin and a hat",
+      "Place near a window",
+      "Use cold blankets"
+    ],
+    "correctIndex": 1,
+    "rationale": "Drying, skin-to-skin contact and a hat reduce evaporative and convective heat loss.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 393,
+    "question": "The single most effective way to prevent infection is:",
+    "options": [
+      "Gowns",
+      "Hand hygiene",
+      "Antibiotics",
+      "Room cleaning"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hand hygiene is the most effective single measure.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 394,
+    "question": "Cardiac rehabilitation after a heart attack is:",
+    "options": [
+      "Primary prevention",
+      "Secondary prevention",
+      "Tertiary prevention",
+      "Health promotion only"
+    ],
+    "correctIndex": 2,
+    "rationale": "Limiting complications of established disease is tertiary prevention.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 395,
+    "question": "A silent chest in an asthmatic indicates:",
+    "options": [
+      "Improvement",
+      "Life-threatening obstruction",
+      "Normal finding",
+      "Anxiety"
+    ],
+    "correctIndex": 1,
+    "rationale": "No air movement (silent chest) signals severe, life-threatening bronchospasm.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 396,
+    "question": "A key fall-prevention intervention is to:",
+    "options": [
+      "Keep the bed high",
+      "Place the call bell in reach and keep the bed low",
+      "Use restraints routinely",
+      "Dim all lights"
+    ],
+    "correctIndex": 1,
+    "rationale": "Bed low with call bell in reach reduces falls; restraints are a last resort.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 397,
+    "question": "A 6-month-old would typically be able to:",
+    "options": [
+      "Walk independently",
+      "Sit with support and roll over",
+      "Run",
+      "Speak sentences"
+    ],
+    "correctIndex": 1,
+    "rationale": "At ~6 months an infant sits with support and rolls over.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 398,
+    "question": "Which statement about documentation is correct?",
+    "options": [
+      "Document interventions before doing them",
+      "Use opinions and labels",
+      "Record objective, timely, factual entries",
+      "Leave blank lines for later"
+    ],
+    "correctIndex": 2,
+    "rationale": "Documentation must be objective, factual, timely, and contemporaneous.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 399,
+    "question": "Which is a physiological (Maslow) priority over a safety need?",
+    "options": [
+      "Fear of falling",
+      "Adequate oxygenation",
+      "Need for privacy",
+      "Self-esteem"
+    ],
+    "correctIndex": 1,
+    "rationale": "Oxygenation (physiological) outranks safety and psychosocial needs.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 400,
+    "question": "When removing PPE, the nurse should remove the gloves:",
+    "options": [
+      "Last",
+      "First (most contaminated), then perform hand hygiene as indicated",
+      "Never",
+      "With teeth"
+    ],
+    "correctIndex": 1,
+    "rationale": "Gloves (most contaminated) are typically removed first during doffing, with hand hygiene as indicated.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 401,
+    "question": "Which patient needs a negative-pressure room?",
+    "options": [
+      "A patient with MRSA",
+      "A patient with influenza",
+      "A patient with active pulmonary TB",
+      "A patient with a UTI"
+    ],
+    "correctIndex": 2,
+    "rationale": "Active pulmonary TB (airborne) requires a negative-pressure room and N95.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 402,
+    "question": "A patient with suspected active TB requires:",
+    "options": [
+      "Standard precautions only",
+      "Droplet with a surgical mask",
+      "Airborne: negative-pressure room and N95",
+      "Contact with gown and gloves"
+    ],
+    "correctIndex": 2,
+    "rationale": "TB is airborne - negative pressure and a fit-tested N95 are required.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 403,
+    "question": "Adult CPR compressions are delivered at:",
+    "options": [
+      "40-60/min",
+      "60-80/min",
+      "100-120/min",
+      "As fast as possible"
+    ],
+    "correctIndex": 2,
+    "rationale": "High-quality CPR uses 100-120 compressions per minute.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 404,
+    "question": "UAE newborns typically receive which vaccines before discharge?",
+    "options": [
+      "MMR and DTaP",
+      "BCG and hepatitis B",
+      "Varicella and polio",
+      "Influenza and HPV"
+    ],
+    "correctIndex": 1,
+    "rationale": "BCG and the first hepatitis B dose are given to newborns.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 405,
+    "question": "To maintain a sterile field, sterile items must be kept:",
+    "options": [
+      "Below the waist",
+      "Above the waist and within sight",
+      "Behind the nurse",
+      "On the floor"
+    ],
+    "correctIndex": 1,
+    "rationale": "Sterile items are kept above the waist and in continuous view.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 406,
+    "question": "During a mass-casualty event, a patient with minor cuts who can walk is tagged:",
+    "options": [
+      "Red (emergent)",
+      "Green (non-urgent)",
+      "Black (deceased)",
+      "Yellow (urgent)"
+    ],
+    "correctIndex": 1,
+    "rationale": "Walking-wounded with minor injuries are non-urgent (green).",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 407,
+    "question": "Defibrillation works by:",
+    "options": [
+      "Pacing the heart",
+      "Depolarising the myocardium to allow normal rhythm to resume",
+      "Increasing heart rate",
+      "Sedating the patient"
+    ],
+    "correctIndex": 1,
+    "rationale": "A defibrillation shock depolarises the myocardium so the sinus node can resume control.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 408,
+    "question": "Accurate documentation should be:",
+    "options": [
+      "Completed at end of week",
+      "Objective, factual and timely",
+      "Based on assumptions",
+      "Erased if wrong"
+    ],
+    "correctIndex": 1,
+    "rationale": "Records must be objective, factual, and contemporaneous; errors are corrected per policy, not erased.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 409,
+    "question": "Before giving medication, the nurse identifies the patient using:",
+    "options": [
+      "Room and bed number",
+      "Two identifiers such as name and DOB",
+      "The diagnosis",
+      "The nurse's memory"
+    ],
+    "correctIndex": 1,
+    "rationale": "Two identifiers (not room/bed) are required.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 410,
+    "question": "Monitor shows a chaotic waveform; patient pulseless and apneic. The nurse should:",
+    "options": [
+      "Synchronised cardioversion",
+      "Start CPR and prepare to defibrillate",
+      "Give oral medication",
+      "Check glucose first"
+    ],
+    "correctIndex": 1,
+    "rationale": "This is VF - a pulseless shockable rhythm needing CPR and defibrillation.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 411,
+    "question": "The Five Rights of delegation include all EXCEPT:",
+    "options": [
+      "Right task",
+      "Right person",
+      "Right diagnosis",
+      "Right supervision"
+    ],
+    "correctIndex": 2,
+    "rationale": "The Five Rights are task, circumstance, person, direction/communication, and supervision - not 'diagnosis'.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 412,
+    "question": "Regular insulin given subcutaneously before a meal is timed because its onset is:",
+    "options": [
+      "8 hours",
+      "About 30 minutes",
+      "Immediate and lifelong",
+      "24 hours"
+    ],
+    "correctIndex": 1,
+    "rationale": "Regular insulin onset is ~30 minutes, so it is given before meals to match glucose rise.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 413,
+    "question": "During the fourth stage (first hours postpartum), the priority is to:",
+    "options": [
+      "Discharge quickly",
+      "Monitor fundus, lochia and vitals for haemorrhage",
+      "Restrict bonding",
+      "Withhold fluids"
+    ],
+    "correctIndex": 1,
+    "rationale": "Close monitoring of the fundus, bleeding and vitals detects early PPH.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 414,
+    "question": "A competent patient signs consent then says they have changed their mind before the procedure. The nurse should:",
+    "options": [
+      "Proceed as the form is signed",
+      "Stop and notify the physician; consent can be withdrawn",
+      "Tell the patient it is too late",
+      "Ask the family to decide"
+    ],
+    "correctIndex": 1,
+    "rationale": "Consent may be withdrawn at any time; the nurse stops and notifies the physician.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 415,
+    "question": "ABG pH 7.50, CO2 30, HCO3 24 indicates:",
+    "options": [
+      "Respiratory acidosis",
+      "Respiratory alkalosis",
+      "Metabolic acidosis",
+      "Metabolic alkalosis"
+    ],
+    "correctIndex": 1,
+    "rationale": "High pH with low CO2 is respiratory alkalosis.",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 416,
+    "question": "A patient asks the nurse to explain surgical risks before signing consent. The nurse should:",
+    "options": [
+      "Explain all risks personally",
+      "Refer the question to the surgeon to ensure informed consent",
+      "Tell them not to worry",
+      "Witness the signature anyway"
+    ],
+    "correctIndex": 1,
+    "rationale": "The physician must provide the explanation of risks; the nurse ensures the patient is informed before witnessing consent.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 417,
+    "question": "Heparin is monitored with which test?",
+    "options": [
+      "INR",
+      "aPTT",
+      "Blood glucose",
+      "Lipids"
+    ],
+    "correctIndex": 1,
+    "rationale": "Heparin therapy is monitored with aPTT.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 418,
+    "question": "An order reads 0.125 mg; the vial is 0.25 mg/mL. Volume to give?",
+    "options": [
+      "0.5 mL",
+      "1 mL",
+      "2 mL",
+      "0.25 mL"
+    ],
+    "correctIndex": 0,
+    "rationale": "(0.125/0.25) x 1 mL = 0.5 mL.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 419,
+    "question": "Before delegating, the nurse must FIRST consider:",
+    "options": [
+      "The UAP's break schedule",
+      "Whether the task and patient are stable and within the UAP's competence",
+      "The unit budget",
+      "The physician's preference"
+    ],
+    "correctIndex": 1,
+    "rationale": "Delegation depends on task stability/predictability and the delegatee's competence (right task/person/circumstance).",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 420,
+    "question": "Which is the BEST example of patient advocacy?",
+    "options": [
+      "Following all orders without question",
+      "Speaking up about an unsafe staffing or order",
+      "Avoiding conflict with physicians",
+      "Documenting after the shift"
+    ],
+    "correctIndex": 1,
+    "rationale": "Advocacy means protecting patient safety, including raising concerns about unsafe care.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 421,
+    "question": "The nurse should perform hand hygiene:",
+    "options": [
+      "Only after removing gloves",
+      "Before and after patient contact and per the 5 Moments",
+      "Once per shift",
+      "Only when soiled"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hand hygiene follows the WHO 5 Moments, including before and after patient contact; gloves do not replace it.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 422,
+    "question": "A newborn's normal respiratory rate is:",
+    "options": [
+      "12-20",
+      "30-60",
+      "60-80",
+      "8-12"
+    ],
+    "correctIndex": 1,
+    "rationale": "Newborn RR is 30-60 breaths/min.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 423,
+    "question": "A nurse overhears a colleague discussing a patient in the cafeteria. This violates:",
+    "options": [
+      "Justice",
+      "Confidentiality",
+      "Beneficence",
+      "Autonomy"
+    ],
+    "correctIndex": 1,
+    "rationale": "Discussing identifiable patient information publicly breaches confidentiality.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 424,
+    "question": "In the trauma primary survey, what comes FIRST?",
+    "options": [
+      "Exposure",
+      "Airway with C-spine protection",
+      "Disability",
+      "Circulation"
+    ],
+    "correctIndex": 1,
+    "rationale": "Airway (with cervical spine protection) is first in ABCDE.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 425,
+    "question": "Antidote for an opioid overdose with respiratory depression:",
+    "options": [
+      "Flumazenil",
+      "Naloxone",
+      "Protamine",
+      "Vitamin K"
+    ],
+    "correctIndex": 1,
+    "rationale": "Naloxone reverses opioids; flumazenil reverses benzodiazepines.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 426,
+    "question": "Cultural competence in the UAE includes:",
+    "options": [
+      "Ignoring religious requests to save time",
+      "Arranging same-gender care/chaperone when requested",
+      "Refusing interpreters",
+      "Assuming all patients are alike"
+    ],
+    "correctIndex": 1,
+    "rationale": "Respecting religious and cultural needs (e.g., same-gender care) is a professional and legal expectation.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 427,
+    "question": "An APGAR component is:",
+    "options": [
+      "Birth weight",
+      "Reflex irritability",
+      "Head circumference",
+      "Blood type"
+    ],
+    "correctIndex": 1,
+    "rationale": "APGAR scores heart rate, respiratory effort, muscle tone, reflex irritability and colour.",
+    "category": "Maternity & Child Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 428,
+    "question": "To prevent ventilator-associated pneumonia, the nurse should:",
+    "options": [
+      "Lay the patient flat",
+      "Elevate the head of bed 30-45 degrees and provide oral care",
+      "Avoid sedation breaks",
+      "Stop suctioning"
+    ],
+    "correctIndex": 1,
+    "rationale": "Head-of-bed elevation, oral care and sedation breaks reduce VAP.",
+    "category": "Infection Control",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 429,
+    "question": "Which patient information may be shared without specific consent?",
+    "options": [
+      "With the patient's employer",
+      "With the care team directly involved in treatment",
+      "With the patient's neighbour",
+      "On social media"
+    ],
+    "correctIndex": 1,
+    "rationale": "Information may be shared on a need-to-know basis among the treating care team.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 430,
+    "question": "Telling a patient the truth about their diagnosis reflects:",
+    "options": [
+      "Veracity",
+      "Justice",
+      "Non-maleficence",
+      "Fidelity"
+    ],
+    "correctIndex": 0,
+    "rationale": "Veracity is the duty of truthfulness.",
+    "category": "Ethics & Regulations",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 431,
+    "question": "After defibrillation, the nurse should immediately:",
+    "options": [
+      "Check a 12-lead first",
+      "Resume chest compressions",
+      "Stop and observe",
+      "Give oral medication"
+    ],
+    "correctIndex": 1,
+    "rationale": "CPR is resumed immediately after a shock to maintain perfusion.",
+    "category": "Critical Care",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 432,
+    "question": "Order 1.5 g; available 500 mg tablets. Give:",
+    "options": [
+      "2 tablets",
+      "3 tablets",
+      "1 tablet",
+      "4 tablets"
+    ],
+    "correctIndex": 1,
+    "rationale": "1.5 g = 1500 mg; 1500/500 = 3 tablets.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 433,
+    "question": "An unconscious patient who is breathing should be placed in the:",
+    "options": [
+      "Supine position",
+      "Left-lateral recovery position",
+      "High-Fowler's",
+      "Prone position"
+    ],
+    "correctIndex": 1,
+    "rationale": "The recovery position protects the airway from aspiration.",
+    "category": "Fundamentals",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 434,
+    "question": "Kussmaul respirations are a compensatory response to:",
+    "options": [
+      "Metabolic acidosis",
+      "Metabolic alkalosis",
+      "Respiratory acidosis",
+      "Hypothermia"
+    ],
+    "correctIndex": 0,
+    "rationale": "Deep, rapid Kussmaul breathing blows off CO2 to compensate for metabolic acidosis (e.g., DKA).",
+    "category": "Clinical Core",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 435,
+    "question": "A patient on continuous bladder irrigation after prostate surgery has bright-red output with clots. The nurse should:",
+    "options": [
+      "Stop the irrigation",
+      "Increase the irrigation rate and assess for clot obstruction",
+      "Clamp the catheter",
+      "Remove the catheter"
+    ],
+    "correctIndex": 1,
+    "rationale": "Bright-red drainage with clots needs a faster irrigation rate to prevent catheter obstruction; assess and notify if it persists.",
+    "category": "Post-operative",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 436,
+    "question": "A patient with SIADH is expected to have:",
+    "options": [
+      "Hypernatremia and dehydration",
+      "Hyponatremia and water retention",
+      "Hyperkalemia",
+      "Polyuria"
+    ],
+    "correctIndex": 1,
+    "rationale": "Syndrome of inappropriate ADH causes water retention and dilutional hyponatremia.",
+    "category": "Endocrine",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 437,
+    "question": "Which intervention is the priority for a patient with diabetes insipidus?",
+    "options": [
+      "Restrict all fluids",
+      "Monitor for dehydration and replace fluids; expect large dilute urine output",
+      "Give insulin",
+      "Encourage a high-sodium diet"
+    ],
+    "correctIndex": 1,
+    "rationale": "Diabetes insipidus causes excessive dilute urine and dehydration; fluid replacement and monitoring are priorities.",
+    "category": "Endocrine",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 438,
+    "question": "A patient with a tracheostomy requires suctioning. The nurse should:",
+    "options": [
+      "Apply suction while inserting the catheter",
+      "Apply suction only on withdrawal, limiting each pass to about 10-15 seconds",
+      "Suction for 60 seconds",
+      "Reuse the same catheter for the day"
+    ],
+    "correctIndex": 1,
+    "rationale": "Suction only on withdrawal for 10-15 seconds to limit hypoxia and mucosal trauma.",
+    "category": "Respiratory",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 439,
+    "question": "A patient receiving a continuous opioid infusion has pinpoint pupils and RR 7. The FIRST action is to:",
+    "options": [
+      "Increase the infusion",
+      "Stop the infusion, stimulate the patient and prepare naloxone",
+      "Give a sedative",
+      "Apply restraints"
+    ],
+    "correctIndex": 1,
+    "rationale": "Opioid-induced respiratory depression requires stopping the drug and readiness to administer naloxone.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 440,
+    "question": "A patient with a below-knee amputation reports pain in the missing limb. The nurse recognises:",
+    "options": [
+      "The patient is confused",
+      "Phantom limb pain, which is real and should be treated",
+      "Malingering",
+      "A surgical error"
+    ],
+    "correctIndex": 1,
+    "rationale": "Phantom limb pain is a genuine phenomenon and should be acknowledged and managed.",
+    "category": "Musculoskeletal",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 441,
+    "question": "Which finding after a lumbar puncture should the nurse report?",
+    "options": [
+      "Lying flat for a few hours",
+      "Severe headache, neck stiffness or fever",
+      "Mild thirst",
+      "Normal leg movement"
+    ],
+    "correctIndex": 1,
+    "rationale": "Severe headache, neck stiffness or fever after LP may indicate complications and must be reported.",
+    "category": "Neurology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 442,
+    "question": "A patient with chronic liver disease is at risk of bleeding because the liver:",
+    "options": [
+      "Produces too many platelets",
+      "Fails to produce clotting factors",
+      "Increases vitamin K",
+      "Raises fibrinogen"
+    ],
+    "correctIndex": 1,
+    "rationale": "The diseased liver produces fewer clotting factors, increasing bleeding risk.",
+    "category": "Gastrointestinal",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 443,
+    "question": "The priority teaching for a patient discharged on warfarin is to:",
+    "options": [
+      "Take double doses if one is missed",
+      "Report unusual bleeding/bruising and keep regular INR checks",
+      "Stop the drug when feeling well",
+      "Avoid all activity"
+    ],
+    "correctIndex": 1,
+    "rationale": "Patients must monitor for bleeding and attend INR checks; never double dose.",
+    "category": "Pharmacology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 444,
+    "question": "A patient with acute coronary syndrome is most appropriately positioned:",
+    "options": [
+      "Flat supine",
+      "Upright/semi-Fowler's to ease cardiac workload and breathing",
+      "Trendelenburg",
+      "Prone"
+    ],
+    "correctIndex": 1,
+    "rationale": "Semi-Fowler's reduces preload and eases breathing in cardiac patients.",
+    "category": "Cardiac",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 445,
+    "question": "A patient with a new ileal conduit (urostomy) should be taught that the stoma output is:",
+    "options": [
+      "Formed stool",
+      "Continuous urine, requiring an appliance at all times",
+      "Absent for days",
+      "Bright-red blood"
+    ],
+    "correctIndex": 1,
+    "rationale": "A urostomy continuously drains urine and needs a collection appliance; monitor for skin breakdown and infection.",
+    "category": "Renal",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 446,
+    "question": "The nurse caring for a patient in skeletal traction should:",
+    "options": [
+      "Remove the weights to reposition",
+      "Ensure weights hang freely and maintain correct body alignment",
+      "Rest the weights on the floor",
+      "Loosen the traction at night"
+    ],
+    "correctIndex": 1,
+    "rationale": "Traction weights must hang freely and not be removed; maintain alignment to ensure effectiveness.",
+    "category": "Musculoskeletal",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 447,
+    "question": "A patient develops a sudden severe headache described as 'the worst of my life.' The nurse suspects:",
+    "options": [
+      "Tension headache",
+      "Subarachnoid haemorrhage - an emergency",
+      "Migraine only",
+      "Sinusitis"
+    ],
+    "correctIndex": 1,
+    "rationale": "A sudden 'thunderclap' worst-ever headache suggests subarachnoid haemorrhage; act urgently.",
+    "category": "Neurology",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 448,
+    "question": "Which is the correct action when a patient's oxygen saturation reads 90% with a cold extremity and poor waveform?",
+    "options": [
+      "Document 90% as accurate",
+      "Reposition the probe/warm the site and reassess for an accurate reading",
+      "Increase oxygen immediately without checking",
+      "Remove the probe permanently"
+    ],
+    "correctIndex": 1,
+    "rationale": "Poor perfusion/cold extremity can give inaccurate pulse oximetry; correct the probe and reassess.",
+    "category": "Assessment",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 449,
+    "question": "A patient with hypoparathyroidism is most likely to develop:",
+    "options": [
+      "Hypercalcemia",
+      "Hypocalcemia with tetany",
+      "Hyperkalemia",
+      "Hypernatremia"
+    ],
+    "correctIndex": 1,
+    "rationale": "Low parathyroid hormone lowers calcium, causing hypocalcemia and tetany.",
+    "category": "Endocrine",
+    "examType": "HAAD_DOH"
+  },
+  {
+    "id": 450,
+    "question": "A patient receiving radiation therapy to the skin is taught to:",
+    "options": [
+      "Scrub the marked area",
+      "Keep the skin clean and dry, avoid rubbing, and not remove radiation markings",
+      "Apply ice packs",
+      "Use perfumed lotions"
+    ],
+    "correctIndex": 1,
+    "rationale": "Protect irradiated skin: keep it dry, avoid friction/irritants, and preserve treatment markings.",
+    "category": "Oncology",
+    "examType": "HAAD_DOH"
   }
 ];
