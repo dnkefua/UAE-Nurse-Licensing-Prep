@@ -79,6 +79,9 @@ export interface StudyTopic {
   title: string;
   subtitle: string;
   category: string;
+  readingTime?: string;       // e.g. "20 min read"
+  examWeight?: string;        // approx weighting on the licensing exam
+  objectives?: string[];      // learning objectives
   sections: {
     title: string;
     content: string;
@@ -87,5 +90,11 @@ export interface StudyTopic {
   flashcards: {
     question: string;
     answer: string;
+  }[];
+  quiz?: {                    // sample exercises / practice exam for this topic
+    question: string;
+    options: string[];
+    correctIndex: number;
+    rationale: string;
   }[];
 }

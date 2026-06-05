@@ -4,7 +4,10 @@
  */
 
 import React, { useState } from 'react';
-import { BookOpen, HelpCircle, Layers, ArrowLeft, ArrowRight, Sparkles, MessageSquare, Send, RefreshCw } from 'lucide-react';
+import {
+  BookOpen, Layers, ArrowLeft, ArrowRight, Sparkles, Send, RefreshCw,
+  ClipboardCheck, CheckCircle2, XCircle, Clock, Target, BarChart3, RotateCcw, Award
+} from 'lucide-react';
 import { STUDY_TOPICS } from '../data/staticData';
 import { StudyTopic } from '../types';
 
@@ -14,9 +17,28 @@ interface StudyProps {
 
 export default function Study({ onAskAI }: StudyProps) {
   const [selectedTopic, setSelectedTopic] = useState<StudyTopic | null>(null);
-  const [studyMode, setStudyMode] = useState<'reading' | 'flashcards'>('reading');
+  const [studyMode, setStudyMode] = useState<'reading' | 'flashcards' | 'exam'>('reading');
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+
+  // Practice-exam state (per topic): question index -> chosen option index
+  const [examAnswers, setExamAnswers] = useState<Record<number, number>>({});
+
+  const openTopic = (topic: StudyTopic, mode: 'reading' | 'flashcards' | 'exam') => {
+    setSelectedTopic(topic);
+    setStudyMode(mode);
+    setFlashcardIndex(0);
+    setIsFlipped(false);
+    setExamAnswers({});
+  };
+
+  const answerExam = (qi: number, oi: number) => {
+    setExamAnswers(prev => (prev[qi] !== undefined ? prev : { ...prev, [qi]: oi }));
+  };
+
+  const quiz = selectedTopic?.quiz ?? [];
+  const examScore = quiz.reduce((acc, q, i) => acc + (examAnswers[i] === q.correctIndex ? 1 : 0), 0);
+  const examAnswered = Object.keys(examAnswers).length;
 
   // AI Tutor Local chat states
   const [aiPrompt, setAiPrompt] = useState('');
@@ -70,7 +92,7 @@ export default function Study({ onAskAI }: StudyProps) {
           {STUDY_TOPICS.map((topic) => (
             <div
               key={topic.id}
-              onClick={() => { setSelectedTopic(topic); setStudyMode('reading'); }}
+              onClick={() => openTopic(topic, 'reading')}
               className="group p-6 bg-white border border-slate-200 rounded-2xl hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 shadow-sm cursor-pointer"
             >
               <div>
@@ -84,31 +106,37 @@ export default function Study({ onAskAI }: StudyProps) {
                   {topic.title}
                 </h3>
                 <p className="text-xs text-slate-500 mt-1 line-clamp-2">{topic.subtitle}</p>
+
+                {/* Metadata */}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2.5 text-[10px] font-mono text-slate-400">
+                  {topic.readingTime && <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {topic.readingTime}</span>}
+                  <span className="flex items-center gap-1"><Layers className="w-3 h-3" /> {topic.flashcards.length} cards</span>
+                  {topic.quiz && <span className="flex items-center gap-1"><ClipboardCheck className="w-3 h-3" /> {topic.quiz.length}-Q exam</span>}
+                  {topic.examWeight && <span className="text-amber-500">★ {topic.examWeight}</span>}
+                </div>
               </div>
 
-              <div className="flex items-center gap-4 text-xs font-semibold pt-1">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-semibold pt-1">
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedTopic(topic);
-                    setStudyMode('reading');
-                  }}
-                  className="py-1.5 px-3 bg-blue-650 hover:bg-blue-600 text-white rounded-lg flex items-center gap-1 cursor-pointer transition-all shadow-sm shadow-blue-500/10"
+                  onClick={(e) => { e.stopPropagation(); openTopic(topic, 'reading'); }}
+                  className="py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-1 cursor-pointer transition-all shadow-sm shadow-blue-500/10"
                 >
-                  <BookOpen className="w-3.5 h-3.5" /> Start Lessons
+                  <BookOpen className="w-3.5 h-3.5" /> Read
                 </button>
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedTopic(topic);
-                    setStudyMode('flashcards');
-                    setFlashcardIndex(0);
-                    setIsFlipped(false);
-                  }}
-                  className="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-750 rounded-lg flex items-center gap-1 cursor-pointer transition-all"
+                  onClick={(e) => { e.stopPropagation(); openTopic(topic, 'flashcards'); }}
+                  className="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg flex items-center gap-1 cursor-pointer transition-all"
                 >
-                  <Layers className="w-3.5 h-3.5 text-slate-500" /> Interactive Cards ({topic.flashcards.length})
+                  <Layers className="w-3.5 h-3.5 text-slate-500" /> Cards ({topic.flashcards.length})
                 </button>
+                {topic.quiz && topic.quiz.length > 0 && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); openTopic(topic, 'exam'); }}
+                    className="py-1.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg flex items-center gap-1 cursor-pointer transition-all shadow-sm"
+                  >
+                    <ClipboardCheck className="w-3.5 h-3.5" /> Exam ({topic.quiz.length})
+                  </button>
+                )}
               </div>
             </div>
           ))}
@@ -118,23 +146,27 @@ export default function Study({ onAskAI }: StudyProps) {
           {/* Main Workspace Body */}
           <div className="lg:col-span-2 space-y-6">
             {/* Nav Sub-Tabs */}
-            <div className="bg-slate-100 p-1 rounded-xl inline-flex border border-slate-200">
+            <div className="bg-slate-100 p-1 rounded-xl inline-flex border border-slate-200 flex-wrap gap-1">
               <button
                 onClick={() => setStudyMode('reading')}
-                className={`py-1.5 px-4 rounded-lg text-xs font-semibold cursor-pointer transition-all ${studyMode === 'reading' ? 'bg-white text-blue-700 shadow-sm border border-slate-200/50' : 'text-slate-650 hover:text-slate-900'}`}
+                className={`py-1.5 px-3.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1 ${studyMode === 'reading' ? 'bg-white text-blue-700 shadow-sm border border-slate-200/50' : 'text-slate-600 hover:text-slate-900'}`}
               >
-                Subject Guide Text
+                <BookOpen className="w-3.5 h-3.5" /> Lesson
               </button>
               <button
-                onClick={() => {
-                  setStudyMode('flashcards');
-                  setFlashcardIndex(0);
-                  setIsFlipped(false);
-                }}
-                className={`py-1.5 px-4 rounded-lg text-xs font-semibold cursor-pointer transition-all ${studyMode === 'flashcards' ? 'bg-white text-blue-700 shadow-sm border border-slate-200/50' : 'text-slate-650 hover:text-slate-900'}`}
+                onClick={() => { setStudyMode('flashcards'); setFlashcardIndex(0); setIsFlipped(false); }}
+                className={`py-1.5 px-3.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1 ${studyMode === 'flashcards' ? 'bg-white text-blue-700 shadow-sm border border-slate-200/50' : 'text-slate-600 hover:text-slate-900'}`}
               >
-                Subject Cards ({selectedTopic.flashcards.length})
+                <Layers className="w-3.5 h-3.5" /> Cards ({selectedTopic.flashcards.length})
               </button>
+              {quiz.length > 0 && (
+                <button
+                  onClick={() => { setStudyMode('exam'); setExamAnswers({}); }}
+                  className={`py-1.5 px-3.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1 ${studyMode === 'exam' ? 'bg-white text-emerald-700 shadow-sm border border-slate-200/50' : 'text-slate-600 hover:text-slate-900'}`}
+                >
+                  <ClipboardCheck className="w-3.5 h-3.5" /> Practice Exam ({quiz.length})
+                </button>
+              )}
             </div>
 
             {studyMode === 'reading' ? (
@@ -143,7 +175,27 @@ export default function Study({ onAskAI }: StudyProps) {
                   <span className="text-[10px] font-mono font-bold text-blue-600 uppercase tracking-widest">{selectedTopic.category}</span>
                   <h3 className="text-lg font-bold text-slate-900 font-sans mt-1">{selectedTopic.title}</h3>
                   <p className="text-xs text-slate-500 mt-1">{selectedTopic.subtitle}</p>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[10px] font-mono text-slate-400">
+                    {selectedTopic.readingTime && <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {selectedTopic.readingTime}</span>}
+                    {selectedTopic.examWeight && <span className="flex items-center gap-1 text-amber-500"><Award className="w-3 h-3" /> {selectedTopic.examWeight}</span>}
+                  </div>
                 </div>
+
+                {/* Learning objectives */}
+                {selectedTopic.objectives && selectedTopic.objectives.length > 0 && (
+                  <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-4">
+                    <h4 className="text-[11px] font-mono font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+                      <Target className="w-3.5 h-3.5" /> Learning Objectives
+                    </h4>
+                    <ul className="space-y-1.5">
+                      {selectedTopic.objectives.map((o, i) => (
+                        <li key={i} className="flex gap-2 text-xs text-slate-600 leading-relaxed">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" /> <span>{o}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {selectedTopic.sections.map((sec, index) => (
                   <div key={index} className="space-y-3">
@@ -158,8 +210,18 @@ export default function Study({ onAskAI }: StudyProps) {
                     )}
                   </div>
                 ))}
+
+                {/* Jump to practice exam */}
+                {quiz.length > 0 && (
+                  <button
+                    onClick={() => { setStudyMode('exam'); setExamAnswers({}); }}
+                    className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <ClipboardCheck className="w-4 h-4" /> Take the {quiz.length}-Question Practice Exam
+                  </button>
+                )}
               </div>
-            ) : (
+            ) : studyMode === 'flashcards' ? (
               /* High-end Flashcard Widget */
               <div className="space-y-4">
                 <div className="perspective-1000 w-full min-h-64 cursor-pointer" onClick={() => setIsFlipped(!isFlipped)}>
@@ -217,6 +279,102 @@ export default function Study({ onAskAI }: StudyProps) {
                     Next Card <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
+              </div>
+            ) : (
+              /* ── Practice Exam ── */
+              <div className="space-y-4">
+                {/* Score header */}
+                <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-2">
+                    <ClipboardCheck className="w-5 h-5 text-emerald-600" />
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900">Practice Exam</h3>
+                      <p className="text-[11px] text-slate-500">{selectedTopic.title}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <p className="text-[9px] font-mono text-slate-400 uppercase">Score</p>
+                      <p className={`text-lg font-extrabold font-mono ${
+                        examAnswered === 0 ? 'text-slate-400'
+                        : examScore / quiz.length >= 0.6 ? 'text-emerald-600' : 'text-amber-500'
+                      }`}>{examScore}/{quiz.length}</p>
+                    </div>
+                    {examAnswered > 0 && (
+                      <button onClick={() => setExamAnswers({})}
+                        className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer" title="Reset exam">
+                        <RotateCcw className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                  <div className="h-1.5 bg-emerald-500 transition-all duration-300" style={{ width: `${(examAnswered / quiz.length) * 100}%` }} />
+                </div>
+
+                {/* Questions */}
+                {quiz.map((q, qi) => {
+                  const chosen = examAnswers[qi];
+                  const answered = chosen !== undefined;
+                  return (
+                    <div key={qi} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+                      <div className="flex gap-2">
+                        <span className="shrink-0 w-6 h-6 rounded-full bg-slate-900 text-white text-[11px] font-bold font-mono flex items-center justify-center">{qi + 1}</span>
+                        <p className="text-[13px] font-semibold text-slate-800 leading-snug pt-0.5">{q.question}</p>
+                      </div>
+                      <div className="space-y-2">
+                        {q.options.map((opt, oi) => {
+                          const isCorrect = oi === q.correctIndex;
+                          const isChosen = chosen === oi;
+                          let cls = 'bg-white border-slate-200 hover:border-blue-300 hover:bg-slate-50 text-slate-700';
+                          if (answered) {
+                            if (isCorrect) cls = 'bg-emerald-50 border-emerald-300 text-emerald-800';
+                            else if (isChosen) cls = 'bg-rose-50 border-rose-300 text-rose-800';
+                            else cls = 'bg-white border-slate-200 text-slate-400';
+                          }
+                          return (
+                            <button
+                              key={oi}
+                              disabled={answered}
+                              onClick={() => answerExam(qi, oi)}
+                              className={`w-full text-left px-3.5 py-2.5 rounded-xl border text-xs leading-relaxed transition-all flex items-start gap-2 ${cls} ${answered ? 'cursor-default' : 'cursor-pointer'}`}
+                            >
+                              <span className="shrink-0 w-5 h-5 rounded-full border border-current/30 flex items-center justify-center text-[10px] font-bold font-mono mt-px">
+                                {answered && isCorrect ? <CheckCircle2 className="w-3.5 h-3.5" /> : answered && isChosen ? <XCircle className="w-3.5 h-3.5" /> : String.fromCharCode(65 + oi)}
+                              </span>
+                              <span className="flex-1">{opt}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {answered && (
+                        <div className={`text-[11.5px] leading-relaxed p-3 rounded-xl border ${chosen === q.correctIndex ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}`}>
+                          <span className="font-bold font-mono uppercase text-[10px] tracking-wider">{chosen === q.correctIndex ? '✓ Correct — ' : '✗ Rationale — '}</span>
+                          {q.rationale}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {/* Completion summary */}
+                {examAnswered === quiz.length && quiz.length > 0 && (
+                  <div className={`rounded-2xl p-5 text-center border ${examScore / quiz.length >= 0.6 ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'}`}>
+                    <BarChart3 className={`w-8 h-8 mx-auto mb-2 ${examScore / quiz.length >= 0.6 ? 'text-emerald-600' : 'text-amber-500'}`} />
+                    <p className="text-sm font-extrabold text-slate-900">You scored {examScore} / {quiz.length} ({Math.round((examScore / quiz.length) * 100)}%)</p>
+                    <p className="text-[11px] text-slate-500 mt-1">
+                      {examScore / quiz.length >= 0.6
+                        ? 'Above the typical 60% pass threshold — great work! Review any rationales above.'
+                        : 'Below the 60% pass threshold — review the lesson and rationales, then retake.'}
+                    </p>
+                    <button onClick={() => setExamAnswers({})}
+                      className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all cursor-pointer">
+                      <RotateCcw className="w-3.5 h-3.5" /> Retake Exam
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

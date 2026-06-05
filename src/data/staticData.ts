@@ -831,151 +831,493 @@ export const STUDY_TOPICS: StudyTopic[] = [
   {
     id: 'ethics-law',
     title: 'UAE Nursing Code of Ethics & Licensing Regulations',
-    subtitle: 'Understanding DHA, MOH, and DOH/HAAD professional standards',
+    subtitle: 'Professional standards, scope of practice & patient rights under DHA, MOHAP and DOH/HAAD',
     category: 'Ethics & Regulations',
+    readingTime: '18 min read',
+    examWeight: '~10–15% of the licensing exam',
+    objectives: [
+      'Describe the legal framework governing nursing practice in the UAE.',
+      'Apply the principles of informed consent, confidentiality and patient rights.',
+      'Differentiate mandatory reporting duties from confidentiality obligations.',
+      'Recognise the nurse\'s scope of practice and delegation boundaries.'
+    ],
     sections: [
       {
-        title: 'UAE Nursing Professional Scope & Practice Standards',
-        content: 'Nurses practicing in the UAE must adhere to strict clinical boundaries authorized under Federal Decree-Law No. (10) of 2008 and respective health authorities (DHA, MOHAP, DOH). Practice covers assessment, care formulation, nursing interventions, and evaluation.',
+        title: 'Legal Framework & Scope of Practice',
+        content: 'Nursing in the UAE is regulated under Federal Decree-Law No. (4) of 2016 on Medical Liability (which replaced the earlier 2008 law) together with the standards of the relevant health authority — DHA (Dubai), MOHAP (Northern Emirates) and DOH/HAAD (Abu Dhabi). The nursing process — Assessment, Diagnosis, Planning, Implementation and Evaluation (ADPIE) — is the legal and professional backbone of safe care.',
         bullets: [
-          'Professional Registry: All clinical staff must maintain active licensing with their regulating authority.',
-          'Sovereign Cultural Respect: Nursing duties must uphold multi-national cultural parameters and respects patient dignity according to Islamic values.',
-          'Informed Consent: UAE jurisprudence places strong emphasis on direct written consent for invasive procedures, usually coordinated via head surgeons or clinical directors.'
+          'Active licensure: every clinician must hold a current licence from their regulating authority and practise only within its defined scope.',
+          'Standard of care: nurses are accountable for delivering care that a reasonably prudent nurse would provide in the same situation.',
+          'Cultural & religious respect: care must uphold patient dignity and Islamic values, including same-gender care where requested.',
+          'Documentation: accurate, timely, objective records are a legal requirement and the nurse\'s best protection.'
         ]
       },
       {
-        title: 'Patient Privacy & Confidentiality (UAE Law Mandates)',
-        content: 'Disclosure of medical records without direct patient authorization or legal mandate is strictly prohibited. The UAE Penal Code and Federal Health Data Protection systems protect patient charts across both electronic networks and standard folders.',
+        title: 'Informed Consent & Patient Rights',
+        content: 'Informed consent must be obtained before invasive or high-risk procedures. The patient must be competent, informed of risks/benefits/alternatives, and consent voluntarily without coercion. The nurse often witnesses consent and confirms the patient understands — the treating physician is responsible for the explanation.',
         bullets: [
-          'Confidentiality: Keeping information private is a primary duty except when required to prevent public infectious harm.',
-          'Incident Reporting: Sentinel events (e.g., medication errors with harm, wrong-site surgeries) must be reported to the quality board within 24 hours.'
+          'Valid consent = competent patient + adequate disclosure + voluntary decision.',
+          'Emergencies: implied consent applies when delay would threaten life and the patient cannot consent.',
+          'Minors / incompetent adults: consent is given by a legal guardian.',
+          'A patient may refuse treatment; the nurse documents the refusal and informs the physician.'
+        ]
+      },
+      {
+        title: 'Confidentiality & Mandatory Reporting',
+        content: 'Disclosure of patient information without authorization is prohibited under UAE law. The key exception is mandatory public-health reporting: notifiable communicable diseases must be reported to preventive medicine departments to protect public health.',
+        bullets: [
+          'Confidentiality protects records across electronic and paper systems.',
+          'Exception: notifiable diseases (e.g., TB, measles, meningococcal meningitis) must be reported, usually within 24 hours.',
+          'Sentinel events (e.g., medication error with harm, wrong-site surgery) are reported to the quality/risk department per policy.',
+          'Breach of confidentiality can lead to disciplinary, civil and criminal liability.'
+        ]
+      },
+      {
+        title: 'Delegation, Advocacy & Professional Accountability',
+        content: 'The registered nurse remains accountable for delegated tasks. Delegation must follow the "Five Rights": right task, right circumstance, right person, right direction/communication, and right supervision. The nurse is also the patient\'s advocate — protecting their safety, rights and preferences.',
+        bullets: [
+          'Delegate only tasks within the assistant\'s competence (e.g., routine ambulation, hygiene, basic vitals).',
+          'Never delegate assessment, clinical judgement, teaching, or medication administration to unlicensed personnel.',
+          'Advocacy: speak up for patient safety, question unsafe orders, and escalate concerns.',
+          'Accountability cannot be transferred — the RN owns the outcome of delegated care.'
         ]
       }
     ],
     flashcards: [
+      { question: 'Which federal law currently governs medical liability and professional conduct in the UAE?', answer: 'Federal Decree-Law No. (4) of 2016 on Medical Liability (which superseded the 2008 law), enforced alongside DHA, MOHAP and DOH standards.' },
+      { question: 'When can patient information be disclosed without explicit consent?', answer: 'Only for mandatory public-health reporting of notifiable communicable diseases to the relevant authority, to protect public health.' },
+      { question: 'Who is legally responsible for explaining a procedure for informed consent?', answer: 'The treating physician performing the procedure. The nurse may witness consent and confirm the patient\'s understanding.' },
+      { question: 'List the "Five Rights" of delegation.', answer: 'Right task, right circumstance, right person, right direction/communication, and right supervision.' },
+      { question: 'Which tasks can NOT be delegated to unlicensed assistive personnel?', answer: 'Assessment, nursing diagnosis, clinical judgement, patient teaching, and medication administration.' }
+    ],
+    quiz: [
+      { question: 'A competent adult refuses a blood transfusion for religious reasons. What is the nurse\'s most appropriate action?', options: ['Administer the transfusion because it is life-saving', 'Respect the refusal, document it, and notify the physician', 'Ask the family to override the decision', 'Delay care until the patient changes their mind'], correctIndex: 1, rationale: 'A competent adult has the right to refuse treatment. The nurse must respect autonomy, document the informed refusal, and notify the physician — not coerce or override the patient.' },
+      { question: 'A nurse may delegate which task to a qualified unlicensed assistive personnel (UAP)?', options: ['Assessing a new admission', 'Administering oral medications', 'Assisting a stable patient to ambulate to the bathroom', 'Teaching insulin self-injection'], correctIndex: 2, rationale: 'Routine ambulation of a stable patient is appropriate to delegate. Assessment, medication administration, and teaching require the licensed nurse\'s judgement.' },
+      { question: 'Which situation requires mandatory reporting despite confidentiality rules?', options: ['A patient with controlled hypertension', 'A confirmed case of pulmonary tuberculosis', 'A patient requesting a second opinion', 'A patient refusing physiotherapy'], correctIndex: 1, rationale: 'Notifiable communicable diseases such as TB must be reported to preventive medicine departments — a recognised exception to confidentiality to protect public health.' },
+      { question: 'For valid informed consent, all of the following are required EXCEPT:', options: ['The patient is competent', 'Risks, benefits and alternatives are disclosed', 'The decision is voluntary', 'A family member co-signs the form'], correctIndex: 3, rationale: 'Valid consent requires a competent patient, adequate disclosure, and a voluntary decision. A family co-signature is not required for a competent adult.' },
+      { question: 'A nurse disagrees with a physician\'s order that appears unsafe. The best action is to:', options: ['Carry out the order to avoid conflict', 'Refuse and say nothing further', 'Question the order and escalate the concern through the chain of command', 'Ask another nurse to carry it out'], correctIndex: 2, rationale: 'As a patient advocate the nurse must clarify and question unsafe orders and escalate appropriately, documenting the concern — never silently carry out unsafe care.' }
+    ]
+  },
+  {
+    id: 'fundamentals',
+    title: 'Fundamentals of Nursing & Patient Safety',
+    subtitle: 'Vital signs, the nursing process, mobility, hygiene, and the safety priorities tested heavily on every exam',
+    category: 'Fundamentals',
+    readingTime: '20 min read',
+    examWeight: '~15–20% of the licensing exam',
+    objectives: [
+      'Interpret normal adult vital-sign ranges and recognise abnormal values.',
+      'Apply the nursing process (ADPIE) and prioritisation frameworks.',
+      'Use ABC and Maslow\'s hierarchy to prioritise patient problems.',
+      'Implement core safety measures: fall prevention, asepsis, and identification.'
+    ],
+    sections: [
       {
-        question: "What is the primary federal regulation governing nursing practice boundaries in the UAE?",
-        answer: "Federal Decree-Law No. (10) of 2008 concerning medical liability and nursing regulations."
+        title: 'Normal Adult Vital Signs',
+        content: 'Vital signs are the foundation of assessment. Memorise the normal adult ranges and the values that demand action. Always interpret a value in the context of the patient\'s baseline and clinical picture.',
+        bullets: [
+          'Temperature: 36.1–37.2°C (oral). Fever ≥ 38°C.',
+          'Heart rate: 60–100 bpm. Bradycardia < 60, tachycardia > 100.',
+          'Respiratory rate: 12–20 breaths/min.',
+          'Blood pressure: < 120/80 mmHg normal; ≥ 140/90 hypertension; sustained < 90 systolic suggests hypotension/shock.',
+          'Oxygen saturation (SpO₂): 95–100% on room air.'
+        ]
       },
       {
-        question: "Under UAE Healthcare Law, when can a patient's medical details be disclosed without explicit consent?",
-        answer: "Only for mandatory reporting of communicable diseases (e.g., TB, COVID-19) to respective regulatory bodies (MOHAP, DHA, DOH) to protect public health."
+        title: 'The Nursing Process & Prioritisation',
+        content: 'ADPIE — Assessment, Diagnosis, Planning, Implementation, Evaluation — guides every nurse-patient interaction. When choosing which problem to address first, use two complementary frameworks: ABC (Airway, Breathing, Circulation) and Maslow\'s hierarchy (physiological needs before safety, then psychosocial).',
+        bullets: [
+          'ABCs always come first: a patent airway and adequate breathing precede everything.',
+          'Maslow: physiological needs (oxygen, fluids, nutrition, elimination) before safety and psychosocial needs.',
+          'Acute, unstable, or life-threatening problems take priority over chronic, stable ones.',
+          'Assessment precedes intervention — never act on incomplete data unless it is an emergency.'
+        ]
       },
       {
-        question: "What health authority regulates medical licensing specifically in the Emirate of Dubai?",
-        answer: "DHA (Dubai Health Authority)."
+        title: 'Patient Safety Essentials',
+        content: 'Patient safety is a global priority and a major exam theme. Two-identifier verification, fall prevention, and infection prevention through hand hygiene are non-negotiable.',
+        bullets: [
+          'Use two identifiers (e.g., name + date of birth/MRN) before any medication, procedure, or specimen.',
+          'WHO "5 Moments for Hand Hygiene": before patient contact, before aseptic task, after body-fluid exposure risk, after patient contact, after contact with patient surroundings.',
+          'Fall prevention: bed in low position, call bell within reach, non-slip footwear, scheduled rounding, assess high-risk patients.',
+          'Verify allergies and use barcode/medication checks to prevent errors.'
+        ]
       }
+    ],
+    flashcards: [
+      { question: 'What is the normal adult resting heart rate range?', answer: '60–100 beats per minute. Below 60 is bradycardia; above 100 is tachycardia.' },
+      { question: 'Order the priority frameworks used to decide which patient need to address first.', answer: 'Airway, Breathing, Circulation (ABC) first; then Maslow\'s hierarchy — physiological needs before safety and psychosocial needs.' },
+      { question: 'How many patient identifiers must be checked before giving a medication?', answer: 'At least two (e.g., full name and date of birth or medical record number) — never the room/bed number.' },
+      { question: 'State the WHO "5 Moments for Hand Hygiene".', answer: 'Before patient contact, before an aseptic task, after body-fluid exposure risk, after patient contact, and after contact with the patient\'s surroundings.' },
+      { question: 'What is the normal range for oxygen saturation on room air?', answer: '95–100%. Values below 90% indicate significant hypoxaemia requiring intervention.' }
+    ],
+    quiz: [
+      { question: 'A nurse must prioritise care for four patients. Who should be seen FIRST?', options: ['A patient due for routine medications', 'A patient reporting new shortness of breath and SpO₂ 86%', 'A patient requesting help to the bathroom', 'A patient asking about discharge'], correctIndex: 1, rationale: 'Airway/Breathing problems take priority. New dyspnoea with SpO₂ 86% is a life-threatening physiological need and must be addressed first.' },
+      { question: 'Before administering medication, the nurse should identify the patient using:', options: ['Room number and bed', 'The nurse\'s memory of the patient', 'Two identifiers such as name and date of birth', 'The diagnosis on the chart'], correctIndex: 2, rationale: 'Two patient identifiers (e.g., name + DOB/MRN) are required; room/bed numbers are not acceptable identifiers.' },
+      { question: 'Which adult vital sign is clearly abnormal and needs action?', options: ['Temperature 36.8°C', 'Heart rate 72 bpm', 'Respiratory rate 30 breaths/min', 'Blood pressure 118/76 mmHg'], correctIndex: 2, rationale: 'Normal adult respiratory rate is 12–20/min. A rate of 30 (tachypnoea) is abnormal and warrants assessment.' },
+      { question: 'According to Maslow, which need takes priority?', options: ['Self-esteem', 'Belonging', 'Oxygenation and fluid balance', 'Spiritual support'], correctIndex: 2, rationale: 'Physiological needs (oxygen, fluids, nutrition, elimination) are the base of Maslow\'s hierarchy and take priority over higher psychosocial needs.' },
+      { question: 'A key fall-prevention intervention for a high-risk patient is to:', options: ['Keep the bed in the highest position', 'Place the call bell within reach and keep the bed low', 'Use restraints routinely', 'Remove the call bell to reduce noise'], correctIndex: 1, rationale: 'Keeping the bed low with the call bell within reach (plus non-slip footwear and rounding) reduces falls. Restraints are a last resort, not routine.' }
     ]
   },
   {
     id: 'med-surg',
     title: 'Medical-Surgical Core Nursing Systems',
-    subtitle: 'Electrolytes, Acute Cardiac Emergencies, and Renal Management',
+    subtitle: 'Shock, cardiac emergencies, fluid & electrolytes, and acid-base balance',
     category: 'Clinical Core',
+    readingTime: '24 min read',
+    examWeight: '~20–25% of the licensing exam',
+    objectives: [
+      'Recognise and prioritise care for the major types of shock.',
+      'Identify priority interventions for myocardial infarction and cardiac emergencies.',
+      'Manage potassium, sodium and calcium imbalances safely.',
+      'Interpret basic arterial blood gases (acid-base balance).'
+    ],
     sections: [
       {
         title: 'Cardiovascular Systems & Shock Protocols',
-        content: 'Recognizing early symptoms of Hypovolemic, Cardiogenic, and Anaphylactic shock is essential. The nurse should quickly prioritize hemodynamic stability, oxygen supplement guidelines, and access validation for emergency infusions.',
+        content: 'Early recognition of shock saves lives. Hypovolemic, cardiogenic, distributive (e.g., septic, anaphylactic) and obstructive shock share the final pathway of inadequate tissue perfusion. Prioritise oxygenation, circulation and rapid escalation.',
         bullets: [
-          'Hypovolemic Shock: Early signs include tachycardia, cold/clammy skin, decreased urine output, and narrowing pulse pressure.',
-          'Myocardial Infarction: Priority interventions are MONA protocol (Morphine, Oxygen, Nitroglycerin, Aspirin) as delegated, with instant ECG reading.'
+          'Hypovolemic shock: tachycardia, cold/clammy skin, low urine output, narrowing pulse pressure — treat with fluids/blood and control bleeding.',
+          'Myocardial infarction: priority interventions follow MONA as ordered — Morphine, Oxygen (if hypoxic), Nitroglycerin, Aspirin — plus immediate 12-lead ECG.',
+          'Anaphylactic shock: ensure airway, give IM epinephrine (1:1000) first, then antihistamines/steroids as ordered.',
+          'Sepsis: early recognition, blood cultures before antibiotics, fluid resuscitation, and source control.'
         ]
       },
       {
-        title: 'Fluid & Electrolyte Core Distortions',
-        content: 'Electrolyte control is critical for metabolic stability. Pay close attention to Potassium, Sodium, and Calcium discrepancies which carry elevated risk of neuromuscular or cardiac arrest complications.',
+        title: 'Fluid & Electrolyte Imbalances',
+        content: 'Electrolyte control is critical for cardiac and neuromuscular stability. Potassium, sodium and calcium abnormalities can be rapidly fatal.',
         bullets: [
-          'Hyperkalemia (> 5.0 mEq/L): Causes tall, peaked T-waves, widened QRS. Administer calcium gluconate to stabilize myocardium, followed by insulin/dextrose or Kayexalate.',
-          'Hypokalemia (< 3.5 mEq/L): Shows flat T-waves, prominent U-waves. Never administer Potassium via IV push; always use a secondary regulated pump.'
-        ]
-      }
-    ],
-    flashcards: [
-      {
-        question: "What is the immediate priority nursing action for a patient experiencing suspected anaphylactic shock?",
-        answer: "Ensure a patent airway, place the patient in supine position with legs elevated, and administer IM Epinephrine (1:1000) as ordered."
-      },
-      {
-        question: "Why should Potassium Chloride (KCl) never be administered via direct intravenous push?",
-        answer: "IV push of concentrated Potassium Chloride triggers instant cardiac arrest. It must always be diluted and infused slowly via automated perfusion pump."
-      },
-      {
-        question: "Which ECG change is most characteristic of severe hyperkalemia?",
-        answer: "Tall, symmetrical peaked T-waves, followed by prolongation of the PR interval and widening of the QRS complex."
-      }
-    ]
-  },
-  {
-    id: 'maternity-pediatrics',
-    title: 'Maternity Care & Pediatric Milestones',
-    subtitle: 'Labor pathways, postpartum safety, and child assessment metrics',
-    category: 'Maternity & Child Care',
-    sections: [
-      {
-        title: 'Maternal Assessment: Postpartum Hemorrhage (PPH)',
-        content: 'PPH is defined as blood loss > 500 mL following vaginal birth or > 1000 mL following a Caesarean section. Uterine atony is the leading cause. Frequent fundal checks are required to assess tone.',
-        bullets: [
-          'Fundal Massage: The primary action for a boggy (atonic) uterus to stimulate contractility and control bleeding.',
-          'Pharmacology: Oxytocin (Pitocin) infusion is the first-line medication, followed by Methylergonovine (Methergine) if un-contraindicated (avoid in hypertension).'
+          'Hyperkalemia (> 5.0 mEq/L): tall, peaked T-waves, widened QRS. Give calcium gluconate to protect the heart, then insulin/dextrose or Kayexalate to shift/remove potassium.',
+          'Hypokalemia (< 3.5 mEq/L): flat T-waves, U-waves. Never give potassium by IV push — always dilute and infuse via pump.',
+          'Hyponatremia: confusion, seizures; correct slowly to avoid osmotic demyelination.',
+          'Hypocalcemia: positive Chvostek\'s and Trousseau\'s signs, tetany; hypercalcemia causes weakness and dysrhythmias.'
         ]
       },
       {
-        title: 'Pediatric Development & APGAR System',
-        content: 'The APGAR score is measured at 1 and 5 minutes post-delivery. Scoring assesses Heart Rate, Respiratory Effort, Muscle Tone, Reflex Irritability, and Color, with each receiving 0-2 points.',
+        title: 'Acid-Base Balance (ABG Basics)',
+        content: 'Use the ROME mnemonic to interpret blood gases: Respiratory Opposite, Metabolic Equal. Normal values: pH 7.35–7.45, PaCO₂ 35–45 mmHg, HCO₃⁻ 22–26 mEq/L.',
         bullets: [
-          'Score 7 - 10: Indicates normal infant adjustment transition.',
-          'Score 4 - 6: Moderate distress, requiring tactile stimulation and oxygen mask.',
-          'Score 0 - 3: Severe distress, requiring immediate neonatologist-led resuscitation.'
+          'Respiratory acidosis: ↓pH, ↑PaCO₂ (e.g., hypoventilation/COPD).',
+          'Respiratory alkalosis: ↑pH, ↓PaCO₂ (e.g., hyperventilation/anxiety).',
+          'Metabolic acidosis: ↓pH, ↓HCO₃⁻ (e.g., DKA, diarrhoea, renal failure).',
+          'Metabolic alkalosis: ↑pH, ↑HCO₃⁻ (e.g., vomiting, excess antacids).'
         ]
       }
     ],
     flashcards: [
-      {
-        question: "What is the lead nursing intervention for a postpartum patient presenting with a soft, boggy uterus and excessive lochia?",
-        answer: "Perform immediate external fundal massage to stimulate contraction of the uterine muscle fibers."
-      },
-      {
-        question: "At 1 minute, a newborn has a HR of 110 bpm, slow/irregular crying, some flexion of extremities, active grimace, and body pink with blue hands/feet. What is the APGAR score?",
-        answer: "6 (HR: 2, Resp: 1, Tone: 1, Reflex: 1, Color: 1)."
-      }
+      { question: 'What is the immediate priority action in suspected anaphylactic shock?', answer: 'Ensure a patent airway, position supine with legs elevated, and administer IM epinephrine (1:1000) as ordered — epinephrine first.' },
+      { question: 'Why must concentrated potassium chloride never be given by IV push?', answer: 'It can cause immediate fatal cardiac arrest. It must always be diluted and infused slowly through a regulated pump.' },
+      { question: 'Which ECG change is most characteristic of severe hyperkalemia?', answer: 'Tall, symmetrically peaked T-waves, followed by PR prolongation and QRS widening.' },
+      { question: 'Interpret: pH 7.30, PaCO₂ 55, HCO₃⁻ 24.', answer: 'Respiratory acidosis (low pH with high CO₂) — uncompensated, as bicarbonate is still normal.' },
+      { question: 'What is the first-line antidote that protects the myocardium in hyperkalemia?', answer: 'IV calcium gluconate stabilises the cardiac membrane; insulin + dextrose and Kayexalate then lower the potassium.' }
+    ],
+    quiz: [
+      { question: 'A post-op patient has BP 88/60, HR 122, cool clammy skin and low urine output. The priority intervention is to:', options: ['Administer an antipyretic', 'Increase IV fluids/blood and identify the bleeding source', 'Place the patient in reverse Trendelenburg', 'Restrict fluids'], correctIndex: 1, rationale: 'These are signs of hypovolemic shock. Restoring circulating volume (fluids/blood) and controlling the source of loss is the priority.' },
+      { question: 'A patient with serum potassium 6.8 mEq/L and peaked T-waves should first receive:', options: ['Oral potassium', 'IV calcium gluconate', 'A potassium-sparing diuretic', 'Normal saline bolus only'], correctIndex: 1, rationale: 'IV calcium gluconate is given first to stabilise the myocardium, followed by insulin/dextrose or Kayexalate to lower potassium.' },
+      { question: 'ABG: pH 7.50, PaCO₂ 30, HCO₃⁻ 24. This represents:', options: ['Respiratory acidosis', 'Respiratory alkalosis', 'Metabolic acidosis', 'Metabolic alkalosis'], correctIndex: 1, rationale: 'High pH with low CO₂ = respiratory alkalosis (often from hyperventilation). Bicarbonate is normal, so it is uncompensated.' },
+      { question: 'When infusing IV potassium chloride, the nurse must:', options: ['Give it rapidly as a bolus', 'Dilute it and infuse via an electronic pump', 'Push it undiluted over 1 minute', 'Mix it with the patient\'s blood'], correctIndex: 1, rationale: 'KCl must be diluted and infused slowly via a regulated pump; IV push can cause fatal dysrhythmias.' },
+      { question: 'Which finding indicates hypocalcemia?', options: ['Positive Trousseau\'s and Chvostek\'s signs', 'Tall peaked T-waves', 'Flushed warm skin', 'Bounding pulses'], correctIndex: 0, rationale: 'Hypocalcemia increases neuromuscular excitability, producing positive Chvostek\'s (facial twitch) and Trousseau\'s (carpal spasm) signs and tetany.' }
     ]
   },
   {
     id: 'pharmacology',
     title: 'High-Alert Pharmacology & Dosage Calculations',
-    subtitle: 'Dosage formulation math and safety constraints',
+    subtitle: 'Drug-rate math, high-alert medications, antidotes and safe administration',
     category: 'Pharmacology',
+    readingTime: '22 min read',
+    examWeight: '~15–20% of the licensing exam',
+    objectives: [
+      'Perform accurate IV flow-rate and dosage calculations.',
+      'Identify high-alert medications, their monitoring and antidotes.',
+      'Apply the rights of medication administration to prevent errors.',
+      'Recognise signs of common drug toxicities.'
+    ],
     sections: [
       {
         title: 'Dosage Calculation Core Logic',
-        content: 'Calculating accurate IV flow rates and oral dosage ranges is the nurse’s defense against medication incidents. Always double-check pediatric weight-based calculations against toxic thresholds.',
+        content: 'Accurate calculation is the nurse\'s defence against medication harm. Memorise the two core formulas and always double-check weight-based paediatric doses against safe ranges.',
         bullets: [
-          'Flow Rate (gtt/min): (Volume in mL × Drop Factor) ÷ Time in minutes.',
-          'Infusion Rate (mL/hr): Total Volume in mL ÷ Total Time in hours.'
+          'Flow rate (gtt/min) = (Volume in mL × Drop factor) ÷ Time in minutes.',
+          'Infusion rate (mL/hr) = Total volume in mL ÷ Total time in hours.',
+          'Desired dose: (Desired ÷ Have) × Quantity.',
+          'Microdrip tubing is always 60 gtt/mL; macrodrip is 10, 15 or 20 gtt/mL.'
         ]
       },
       {
-        title: 'Anticoagulation & Insulin Management Guidelines',
-        content: 'High-alert medications require dual clinical confirmation before administration. Always track matching laboratory diagnostic thresholds to guarantee patient safety.',
+        title: 'High-Alert Medications, Monitoring & Antidotes',
+        content: 'High-alert drugs carry a heightened risk of significant harm. They require independent double-checks and close lab monitoring.',
         bullets: [
-          'Heparin: Monitor Activated Partial Thromboplastin Time (aPTT). The antidote is Protamine Sulfate.',
-          'Warfarin (Coumadin): Monitor Prothrombin Time (PT) and International Normalized Ratio (INR). The antidote is Vitamin K.'
+          'Heparin: monitor aPTT; antidote is protamine sulfate.',
+          'Warfarin: monitor PT/INR (target 2.0–3.0); antidote is vitamin K.',
+          'Digoxin: hold if apical pulse < 60; toxicity causes nausea, visual halos, dysrhythmias; antidote is digoxin immune Fab.',
+          'Insulin & opioids: require independent double-checks; naloxone reverses opioid overdose.',
+          'Magnesium sulfate toxicity (loss of reflexes, respiratory depression): antidote is calcium gluconate.'
+        ]
+      },
+      {
+        title: 'Safe Administration — The Rights',
+        content: 'Apply the rights of medication administration every time, and verify allergies and the prescription before giving any drug.',
+        bullets: [
+          'Rights: right patient, drug, dose, route, time — plus documentation, reason, response and right to refuse.',
+          'Check two identifiers and the allergy band before administration.',
+          'Three checks: when retrieving, when preparing, and at the bedside before giving.',
+          'Document immediately after administration — never before.'
         ]
       }
     ],
     flashcards: [
+      { question: 'What is the antidote for heparin overdose?', answer: 'Protamine sulfate. (Warfarin\'s antidote is vitamin K.)' },
+      { question: 'Calculate: infuse 1000 mL over 8 hours using microdrip (60 gtt/mL).', answer: '125 gtt/min. (1000 × 60) ÷ (8 × 60) = 60000 ÷ 480 = 125.' },
+      { question: 'Before giving digoxin, what must the nurse assess and when is the dose held?', answer: 'Take the apical pulse for a full minute; hold and notify the physician if it is below 60 bpm in an adult.' },
+      { question: 'Which lab monitors warfarin therapy and what is the typical target?', answer: 'PT/INR, with a usual therapeutic target of 2.0–3.0.' },
+      { question: 'What is the antidote for magnesium sulfate toxicity?', answer: 'Calcium gluconate — given for loss of deep tendon reflexes or respiratory depression.' }
+    ],
+    quiz: [
+      { question: 'Order: infuse 1 L of 0.9% saline over 10 hours. What rate (mL/hr) is set on the pump?', options: ['50 mL/hr', '100 mL/hr', '125 mL/hr', '200 mL/hr'], correctIndex: 1, rationale: '1000 mL ÷ 10 hr = 100 mL/hr.' },
+      { question: 'A patient on heparin develops bleeding. The nurse anticipates giving:', options: ['Vitamin K', 'Protamine sulfate', 'Naloxone', 'Calcium gluconate'], correctIndex: 1, rationale: 'Protamine sulfate reverses heparin. Vitamin K reverses warfarin; naloxone reverses opioids.' },
+      { question: 'Before administering digoxin to an adult, the nurse takes an apical pulse of 54 bpm. The nurse should:', options: ['Give the dose as ordered', 'Hold the dose and notify the physician', 'Give half the dose', 'Recheck in 4 hours then give'], correctIndex: 1, rationale: 'An apical pulse below 60 bpm requires holding digoxin and notifying the physician to avoid bradycardia and toxicity.' },
+      { question: 'Order: 250 mg of a drug; available 125 mg/5 mL. How many mL are given?', options: ['5 mL', '10 mL', '12.5 mL', '2.5 mL'], correctIndex: 1, rationale: '(Desired 250 ÷ Have 125) × 5 mL = 2 × 5 = 10 mL.' },
+      { question: 'Which medications are considered high-alert and require an independent double-check?', options: ['Paracetamol and vitamins', 'Insulin and IV opioids', 'Oral antacids', 'Topical emollients'], correctIndex: 1, rationale: 'Insulin and IV opioids (and anticoagulants like heparin) are high-alert drugs requiring an independent double-check to prevent serious harm.' }
+    ]
+  },
+  {
+    id: 'maternity-pediatrics',
+    title: 'Maternity Care & Pediatric Nursing',
+    subtitle: 'Labour, postpartum haemorrhage, newborn assessment and child development',
+    category: 'Maternity & Child Care',
+    readingTime: '22 min read',
+    examWeight: '~15% of the licensing exam',
+    objectives: [
+      'Manage postpartum haemorrhage and recognise uterine atony.',
+      'Score and interpret the APGAR assessment.',
+      'Respond to obstetric emergencies (cord prolapse, shoulder dystocia).',
+      'Apply paediatric dosing safety and developmental milestones.'
+    ],
+    sections: [
       {
-        question: "What is the antidote for a patient showing clinical signs of Heparin overdose?",
-        answer: "Protamine Sulfate."
+        title: 'Postpartum Haemorrhage (PPH)',
+        content: 'PPH is blood loss > 500 mL after vaginal birth or > 1000 mL after caesarean. Uterine atony is the leading cause. Frequent fundal assessment is essential.',
+        bullets: [
+          'First action for a boggy/atonic uterus: firm fundal massage to stimulate contraction.',
+          'First-line drug: oxytocin (Pitocin); second-line: methylergonovine (avoid in hypertension).',
+          'Monitor for signs of hypovolemic shock and quantify blood loss.',
+          'Ensure IV access, fluids, and prepare blood products as ordered.'
+        ]
       },
       {
-        question: "Calculate the drip rate: Infuse 1000 mL of 0.9% Normal Saline over 8 hours using a microdrip tubing set (60 gtt/mL).",
-        answer: "125 gtt/min. (1000 mL × 60) ÷ (8 hours × 60 mins) = 1000 ÷ 8 = 125."
+        title: 'Newborn Assessment & APGAR',
+        content: 'The APGAR score is assessed at 1 and 5 minutes after birth, scoring Heart rate, Respiratory effort, Muscle tone, Reflex irritability and Colour (0–2 each).',
+        bullets: [
+          'Score 7–10: normal transition.',
+          'Score 4–6: moderate distress — stimulate and give oxygen.',
+          'Score 0–3: severe distress — immediate resuscitation.',
+          'Maintain warmth, airway and bonding; the first priority at birth is airway/breathing.'
+        ]
       },
       {
-        question: "What is the critical laboratory test used to monitor therapeutic therapeutic levels of Warfarin?",
-        answer: "INR (International Normalized Ratio), aiming for a target therapeutic range of 2.0 to 3.0 in standard conditions."
+        title: 'Obstetric Emergencies & Paediatric Safety',
+        content: 'Cord prolapse and shoulder dystocia are acute emergencies. In paediatrics, weight-based dosing and developmental safety are emphasised.',
+        bullets: [
+          'Umbilical cord prolapse: relieve pressure on the cord with a gloved hand, place mother in knee-chest/Trendelenburg, prepare for emergency C-section.',
+          'Shoulder dystocia: McRoberts maneuver + suprapubic pressure; fundal pressure is contraindicated.',
+          'Paediatric doses are weight-based (mg/kg) — always verify against safe ranges.',
+          'Suspected epiglottitis: never inspect the throat with a tongue blade (risk of laryngospasm).'
+        ]
       }
+    ],
+    flashcards: [
+      { question: 'What is the first nursing action for a postpartum woman with a soft, boggy uterus?', answer: 'Perform firm fundal massage to stimulate uterine contraction and control bleeding.' },
+      { question: 'When is the APGAR score assessed and what does it measure?', answer: 'At 1 and 5 minutes after birth; it scores heart rate, respiratory effort, muscle tone, reflex irritability and colour (0–2 each).' },
+      { question: 'What is the immediate management of umbilical cord prolapse?', answer: 'Use a gloved hand to lift the presenting part off the cord, place the mother in knee-chest or Trendelenburg, and prepare for emergency caesarean.' },
+      { question: 'Which maneuver is used for shoulder dystocia and which action is contraindicated?', answer: 'McRoberts maneuver with suprapubic pressure; fundal pressure is contraindicated.' },
+      { question: 'A newborn at 1 minute: HR 110, slow irregular cry, some flexion, active grimace, body pink with blue extremities. APGAR?', answer: 'Score 6 (HR 2, Resp 1, Tone 1, Reflex 1, Colour 1).' }
+    ],
+    quiz: [
+      { question: 'A postpartum patient has heavy lochia and a boggy fundus. The nurse FIRST:', options: ['Administers oxytocin', 'Massages the fundus', 'Calls the physician', 'Inserts a urinary catheter'], correctIndex: 1, rationale: 'Fundal massage is the immediate first action for a boggy uterus (uterine atony). Oxytocin and other measures follow if massage is insufficient.' },
+      { question: 'During a vaginal exam the nurse palpates a pulsating umbilical cord. The priority action is to:', options: ['Push the cord back in', 'Apply fundal pressure', 'Lift the presenting part off the cord and position knee-chest', 'Encourage the patient to push'], correctIndex: 2, rationale: 'Cord prolapse compresses fetal circulation. Relieving cord pressure with a gloved hand and a knee-chest/Trendelenburg position, then preparing for C-section, is the priority.' },
+      { question: 'A newborn has an APGAR of 5 at one minute. The nurse should:', options: ['Document and take no action', 'Provide stimulation and oxygen, and reassess', 'Begin chest compressions immediately', 'Delay the 5-minute score'], correctIndex: 1, rationale: 'A score of 4–6 indicates moderate distress requiring tactile stimulation and oxygen, with reassessment at 5 minutes.' },
+      { question: 'Methylergonovine (Methergine) for PPH is contraindicated in patients with:', options: ['Diabetes', 'Hypertension', 'Asthma', 'Anaemia'], correctIndex: 1, rationale: 'Methylergonovine causes vasoconstriction and can dangerously raise blood pressure, so it is contraindicated in hypertension.' },
+      { question: 'A 4-year-old with drooling, high fever and tripod positioning likely has epiglottitis. The nurse must AVOID:', options: ['Giving humidified oxygen', 'Keeping the child calm on the parent\'s lap', 'Examining the throat with a tongue depressor', 'Preparing airway equipment'], correctIndex: 2, rationale: 'Inspecting the throat can trigger laryngospasm and complete airway obstruction in epiglottitis. Keep the child calm and have airway equipment ready.' }
+    ]
+  },
+  {
+    id: 'critical-emergency',
+    title: 'Critical Care & Emergency Nursing',
+    subtitle: 'Triage, ACLS basics, respiratory failure, and life-threatening dysrhythmias',
+    category: 'Critical Care',
+    readingTime: '20 min read',
+    examWeight: '~10–15% of the licensing exam',
+    objectives: [
+      'Apply triage principles to prioritise multiple casualties.',
+      'Recognise and respond to lethal cardiac rhythms.',
+      'Manage acute respiratory distress and oxygen therapy safely.',
+      'Identify early signs of clinical deterioration.'
+    ],
+    sections: [
+      {
+        title: 'Triage & Prioritisation',
+        content: 'In emergency and mass-casualty situations, triage sorts patients by urgency. The nurse treats the most survivable, life-threatening conditions first using airway-breathing-circulation logic.',
+        bullets: [
+          'Emergent (red): immediate threat to life — airway obstruction, severe bleeding, shock.',
+          'Urgent (yellow): serious but can wait briefly — stable fractures, moderate pain.',
+          'Non-urgent (green): minor injuries.',
+          'Always reassess — triage categories can change as patients deteriorate or improve.'
+        ]
+      },
+      {
+        title: 'Lethal Dysrhythmias & Basic ACLS',
+        content: 'Pulseless rhythms require immediate high-quality CPR and, when shockable, rapid defibrillation. Distinguish shockable from non-shockable rhythms.',
+        bullets: [
+          'Shockable: ventricular fibrillation (VF) and pulseless ventricular tachycardia (VT) — defibrillate + CPR.',
+          'Non-shockable: asystole and pulseless electrical activity (PEA) — CPR + epinephrine, treat reversible causes.',
+          'Defibrillation is unsynchronised; cardioversion is synchronised and used for unstable rhythms WITH a pulse.',
+          'High-quality CPR: push hard and fast (100–120/min), allow full recoil, minimise interruptions.'
+        ]
+      },
+      {
+        title: 'Acute Respiratory Failure & Oxygen Safety',
+        content: 'Recognise respiratory distress early (rising rate, accessory muscle use, falling SpO₂, altered mental status). Deliver the correct oxygen device and watch special populations.',
+        bullets: [
+          'Escalate oxygen by device: nasal cannula → simple mask → non-rebreather → assisted ventilation.',
+          'In chronic CO₂ retainers (severe COPD), high-flow oxygen can suppress the hypoxic drive — titrate carefully to target SpO₂.',
+          'Position upright (high-Fowler\'s) to ease breathing unless contraindicated.',
+          'A falling level of consciousness in a breathless patient is an ominous sign of fatigue/CO₂ retention.'
+        ]
+      }
+    ],
+    flashcards: [
+      { question: 'Which cardiac rhythms are "shockable"?', answer: 'Ventricular fibrillation (VF) and pulseless ventricular tachycardia (pulseless VT). Asystole and PEA are non-shockable.' },
+      { question: 'What is the difference between defibrillation and synchronised cardioversion?', answer: 'Defibrillation is an unsynchronised shock for pulseless VF/VT. Synchronised cardioversion times the shock to the R-wave and is used for unstable rhythms with a pulse.' },
+      { question: 'In severe COPD, why is high-flow oxygen used cautiously?', answer: 'Chronic CO₂ retainers may rely on a hypoxic drive; excessive oxygen can suppress breathing, causing CO₂ retention and respiratory arrest. Titrate to a target SpO₂.' },
+      { question: 'What are the components of high-quality CPR?', answer: 'Compressions 100–120/min at adequate depth, full chest recoil, minimal interruptions, and avoiding excessive ventilation.' },
+      { question: 'In triage, which patient is treated first?', answer: 'The patient with the most survivable life threat to airway, breathing or circulation (emergent/red category).' }
+    ],
+    quiz: [
+      { question: 'The monitor shows a chaotic, irregular waveform with no pulse and no breathing. The nurse should:', options: ['Perform synchronised cardioversion', 'Start CPR and prepare to defibrillate', 'Give oral medication', 'Check blood glucose first'], correctIndex: 1, rationale: 'This describes ventricular fibrillation — a pulseless shockable rhythm. Immediate high-quality CPR and defibrillation are required.' },
+      { question: 'Synchronised cardioversion (not defibrillation) is appropriate for:', options: ['Pulseless VT', 'Ventricular fibrillation', 'Unstable SVT with a pulse', 'Asystole'], correctIndex: 2, rationale: 'Synchronised cardioversion is used for unstable tachydysrhythmias that still have a pulse (e.g., unstable SVT/VT with a pulse). Pulseless rhythms get defibrillation or CPR.' },
+      { question: 'A COPD patient is given high-flow oxygen and becomes drowsy with slow breathing. The nurse should:', options: ['Increase the oxygen further', 'Reduce oxygen to a controlled target SpO₂ and reassess', 'Leave the patient to rest', 'Give a sedative'], correctIndex: 1, rationale: 'Excess oxygen can suppress the hypoxic drive in CO₂ retainers, causing hypoventilation and drowsiness. Titrate oxygen down to a controlled target and reassess.' },
+      { question: 'Which patient in the emergency department should be seen FIRST?', options: ['A sprained ankle', 'A laceration needing sutures', 'A patient with stridor and difficulty breathing', 'A patient with a migraine'], correctIndex: 2, rationale: 'Stridor signals airway compromise — an immediate (emergent) threat to life and the top triage priority.' },
+      { question: 'During CPR, compressions should be delivered at a rate of:', options: ['40–60 per minute', '60–80 per minute', '100–120 per minute', 'As fast as possible'], correctIndex: 2, rationale: 'High-quality CPR uses a compression rate of 100–120 per minute with full recoil and minimal interruptions.' }
+    ]
+  },
+  {
+    id: 'mental-health',
+    title: 'Mental Health & Psychiatric Nursing',
+    subtitle: 'Therapeutic communication, risk assessment, and management of acute presentations',
+    category: 'Mental Health',
+    readingTime: '16 min read',
+    examWeight: '~10% of the licensing exam',
+    objectives: [
+      'Use therapeutic communication techniques effectively.',
+      'Prioritise safety in suicidal and aggressive patients.',
+      'Manage acute mania, anxiety and psychosis.',
+      'Recognise key medication considerations in psychiatry.'
+    ],
+    sections: [
+      {
+        title: 'Therapeutic Communication',
+        content: 'Therapeutic communication builds trust and supports assessment. Use open-ended questions, active listening, reflection and silence; avoid non-therapeutic blocks such as false reassurance, advice-giving and "why" questions.',
+        bullets: [
+          'Therapeutic: open-ended questions, reflecting, clarifying, offering self, using silence.',
+          'Non-therapeutic: false reassurance ("Don\'t worry"), giving advice, changing the subject, asking "why".',
+          'Acknowledge feelings before facts — empathy first.',
+          'Maintain a calm, non-judgemental and safe environment.'
+        ]
+      },
+      {
+        title: 'Safety: Suicide & Aggression',
+        content: 'Safety is always the priority in mental-health nursing. Directly assess suicide risk and provide a safe environment for agitated or aggressive patients.',
+        bullets: [
+          'Ask directly about suicidal thoughts and a plan — asking does not increase risk.',
+          'A patient with a specific plan and means is high risk — ensure continuous observation and remove hazards.',
+          'For aggression: maintain a safe distance, speak calmly, reduce stimulation; restraints/seclusion are a last resort with an order.',
+          'Acute mania: provide a low-stimulation environment and high-calorie portable foods to meet metabolic needs safely.'
+        ]
+      },
+      {
+        title: 'Psychopharmacology Essentials',
+        content: 'Key psychiatric medication safety points are frequently tested.',
+        bullets: [
+          'Lithium: narrow therapeutic range (0.6–1.2 mEq/L); monitor levels, maintain hydration and stable sodium intake; watch for toxicity (tremor, GI upset, confusion).',
+          'SSRIs: risk of serotonin syndrome (agitation, hyperthermia, hyperreflexia) especially when combined with other serotonergic drugs.',
+          'Antipsychotics: watch for extrapyramidal symptoms and neuroleptic malignant syndrome (high fever, rigidity, altered consciousness — a medical emergency).',
+          'MAOIs: avoid tyramine-rich foods (aged cheese, cured meats) to prevent hypertensive crisis.'
+        ]
+      }
+    ],
+    flashcards: [
+      { question: 'Is it safe to ask a patient directly about suicidal thoughts?', answer: 'Yes. Asking directly does not increase risk; it allows accurate assessment and timely protection.' },
+      { question: 'What is the therapeutic lithium level and a sign of toxicity?', answer: 'Therapeutic range 0.6–1.2 mEq/L. Early toxicity signs include fine tremor, nausea/diarrhoea and confusion.' },
+      { question: 'Give two non-therapeutic communication blocks to avoid.', answer: 'False reassurance ("Everything will be fine") and giving advice; also asking "why" and changing the subject.' },
+      { question: 'How should the nurse manage a patient in acute mania?', answer: 'Provide a calm, low-stimulation environment and offer high-calorie finger foods so the patient can eat while active.' },
+      { question: 'What is neuroleptic malignant syndrome?', answer: 'A life-threatening reaction to antipsychotics: high fever, muscle rigidity, autonomic instability and altered consciousness — stop the drug and treat as an emergency.' }
+    ],
+    quiz: [
+      { question: 'A patient says, "I just feel like there\'s no point anymore." The best response is:', options: ['"Don\'t talk like that, you have so much to live for."', '"Are you having thoughts of harming or killing yourself?"', '"Why do you feel that way?"', '"Let\'s talk about something more positive."'], correctIndex: 1, rationale: 'Directly and calmly assessing for suicidal ideation and a plan is therapeutic and essential for safety. The other options are non-therapeutic blocks.' },
+      { question: 'A patient on lithium reports vomiting, coarse tremor and confusion. The nurse suspects:', options: ['Therapeutic effect', 'Lithium toxicity', 'An allergic reaction', 'Normal side effects to ignore'], correctIndex: 1, rationale: 'These are signs of lithium toxicity. Hold the dose, check the level, and notify the physician; lithium has a narrow therapeutic range.' },
+      { question: 'The priority intervention for an acutely manic, pacing patient is to:', options: ['Place them in a group activity', 'Provide a low-stimulation environment and portable high-calorie food', 'Apply restraints', 'Confront them firmly in front of peers'], correctIndex: 1, rationale: 'Reducing stimulation calms the manic patient, and portable high-calorie foods meet high metabolic demands while they remain active.' },
+      { question: 'Which response is an example of therapeutic communication?', options: ['"I\'m sure everything will be fine."', '"If I were you, I would..."', '"You seem worried. Tell me more about what you\'re feeling."', '"Why are you so upset?"'], correctIndex: 2, rationale: 'Reflecting the patient\'s feeling and inviting them to elaborate is therapeutic. False reassurance, advice, and "why" questions are non-therapeutic.' },
+      { question: 'A patient on an antipsychotic develops high fever, severe muscle rigidity and altered consciousness. The nurse recognises:', options: ['Expected sedation', 'Neuroleptic malignant syndrome — a medical emergency', 'Mild dystonia', 'Caffeine withdrawal'], correctIndex: 1, rationale: 'High fever, rigidity, autonomic instability and altered mental status indicate neuroleptic malignant syndrome — stop the drug and treat emergently.' }
+    ]
+  },
+  {
+    id: 'infection-community',
+    title: 'Infection Control & Community Health',
+    subtitle: 'Isolation precautions, asepsis, immunisation, and public-health priorities',
+    category: 'Infection Control',
+    readingTime: '16 min read',
+    examWeight: '~10% of the licensing exam',
+    objectives: [
+      'Apply the correct transmission-based isolation precautions.',
+      'Differentiate medical and surgical asepsis.',
+      'Outline UAE immunisation and notifiable-disease principles.',
+      'Prevent healthcare-associated infections (HAIs).'
+    ],
+    sections: [
+      {
+        title: 'Standard & Transmission-Based Precautions',
+        content: 'Standard precautions apply to all patients. Transmission-based precautions are added according to how an organism spreads: contact, droplet or airborne.',
+        bullets: [
+          'Airborne (e.g., TB, measles, varicella): negative-pressure room + fit-tested N95 respirator.',
+          'Droplet (e.g., influenza, meningococcus, pertussis): surgical mask within ~1–2 metres; private room preferred.',
+          'Contact (e.g., MRSA, C. difficile): gown and gloves; dedicated equipment. For C. difficile, use soap and water (alcohol gel is not sporicidal).',
+          'Standard precautions (hand hygiene, PPE as needed, safe sharps handling) apply to every patient, every time.'
+        ]
+      },
+      {
+        title: 'Asepsis & HAI Prevention',
+        content: 'Medical asepsis reduces the number of organisms (clean technique); surgical asepsis eliminates them (sterile technique). Preventing device-related infections is a major safety target.',
+        bullets: [
+          'Hand hygiene is the single most effective measure to prevent infection.',
+          'Central lines: chlorhexidine skin antisepsis, full barrier precautions, daily review of need (prevents CLABSI).',
+          'Catheters: insert only when indicated and remove early (prevents CAUTI).',
+          'Maintain sterile field integrity — anything below the waist or out of sight is considered contaminated.'
+        ]
+      },
+      {
+        title: 'Immunisation & Notifiable Diseases',
+        content: 'Community and public-health nursing emphasise prevention. UAE newborns receive early vaccinations, and certain diseases must be reported.',
+        bullets: [
+          'UAE newborns typically receive BCG (tuberculosis) and the first hepatitis B dose before discharge.',
+          'Notifiable communicable diseases must be reported to preventive medicine departments (often within 24 hours).',
+          'Health promotion and screening reduce chronic-disease burden (e.g., diabetes, hypertension).',
+          'Herd immunity protects the vulnerable when vaccination coverage is high.'
+        ]
+      }
+    ],
+    flashcards: [
+      { question: 'What isolation precautions are required for active pulmonary tuberculosis?', answer: 'Airborne precautions: a negative-pressure isolation room and a fit-tested N95 respirator for staff.' },
+      { question: 'Why must hand hygiene for C. difficile use soap and water?', answer: 'Alcohol-based gel does not kill C. difficile spores; mechanical washing with soap and water removes them.' },
+      { question: 'Which two vaccines are typically given to UAE newborns before discharge?', answer: 'BCG (tuberculosis) and the first dose of hepatitis B vaccine.' },
+      { question: 'Differentiate medical and surgical asepsis.', answer: 'Medical asepsis (clean technique) reduces the number of microorganisms; surgical asepsis (sterile technique) eliminates them entirely.' },
+      { question: 'What distance and PPE are used for droplet precautions?', answer: 'A surgical mask within about 1–2 metres of the patient, ideally with a private room.' }
+    ],
+    quiz: [
+      { question: 'A patient with suspected active pulmonary TB requires:', options: ['Standard precautions only', 'Droplet precautions with a surgical mask', 'Airborne precautions with a negative-pressure room and N95', 'Contact precautions with gown and gloves'], correctIndex: 2, rationale: 'TB is airborne; it requires a negative-pressure room and a fit-tested N95 respirator, not a surgical mask.' },
+      { question: 'For a patient with Clostridioides difficile, the nurse should:', options: ['Use alcohol hand gel only', 'Wash hands with soap and water and use contact precautions', 'Use airborne precautions', 'No special precautions are needed'], correctIndex: 1, rationale: 'C. difficile forms spores resistant to alcohol gel; soap-and-water hand washing plus contact precautions (gown/gloves) are required.' },
+      { question: 'The single most effective measure to prevent healthcare-associated infection is:', options: ['Wearing a gown at all times', 'Hand hygiene', 'Routine antibiotics', 'Daily room disinfection'], correctIndex: 1, rationale: 'Hand hygiene is the most effective single intervention to prevent the spread of infection.' },
+      { question: 'Which finding breaks the sterile field?', options: ['Keeping items above waist level', 'A sterile item touching the edge of the drape', 'Facing the sterile field at all times', 'Holding sterile items in front of the body'], correctIndex: 1, rationale: 'The 2.5 cm outer edge of a sterile drape is considered contaminated; anything below the waist or out of sight is also non-sterile.' },
+      { question: 'A confirmed case of measles is identified. The nurse must:', options: ['Keep it confidential and take no further action', 'Report it to the preventive medicine department', 'Discharge the patient immediately', 'Wait until the patient recovers to report'], correctIndex: 1, rationale: 'Measles is a notifiable communicable disease and must be reported to public-health authorities, typically within 24 hours.' }
     ]
   }
 ];
