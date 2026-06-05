@@ -177,6 +177,14 @@ export default function Sidebar({
               Centered Nurse Academy · 2026
             </p>
           )}
+          <a
+            href="/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 block text-center text-[9px] text-slate-500 hover:text-slate-300 font-mono uppercase tracking-widest transition-colors"
+          >
+            Privacy Policy
+          </a>
         </div>
       </aside>
     </>
