@@ -310,6 +310,139 @@ app.get('/api/article', async (req: Request, res: Response) => {
   }
 });
 
+// ── Live UAE nursing jobs (JSearch / Google-for-Jobs) ──────────────────────────
+// Credibility-filtered: favours direct hospital / health-system / HR postings
+// and drops recruiter "resume-farming" listings.
+
+interface LiveJob {
+  id: string; title: string; employer: string; logoUrl: string; city: string;
+  country: string; role: string; employmentType: string; postedDate: string;
+  postedTs: number; salaryRange: string; summary: string; responsibilities: string[];
+  requirements: string[]; benefits: string[]; applyUrl: string; publisher: string;
+  directApply: boolean; institution: boolean; verified: boolean;
+}
+
+// Recruitment-agency / resume-farm signals (employer or publisher name)
+const AGENCY_RE = /\b(recruit|recruitment|consultanc|consultant|manpower|staffing|staff\s|talent|hr\s?solution|human\s?resource|placement|outsourc|workforce|resourcing|executive\s?search|headhunt|agency|maids?|domestic)\b/i;
+// Genuine healthcare-institution signals
+const INSTITUTION_RE = /\b(hospital|clinic|polyclinic|medical\s?cent(er|re)|medical\s?city|health\s?(care|services|system)?|healthcare|seha|cleveland|mediclinic|nmc|aster|burjeel|medeor|thumbay|prime\s?(hospital|health)|king'?s\s?college|american\s?hospital|medcare|emirates\s?health|dubai\s?health|tawam|mafraq|sheikh\s?shakhbout|fakeeh|zulekha|canadian\s?specialist|nmc\s?royal|llh)\b/i;
+
+function inferRole(title: string): string {
+  const t = title.toLowerCase();
+  if (/assistant|aide|\bcna\b|care\s?assistant|patient\s?care/.test(t)) return 'Nursing Assistant';
+  if (/midwife|midwifery/.test(t)) return 'Midwife';
+  if (/home\s?care|home\s?health/.test(t)) return 'Home Care Nurse';
+  if (/icu|ccu|critical|emergency|\ber\b|theatre|operating|oncology|dialysis|nicu|picu|specialist|charge\s?nurse|head\s?nurse/.test(t)) return 'Specialist Nurse';
+  return 'Registered Nurse';
+}
+
+function fmtSalary(j: any): string {
+  const cur = j.job_salary_currency || 'AED';
+  const per = (j.job_salary_period || '').toLowerCase();
+  const perLabel = per === 'year' ? 'year' : per === 'hour' ? 'hour' : per === 'month' ? 'month' : per || 'month';
+  if (j.job_min_salary && j.job_max_salary)
+    return `${cur} ${Math.round(j.job_min_salary).toLocaleString()} – ${Math.round(j.job_max_salary).toLocaleString()} / ${perLabel}`;
+  if (j.job_min_salary) return `From ${cur} ${Math.round(j.job_min_salary).toLocaleString()} / ${perLabel}`;
+  return 'Salary not disclosed — confirm with employer';
+}
+
+async function fetchJSearch(query: string, key: string): Promise<any[]> {
+  const url = `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(query)}&page=1&num_pages=1&country=ae&date_posted=month`;
+  try {
+    const r = await fetch(url, {
+      headers: { 'X-RapidAPI-Key': key, 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com' },
+      signal: AbortSignal.timeout(12000),
+    });
+    if (!r.ok) { console.error('[jobs] JSearch', r.status); return []; }
+    const d = await r.json();
+    return Array.isArray(d.data) ? d.data : [];
+  } catch (e) { console.error('[jobs] JSearch error', e); return []; }
+}
+
+function normalizeJob(j: any): LiveJob | null {
+  const employer = (j.employer_name || '').trim();
+  const title = (j.job_title || '').trim();
+  if (!title || !j.job_apply_link) return null;
+
+  const hay = `${employer} ${j.job_publisher || ''}`;
+  const institution = INSTITUTION_RE.test(hay);
+  const isAgency = AGENCY_RE.test(hay) && !institution;
+  const directApply = !!j.job_apply_is_direct;
+
+  // Credibility gate: keep institutions, or direct-apply non-agency listings.
+  if (!institution && !(directApply && !isAgency)) return null;
+
+  const hl = j.job_highlights || {};
+  const ts = j.job_posted_at_timestamp ? j.job_posted_at_timestamp * 1000 : Date.parse(j.job_posted_at_datetime_utc || '') || 0;
+
+  return {
+    id: j.job_id || `${employer}-${title}`.slice(0, 80),
+    title,
+    employer: employer || j.job_publisher || 'Employer',
+    logoUrl: j.employer_logo || '',
+    city: [j.job_city, j.job_state].filter(Boolean).join(', ') || 'United Arab Emirates',
+    country: j.job_country || 'AE',
+    role: inferRole(title),
+    employmentType: (j.job_employment_type || 'FULLTIME').replace('TIME', '-time').replace('FULL', 'Full').replace('PART', 'Part').replace('CONTRACTOR', 'Contract').replace('CONTRACT', 'Contract'),
+    postedDate: j.job_posted_at_datetime_utc || new Date(ts || Date.now()).toISOString(),
+    postedTs: ts || Date.now(),
+    salaryRange: fmtSalary(j),
+    summary: (j.job_description || '').replace(/\s+/g, ' ').trim().slice(0, 1200),
+    responsibilities: Array.isArray(hl.Responsibilities) ? hl.Responsibilities.slice(0, 8) : [],
+    requirements: Array.isArray(hl.Qualifications) ? hl.Qualifications.slice(0, 8) : [],
+    benefits: Array.isArray(hl.Benefits) ? hl.Benefits.slice(0, 8) : [],
+    applyUrl: j.job_apply_link,
+    publisher: j.job_publisher || '',
+    directApply,
+    institution,
+    verified: institution,
+  };
+}
+
+const jobsCache = new Map<string, { items: LiveJob[]; ts: number }>();
+const JOBS_TTL = 12 * 60 * 60 * 1000; // 12h — conserves the free API quota
+
+// GET /api/jobs
+app.get('/api/jobs', async (_req: Request, res: Response) => {
+  const key = process.env.RAPIDAPI_KEY;
+  if (!key) { res.json({ items: [], configured: false }); return; }
+
+  const cached = jobsCache.get('all');
+  if (cached && Date.now() - cached.ts < JOBS_TTL) {
+    res.json({ items: cached.items, configured: true, cached: true });
+    return;
+  }
+
+  try {
+    const queries = [
+      'registered nurse hospital United Arab Emirates',
+      'staff nurse OR nursing assistant United Arab Emirates',
+    ];
+    const settled = await Promise.allSettled(queries.map(q => fetchJSearch(q, key)));
+    const raw: any[] = [];
+    for (const s of settled) if (s.status === 'fulfilled') raw.push(...s.value);
+
+    const seen = new Set<string>();
+    let items = raw
+      .map(normalizeJob)
+      .filter((j): j is LiveJob => !!j)
+      .filter(j => { const k = j.id || j.title; if (seen.has(k)) return false; seen.add(k); return true; });
+
+    // Rank: institutions first, then direct-apply, then by recency
+    items.sort((a, b) => {
+      const score = (x: LiveJob) => (x.institution ? 2 : 0) + (x.directApply ? 1 : 0);
+      const ds = score(b) - score(a);
+      return ds !== 0 ? ds : b.postedTs - a.postedTs;
+    });
+
+    jobsCache.set('all', { items, ts: Date.now() });
+    res.json({ items, configured: true, cached: false });
+  } catch (error) {
+    console.error('[jobs] error', error);
+    res.status(500).json({ items: [], configured: true, error: 'Failed to load jobs.' });
+  }
+});
+
 // POST /api/ai-tutor
 app.post('/api/ai-tutor', async (req: Request, res: Response) => {
   const { prompt, context, examType } = req.body as {
@@ -399,7 +532,7 @@ export const api = onRequest(
     region:         'us-central1',
     memory:         '256MiB',
     timeoutSeconds: 60,
-    secrets:        ['GEMINI_API_KEY'],  // binds the secret to process.env.GEMINI_API_KEY
+    secrets:        ['GEMINI_API_KEY', 'RAPIDAPI_KEY'],  // bound to process.env.*
     cors:           true,
   },
   app

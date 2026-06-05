@@ -175,8 +175,8 @@ export interface JobPosting {
   logo: string;
   emirate: string;
   role: JobRole;
-  employmentType: 'Full-time' | 'Part-time' | 'Contract';
-  shift: string;
+  employmentType: string;
+  shift?: string;
   postedDate: string;   // ISO date — list is sorted by this, latest first
   salaryRange: string;  // indicative AED/month
   summary: string;
@@ -185,6 +185,12 @@ export interface JobPosting {
   benefits: string[];
   applyUrl: string;     // official careers portal
   verified: boolean;
+  // ── Live-listing extras (from the jobs API) ──
+  logoUrl?: string;
+  publisher?: string;
+  directApply?: boolean;
+  institution?: boolean;
+  live?: boolean;
 }
 
 /**

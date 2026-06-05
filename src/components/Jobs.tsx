@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom';
 import {
   Briefcase, MapPin, ExternalLink, X, ShieldCheck, Search, ChevronRight,
   AlertTriangle, Building2, CheckCircle2, Stethoscope, Clock, Wallet,
-  CalendarClock, ListChecks, GraduationCap, Gift
+  CalendarClock, ListChecks, GraduationCap, Gift, Radio, BadgeCheck, Loader2, RefreshCw
 } from 'lucide-react';
 import { JOB_EMPLOYERS, JOB_BOARDS, JOB_POSTINGS, LINKEDIN_SEARCHES, JobEmployer, JobPosting, JobRole } from '../data/staticData';
 
@@ -35,19 +35,22 @@ function JobModal({ job, onClose }: { job: JobPosting; onClose: () => void }) {
     return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
   }, [onClose]);
 
-  const Section = ({ icon, title, items }: { icon: React.ReactNode; title: string; items: string[] }) => (
-    <div className="space-y-2">
-      <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">{icon} {title}</h3>
-      <ul className="space-y-1.5">
-        {items.map((t, i) => (
-          <li key={i} className="flex gap-2 text-[12.5px] text-slate-600 leading-relaxed">
-            <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-400" />
-            <span>{t}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  const Section = ({ icon, title, items }: { icon: React.ReactNode; title: string; items: string[] }) => {
+    if (!items || items.length === 0) return null;
+    return (
+      <div className="space-y-2">
+        <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">{icon} {title}</h3>
+        <ul className="space-y-1.5">
+          {items.map((t, i) => (
+            <li key={i} className="flex gap-2 text-[12.5px] text-slate-600 leading-relaxed">
+              <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-400" />
+              <span>{t}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={onClose}>
@@ -55,13 +58,18 @@ function JobModal({ job, onClose }: { job: JobPosting; onClose: () => void }) {
         {/* Header */}
         <div className="flex items-start justify-between gap-3 px-5 py-4 border-b border-slate-100 shrink-0">
           <div className="flex items-start gap-3 min-w-0">
-            <span className="text-2xl shrink-0">{job.logo}</span>
+            {job.logoUrl ? (
+              <img src={job.logoUrl} alt="" className="w-9 h-9 rounded-lg object-contain bg-white border border-slate-200 shrink-0"
+                   onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            ) : (
+              <span className="text-2xl shrink-0">{job.logo}</span>
+            )}
             <div className="min-w-0">
               <h2 className="text-sm font-extrabold text-slate-900 leading-snug">{job.title}</h2>
               <p className="text-[11px] text-slate-500 mt-0.5">{job.employer}</p>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-[10px] font-mono text-slate-400">
                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {job.emirate}</span>
-                <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {job.shift}</span>
+                {job.shift && <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {job.shift}</span>}
                 <span className="flex items-center gap-1"><CalendarClock className="w-3 h-3" /> {timeAgo(job.postedDate)}</span>
               </div>
             </div>
@@ -77,8 +85,15 @@ function JobModal({ job, onClose }: { job: JobPosting; onClose: () => void }) {
           <div className="flex flex-wrap gap-2">
             <span className="text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><Stethoscope className="w-3 h-3" /> {job.role}</span>
             <span className="text-[10px] font-mono font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg flex items-center gap-1"><Briefcase className="w-3 h-3" /> {job.employmentType}</span>
-            {job.verified && <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Verified employer</span>}
+            {job.institution && <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Direct Institution</span>}
+            {!job.institution && job.directApply && <span className="text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><BadgeCheck className="w-3 h-3" /> Direct Apply</span>}
+            {!job.live && job.verified && <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Verified employer</span>}
           </div>
+          {job.live && (
+            <p className="text-[10px] text-slate-400 flex items-center gap-1.5">
+              <Radio className="w-3 h-3 text-rose-500" /> Live listing{job.publisher ? ` · via ${job.publisher}` : ''}. Apply on the employer's posting below.
+            </p>
+          )}
 
           {/* Salary */}
           <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2.5">
@@ -118,7 +133,7 @@ function JobModal({ job, onClose }: { job: JobPosting; onClose: () => void }) {
         <div className="shrink-0 border-t border-slate-100 px-5 py-3 bg-slate-50/60">
           <a href={job.applyUrl} target="_blank" rel="noopener noreferrer"
              className="w-full inline-flex items-center justify-center gap-2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all">
-            <ExternalLink className="w-4 h-4" /> Apply on Official Portal
+            <ExternalLink className="w-4 h-4" /> {job.live ? 'Apply on Employer Posting' : 'Apply on Official Portal'}
           </a>
         </div>
       </div>
@@ -203,7 +218,55 @@ export default function Jobs() {
   const [job, setJob] = useState<JobPosting | null>(null);
   const [employer, setEmployer] = useState<JobEmployer | null>(null);
 
-  // Sort postings newest-first, then filter by role
+  // Live jobs from the backend (/api/jobs, credibility-filtered)
+  const [liveJobs, setLiveJobs] = useState<JobPosting[]>([]);
+  const [liveLoading, setLiveLoading] = useState(true);
+  const [liveConfigured, setLiveConfigured] = useState(true);
+
+  const loadLive = async () => {
+    setLiveLoading(true);
+    try {
+      const res = await fetch('/api/jobs', { headers: { Accept: 'application/json' } });
+      const data = await res.json();
+      setLiveConfigured(data.configured !== false);
+      const items: JobPosting[] = (Array.isArray(data.items) ? data.items : []).map((j: any) => ({
+        id: `live-${j.id}`,
+        title: j.title,
+        employer: j.employer,
+        logo: '🏥',
+        logoUrl: j.logoUrl || undefined,
+        emirate: j.city || 'United Arab Emirates',
+        role: (j.role || 'Registered Nurse') as JobRole,
+        employmentType: j.employmentType || 'Full-time',
+        postedDate: j.postedDate,
+        salaryRange: j.salaryRange || 'Salary not disclosed',
+        summary: j.summary || '',
+        responsibilities: j.responsibilities || [],
+        requirements: j.requirements || [],
+        benefits: j.benefits || [],
+        applyUrl: j.applyUrl,
+        verified: !!j.institution,
+        publisher: j.publisher || undefined,
+        directApply: !!j.directApply,
+        institution: !!j.institution,
+        live: true,
+      }));
+      setLiveJobs(items);
+    } catch {
+      setLiveConfigured(false);
+    } finally {
+      setLiveLoading(false);
+    }
+  };
+
+  useEffect(() => { loadLive(); }, []);
+
+  const liveFiltered = useMemo(
+    () => (roleFilter === 'All' ? liveJobs : liveJobs.filter(j => j.role === roleFilter)),
+    [liveJobs, roleFilter]
+  );
+
+  // Sort curated postings newest-first, then filter by role
   const postings = useMemo(() => {
     const sorted = [...JOB_POSTINGS].sort(
       (a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()
@@ -227,7 +290,7 @@ export default function Jobs() {
           UAE Nursing Jobs &amp; Careers
         </h2>
         <p className="text-xs text-slate-500 mt-0.5">
-          Current openings for Nurses &amp; Nursing Assistants at verified UAE healthcare employers — newest first. Tap a posting for the full description and how to apply.
+          Live &amp; verified openings for Nurses &amp; Nursing Assistants — filtered for direct hospital / health-system postings. Tap any job for the full description and how to apply.
         </p>
       </div>
 
@@ -256,10 +319,77 @@ export default function Jobs() {
         ))}
       </div>
 
-      {/* Job postings (newest first) */}
+      {/* ── LIVE openings (from JSearch, credibility-filtered) ── */}
+      {(liveLoading || liveFiltered.length > 0) && (
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+              <Radio className="w-3.5 h-3.5 text-rose-500 animate-pulse" /> Live Openings
+              {!liveLoading && <span className="text-slate-400">({liveFiltered.length})</span>}
+            </h3>
+            <button onClick={loadLive} disabled={liveLoading}
+              className="flex items-center gap-1 text-[10px] font-mono font-bold text-slate-400 hover:text-blue-600 disabled:opacity-50 transition-colors cursor-pointer">
+              <RefreshCw className={`w-3 h-3 ${liveLoading ? 'animate-spin' : ''}`} /> Refresh
+            </button>
+          </div>
+
+          {liveLoading ? (
+            <div className="flex items-center gap-2 text-slate-400 text-xs font-mono py-6 justify-center">
+              <Loader2 className="w-4 h-4 animate-spin" /> Loading live UAE nursing jobs…
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <p className="text-[10px] text-slate-400 flex items-center gap-1.5 -mt-1 mb-1">
+                <BadgeCheck className="w-3 h-3 text-emerald-500" /> Filtered for direct hospital / health-system &amp; direct-apply listings — recruiter resume-farms removed.
+              </p>
+              {liveFiltered.map(p => (
+                <div
+                  key={p.id}
+                  onClick={() => setJob(p)}
+                  className="group bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-rose-200 transition-all cursor-pointer flex items-start gap-4"
+                >
+                  {p.logoUrl ? (
+                    <img src={p.logoUrl} alt="" className="w-10 h-10 rounded-lg object-contain bg-white border border-slate-200 shrink-0"
+                         onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  ) : (
+                    <span className="text-2xl shrink-0 mt-0.5">{p.logo}</span>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <h4 className="font-bold text-sm text-slate-900 leading-snug group-hover:text-rose-700 transition-colors">{p.title}</h4>
+                      <span className="shrink-0 text-[10px] font-mono text-slate-400 flex items-center gap-1"><CalendarClock className="w-3 h-3" /> {timeAgo(p.postedDate)}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-0.5">{p.employer}</p>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[10px] font-mono text-slate-500">
+                      <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-slate-400" /> {p.emirate}</span>
+                      <span className="flex items-center gap-1"><Briefcase className="w-3 h-3 text-slate-400" /> {p.employmentType}</span>
+                      {p.salaryRange && !p.salaryRange.startsWith('Salary not') && <span className="flex items-center gap-1"><Wallet className="w-3 h-3 text-emerald-500" /> {p.salaryRange.split(' / ')[0]}</span>}
+                    </div>
+                    <div className="flex items-center justify-between mt-3 gap-2 flex-wrap">
+                      <div className="flex items-center gap-1.5">
+                        {p.institution
+                          ? <span className="text-[9px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded uppercase flex items-center gap-1"><ShieldCheck className="w-2.5 h-2.5" /> Direct Institution</span>
+                          : p.directApply
+                          ? <span className="text-[9px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded uppercase flex items-center gap-1"><BadgeCheck className="w-2.5 h-2.5" /> Direct Apply</span>
+                          : <span className="text-[9px] font-mono font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded uppercase">Listing</span>}
+                        {p.publisher && <span className="text-[9px] font-mono text-slate-400">via {p.publisher}</span>}
+                      </div>
+                      <span className="text-[10px] font-mono font-bold text-rose-600 uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
+                        View &amp; Apply <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Curated openings (newest first) */}
       <div>
         <h3 className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-          <Briefcase className="w-3.5 h-3.5 text-blue-600" /> Current Openings ({postings.length})
+          <Briefcase className="w-3.5 h-3.5 text-blue-600" /> {liveFiltered.length > 0 || liveLoading ? 'Featured Openings' : 'Current Openings'} ({postings.length})
         </h3>
 
         {postings.length === 0 ? (
