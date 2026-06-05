@@ -636,12 +636,24 @@ export default function App() {
   const [authPassword, setAuthPassword] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleLogin = async () => {
+    setAuthError(null);
+    setGoogleLoading(true);
     try {
       await signInWithGoogle();
-    } catch (e) {
-      console.error("Google sign-in failed:", e);
+    } catch (e: unknown) {
+      const msg = (e as { message?: string })?.message || '';
+      const code = (e as { code?: string })?.code || '';
+      if (/cancel/i.test(msg) || /cancel/i.test(code)) {
+        // user dismissed the Google chooser — no error to show
+      } else {
+        setAuthError('Google sign-in is unavailable here. Please use email & password.');
+      }
+      console.error('Google sign-in failed:', e);
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -915,11 +927,31 @@ export default function App() {
                 {/* ── Landing buttons ── */}
                 {authMode === 'landing' && (
                   <div className="space-y-3">
+                    {/* Continue with Google (native on the app, popup on web) */}
+                    <button
+                      onClick={handleLogin}
+                      disabled={googleLoading}
+                      className="w-full py-3 bg-white hover:bg-slate-100 text-slate-800 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer font-sans shadow-lg flex items-center justify-center gap-2.5 disabled:opacity-60"
+                    >
+                      {googleLoading ? (
+                        <span className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <svg className="w-4 h-4" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8a12 12 0 1 1 0-24c3 0 5.8 1.1 7.9 3l5.7-5.7A20 20 0 1 0 24 44c11 0 20-9 20-20 0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8A12 12 0 0 1 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7A20 20 0 0 0 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2A12 12 0 0 1 12.7 28l-6.5 5A20 20 0 0 0 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3a12 12 0 0 1-4.1 5.6l6.2 5.2C39.5 41.4 44 38 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg>
+                      )}
+                      {googleLoading ? 'Signing in…' : 'Continue with Google'}
+                    </button>
+
+                    <div className="flex items-center gap-3">
+                      <span className="flex-1 h-px bg-[#1b2b3f]" />
+                      <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">or</span>
+                      <span className="flex-1 h-px bg-[#1b2b3f]" />
+                    </div>
+
                     <button
                       onClick={() => { setAuthError(null); setAuthMode('login'); }}
                       className="w-full py-3.5 bg-[#dfba6b] hover:bg-[#ebd095] text-slate-950 rounded-xl text-xs font-black tracking-widest transition-all cursor-pointer font-sans shadow-lg shadow-[#dfba6b]/10 uppercase flex items-center justify-center gap-2"
                     >
-                      🔑 Sign In to Your Account
+                      🔑 Sign In with Email
                     </button>
                     <button
                       onClick={() => { setAuthError(null); setAuthMode('register'); }}
@@ -927,6 +959,10 @@ export default function App() {
                     >
                       ✨ Create New Account
                     </button>
+
+                    {authError && (
+                      <p className="text-rose-400 text-[11px] text-center pt-1">{authError}</p>
+                    )}
                   </div>
                 )}
 
