@@ -166,6 +166,276 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
   },
 ];
 
+// ── Individual job postings (full detail, newest first) ─────────────────────────
+
+export interface JobPosting {
+  id: string;
+  title: string;
+  employer: string;
+  logo: string;
+  emirate: string;
+  role: JobRole;
+  employmentType: 'Full-time' | 'Part-time' | 'Contract';
+  shift: string;
+  postedDate: string;   // ISO date — list is sorted by this, latest first
+  salaryRange: string;  // indicative AED/month
+  summary: string;
+  responsibilities: string[];
+  requirements: string[];
+  benefits: string[];
+  applyUrl: string;     // official careers portal
+  verified: boolean;
+}
+
+/**
+ * Representative current openings at verified UAE employers. Full live vacancy
+ * lists and the actual application form live on each employer's official careers
+ * portal (the Apply button). Applying is always free — never pay a placement fee.
+ * Sorted newest-first by postedDate in the component.
+ */
+export const JOB_POSTINGS: JobPosting[] = [
+  {
+    id: 'p-seha-medsurg',
+    title: 'Registered Nurse — Medical / Surgical Ward',
+    employer: 'SEHA — Abu Dhabi Health Services', logo: '🏥', emirate: 'Abu Dhabi',
+    role: 'Registered Nurse', employmentType: 'Full-time', shift: 'Rotating (day/night)',
+    postedDate: '2026-06-04', salaryRange: 'AED 9,000 – 13,000 / month + benefits',
+    summary: 'Provide holistic, evidence-based nursing care to adult medical-surgical patients across SEHA hospitals, working within a multidisciplinary team to deliver safe, patient-centred care aligned with DOH standards.',
+    responsibilities: [
+      'Assess, plan, implement and evaluate individualised patient care plans.',
+      'Administer medications and treatments safely per physician orders and policy.',
+      'Monitor and document vital signs, intake/output, and clinical changes.',
+      'Educate patients and families on care, discharge planning, and self-management.',
+      'Maintain infection-control and patient-safety standards at all times.',
+    ],
+    requirements: [
+      'Valid DOH (Abu Dhabi) licence or eligibility (DataFlow + exam passed).',
+      'BSc Nursing or 3-year diploma with registration in home country.',
+      'Minimum 2 years post-graduation clinical experience.',
+      'Valid BLS; ACLS preferred.',
+      'Good Standing Certificate and attested credentials.',
+    ],
+    benefits: ['Tax-free salary', 'Housing & transport allowance', 'Annual flights', 'Medical insurance', 'Paid annual leave'],
+    applyUrl: 'https://www.seha.ae/careers/', verified: true,
+  },
+  {
+    id: 'p-ccad-icu',
+    title: 'Registered Nurse — Critical Care (ICU)',
+    employer: 'Cleveland Clinic Abu Dhabi', logo: '🩺', emirate: 'Abu Dhabi',
+    role: 'Specialist Nurse', employmentType: 'Full-time', shift: '12-hour rotating',
+    postedDate: '2026-06-03', salaryRange: 'AED 14,000 – 19,000 / month + benefits',
+    summary: 'Deliver advanced critical-care nursing to high-acuity patients in a JCI-accredited tertiary ICU, using best-practice protocols and advanced monitoring within a renowned academic medical centre.',
+    responsibilities: [
+      'Manage critically ill patients including ventilated and post-operative cases.',
+      'Operate and interpret haemodynamic and cardiac monitoring equipment.',
+      'Titrate vasoactive and sedation infusions per protocol.',
+      'Respond to emergencies and participate in code/rapid-response teams.',
+      'Document accurately in the electronic health record (EPIC).',
+    ],
+    requirements: [
+      'Valid DOH licence or eligibility.',
+      'BSc Nursing required.',
+      'Minimum 2–3 years recent ICU/critical-care experience.',
+      'Valid BLS and ACLS (PALS an asset).',
+      'Strong English communication skills.',
+    ],
+    benefits: ['Tax-free salary', 'Furnished accommodation or allowance', 'Annual flights', 'Family medical cover', 'Continuing-education support'],
+    applyUrl: 'https://www.clevelandclinicabudhabi.ae/en/careers', verified: true,
+  },
+  {
+    id: 'p-nmc-na',
+    title: 'Nursing Assistant / Patient Care Assistant',
+    employer: 'NMC Healthcare', logo: '🏨', emirate: 'Dubai',
+    role: 'Nursing Assistant', employmentType: 'Full-time', shift: 'Rotating',
+    postedDate: '2026-06-02', salaryRange: 'AED 3,500 – 5,500 / month + benefits',
+    summary: 'Support registered nurses in delivering basic patient care and maintaining a safe, clean, and comfortable environment across NMC hospitals and medical centres.',
+    responsibilities: [
+      'Assist patients with hygiene, mobility, feeding, and daily activities.',
+      'Take and record basic observations (temperature, pulse, BP) as delegated.',
+      'Maintain cleanliness and stock of clinical areas and equipment.',
+      'Transport patients and samples safely within the facility.',
+      'Report changes in patient condition to the registered nurse promptly.',
+    ],
+    requirements: [
+      'Nursing Assistant / PCA certificate or equivalent healthcare qualification.',
+      'DHA eligibility/registration as a Nursing Assistant (where applicable).',
+      'Prior hospital or care-home experience preferred.',
+      'Valid BLS certificate.',
+      'Compassionate, team-oriented attitude.',
+    ],
+    benefits: ['Tax-free salary', 'Shared accommodation or allowance', 'Medical insurance', 'Annual leave & flight', 'Visa sponsorship'],
+    applyUrl: 'https://nmc.ae/careers/', verified: true,
+  },
+  {
+    id: 'p-mediclinic-ed',
+    title: 'Registered Nurse — Emergency Department',
+    employer: 'Mediclinic Middle East', logo: '➕', emirate: 'Dubai',
+    role: 'Specialist Nurse', employmentType: 'Full-time', shift: '12-hour rotating',
+    postedDate: '2026-05-30', salaryRange: 'AED 11,000 – 16,000 / month + benefits',
+    summary: 'Provide rapid, high-quality emergency nursing care across triage, resuscitation, and treatment areas in a busy private ED, prioritising patient safety and timely intervention.',
+    responsibilities: [
+      'Perform triage and rapid assessment of presenting patients.',
+      'Deliver emergency interventions and assist with resuscitation.',
+      'Administer medications and manage IV access under pressure.',
+      'Coordinate with physicians and specialists for admissions/referrals.',
+      'Maintain accurate, timely clinical documentation.',
+    ],
+    requirements: [
+      'Valid DHA licence or eligibility.',
+      'BSc Nursing or recognised diploma.',
+      'Minimum 2 years emergency / acute-care experience.',
+      'Valid BLS and ACLS; PALS/TNCC an advantage.',
+      'Ability to work calmly in a fast-paced environment.',
+    ],
+    benefits: ['Tax-free salary', 'Housing allowance', 'Annual flights', 'Comprehensive medical cover', 'Professional development'],
+    applyUrl: 'https://www.mediclinic.ae/en/corporate/careers.html', verified: true,
+  },
+  {
+    id: 'p-dubaihealth-midwife',
+    title: 'Midwife / Labour & Delivery Nurse',
+    employer: 'Dubai Health (Latifa Hospital)', logo: '🏛️', emirate: 'Dubai',
+    role: 'Midwife', employmentType: 'Full-time', shift: 'Rotating',
+    postedDate: '2026-05-28', salaryRange: 'AED 10,000 – 15,000 / month + benefits',
+    summary: 'Provide expert maternity and newborn care across antenatal, labour, delivery, and postnatal services at a leading government women\'s & children\'s hospital.',
+    responsibilities: [
+      'Provide care and monitoring throughout labour and delivery.',
+      'Conduct fetal heart and maternal monitoring; recognise complications early.',
+      'Support normal births and assist with operative deliveries.',
+      'Deliver postnatal care and breastfeeding/newborn education.',
+      'Maintain accurate maternity records and escalate risks promptly.',
+    ],
+    requirements: [
+      'Valid DHA licence or eligibility as Midwife / RN-Midwife.',
+      'BSc Nursing/Midwifery or recognised midwifery qualification.',
+      'Minimum 2 years labour-and-delivery experience.',
+      'Valid BLS; NRP/fetal-monitoring certification preferred.',
+      'Good Standing Certificate.',
+    ],
+    benefits: ['Tax-free salary', 'Government benefits package', 'Housing & transport', 'Annual flights', 'Medical insurance'],
+    applyUrl: 'https://www.dubaihealth.ae/careers', verified: true,
+  },
+  {
+    id: 'p-aster-homecare',
+    title: 'Home Care Nurse',
+    employer: 'Aster Home Health Care', logo: '💠', emirate: 'Dubai',
+    role: 'Home Care Nurse', employmentType: 'Full-time', shift: 'Day shifts / on-call',
+    postedDate: '2026-05-26', salaryRange: 'AED 7,000 – 10,000 / month + benefits',
+    summary: 'Deliver one-to-one clinical care to patients in their homes — from post-operative and elderly care to chronic-disease management — representing Aster\'s home-health service.',
+    responsibilities: [
+      'Provide skilled nursing care in the patient\'s home per the care plan.',
+      'Administer medications, wound care, and tube/catheter management.',
+      'Monitor chronic conditions and educate family caregivers.',
+      'Document visits and coordinate with the supervising physician.',
+      'Ensure safety, dignity, and infection control in the home setting.',
+    ],
+    requirements: [
+      'Valid DHA licence (Registered Nurse).',
+      'BSc Nursing or diploma with registration.',
+      'Minimum 2 years clinical experience; home-care exposure preferred.',
+      'Valid BLS; UAE driving licence an advantage.',
+      'Independent, reliable, and patient-focused.',
+    ],
+    benefits: ['Tax-free salary', 'Transport/allowance', 'Medical insurance', 'Annual leave & flight', 'Visa sponsorship'],
+    applyUrl: 'https://career.asterdmhealthcare.com/', verified: true,
+  },
+  {
+    id: 'p-burjeel-ot',
+    title: 'Registered Nurse — Operating Theatre (Scrub/Circulating)',
+    employer: 'Burjeel Holdings', logo: '🔷', emirate: 'Abu Dhabi',
+    role: 'Specialist Nurse', employmentType: 'Full-time', shift: 'Rotating + on-call',
+    postedDate: '2026-05-24', salaryRange: 'AED 11,000 – 16,000 / month + benefits',
+    summary: 'Provide perioperative nursing as scrub and circulating nurse across a broad surgical caseload in a super-specialty hospital, ensuring sterile technique and patient safety.',
+    responsibilities: [
+      'Prepare the operating room, instruments, and sterile field.',
+      'Function as scrub and/or circulating nurse during procedures.',
+      'Perform surgical counts and maintain asepsis throughout.',
+      'Monitor the patient and support the surgical team intra-operatively.',
+      'Ensure correct handling of specimens and equipment.',
+    ],
+    requirements: [
+      'Valid DOH licence or eligibility.',
+      'BSc Nursing or recognised diploma.',
+      'Minimum 2 years operating-theatre experience.',
+      'Valid BLS; perioperative certification an asset.',
+      'Strong attention to detail and teamwork.',
+    ],
+    benefits: ['Tax-free salary', 'Housing allowance', 'Annual flights', 'Medical cover', 'Career-growth pathways'],
+    applyUrl: 'https://burjeelholdings.com/careers/', verified: true,
+  },
+  {
+    id: 'p-ahd-peds',
+    title: 'Registered Nurse — Paediatrics',
+    employer: 'American Hospital Dubai', logo: '🏥', emirate: 'Dubai',
+    role: 'Registered Nurse', employmentType: 'Full-time', shift: 'Rotating',
+    postedDate: '2026-05-22', salaryRange: 'AED 11,000 – 15,000 / month + benefits',
+    summary: 'Provide family-centred paediatric nursing care to infants, children, and adolescents in a JCI-accredited private hospital, partnering with families and the care team.',
+    responsibilities: [
+      'Deliver age-appropriate nursing care and accurate paediatric dosing.',
+      'Monitor growth, development, and clinical status of paediatric patients.',
+      'Support families with education and emotional reassurance.',
+      'Recognise and escalate paediatric deterioration early.',
+      'Maintain meticulous documentation and safety checks.',
+    ],
+    requirements: [
+      'Valid DHA licence or eligibility.',
+      'BSc Nursing required.',
+      'Minimum 2 years paediatric nursing experience.',
+      'Valid BLS and PALS.',
+      'Excellent communication with children and families.',
+    ],
+    benefits: ['Tax-free salary', 'Housing allowance', 'Annual flights', 'Family medical insurance', 'Education support'],
+    applyUrl: 'https://www.ahdubai.com/careers', verified: true,
+  },
+  {
+    id: 'p-ehs-opd',
+    title: 'Staff Nurse — Outpatient Clinics',
+    employer: 'Emirates Health Services (EHS)', logo: '🇦🇪', emirate: 'Sharjah',
+    role: 'Registered Nurse', employmentType: 'Full-time', shift: 'Day shifts',
+    postedDate: '2026-05-20', salaryRange: 'AED 8,500 – 12,000 / month + benefits',
+    summary: 'Provide nursing care across busy government outpatient and primary-care clinics in the Northern Emirates, supporting screening, treatment, and health-promotion services.',
+    responsibilities: [
+      'Assess and triage outpatients; record histories and vitals.',
+      'Assist physicians with examinations and minor procedures.',
+      'Administer vaccinations, injections, and treatments.',
+      'Provide health education and chronic-disease follow-up.',
+      'Maintain clinic stock, equipment, and documentation.',
+    ],
+    requirements: [
+      'Valid MOHAP licence or eligibility.',
+      'BSc Nursing or recognised diploma with registration.',
+      'Minimum 2 years clinical experience.',
+      'Valid BLS.',
+      'Arabic language an advantage (not essential).',
+    ],
+    benefits: ['Tax-free salary', 'Government benefits', 'Housing & transport', 'Annual flights', 'Medical insurance'],
+    applyUrl: 'https://www.ehs.gov.ae/en/careers', verified: true,
+  },
+  {
+    id: 'p-nmc-dialysis',
+    title: 'Dialysis Nurse (Haemodialysis)',
+    employer: 'NMC Healthcare', logo: '🏨', emirate: 'Abu Dhabi',
+    role: 'Specialist Nurse', employmentType: 'Full-time', shift: 'Rotating',
+    postedDate: '2026-05-18', salaryRange: 'AED 10,000 – 14,000 / month + benefits',
+    summary: 'Deliver safe, high-quality haemodialysis care to chronic kidney-disease patients, managing the dialysis procedure end-to-end and supporting long-term patient wellbeing.',
+    responsibilities: [
+      'Set up, prime, and operate haemodialysis machines safely.',
+      'Assess vascular access (AV fistula/catheter) and manage complications.',
+      'Monitor patients before, during, and after dialysis sessions.',
+      'Administer medications such as heparin and erythropoietin per orders.',
+      'Educate patients on fluid, diet, and access care.',
+    ],
+    requirements: [
+      'Valid DOH licence or eligibility.',
+      'BSc Nursing or diploma with registration.',
+      'Minimum 1–2 years dialysis/renal experience.',
+      'Valid BLS; dialysis certification preferred.',
+      'Strong assessment and monitoring skills.',
+    ],
+    benefits: ['Tax-free salary', 'Housing allowance', 'Annual flights', 'Medical insurance', 'Visa sponsorship'],
+    applyUrl: 'https://nmc.ae/careers/', verified: true,
+  },
+];
+
 export interface JobBoard {
   id: string;
   name: string;
