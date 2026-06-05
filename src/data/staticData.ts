@@ -693,6 +693,32 @@ export const SCHOLARSHIPS: Scholarship[] = [
   },
 ];
 
+// ── Forum / Mentorship resources (real, working external links) ─────────────────
+
+export interface ForumResource {
+  id: string;
+  name: string;
+  note: string;
+  url: string;
+  icon: string;
+}
+
+export const FORUM_RESOURCES: ForumResource[] = [
+  { id: 'dataflow', name: 'DataFlow Group (PSV)',       note: 'Primary source verification of your credentials', url: 'https://www.dataflowgroup.com/',  icon: '🔎' },
+  { id: 'sheryan',  name: 'DHA Sheryan',                note: 'Dubai professional licensing portal',            url: 'https://services.dha.gov.ae/sheryan/', icon: '🏙️' },
+  { id: 'prometric',name: 'Prometric',                  note: 'Book your DHA / MOHAP licensing exam',            url: 'https://www.prometric.com/',         icon: '🖥️' },
+  { id: 'pearson',  name: 'Pearson VUE',                note: 'Book the DOH Abu Dhabi exam',                    url: 'https://home.pearsonvue.com/',       icon: '🖥️' },
+  { id: 'icn',      name: 'Intl. Council of Nurses',    note: 'Global nursing body & resources',                url: 'https://www.icn.ch/',                icon: '🌐' },
+  { id: 'sigma',    name: 'Sigma Nursing',              note: 'Mentorship, research & global community',        url: 'https://www.sigmanursing.org/',      icon: '⭐' },
+  { id: 'who',      name: 'WHO — Nursing & Midwifery',  note: 'Global standards & workforce guidance',          url: 'https://www.who.int/health-topics/nursing', icon: '🏥' },
+];
+
+// Academy mentors / admins — real contact points for 1-on-1 mentorship.
+export const ACADEMY_MENTORS: { name: string; role: string; email: string }[] = [
+  { name: 'Academy Lead Mentor', role: 'Licensing & DataFlow guidance', email: 'loveline082022@gmail.com' },
+  { name: 'Academy Coordinator', role: 'Study planning & exam prep',    email: 'uncledez8@gmail.com' },
+];
+
 // ── UAE Health Authority reference data (for in-app info panels) ────────────────
 
 export interface AuthorityInfo {

@@ -10,7 +10,8 @@ import {
   Sparkles, UserCheck, X, ExternalLink, CheckCircle2, ChevronRight, Building2
 } from 'lucide-react';
 import { ForumPost, ForumComment } from '../types';
-import { UAE_AUTHORITIES, AuthorityInfo } from '../data/staticData';
+import { UAE_AUTHORITIES, AuthorityInfo, FORUM_RESOURCES, ACADEMY_MENTORS } from '../data/staticData';
+import { Mail, ExternalLink as ExtLink } from 'lucide-react';
 
 const AUTH_COLORS: Record<string, { badge: string; ring: string; btn: string }> = {
   blue:    { badge: 'bg-blue-100 text-blue-800 border-blue-200',       ring: 'border-blue-200',    btn: 'bg-blue-600 hover:bg-blue-700' },
@@ -262,6 +263,56 @@ export default function Forum({
                 </p>
               </div>
             </div>
+
+            {/* Key Resources — real working links */}
+            <div className="pt-4 border-t border-slate-100 space-y-2">
+              <h4 className="text-[10px] font-mono tracking-widest text-emerald-600 uppercase font-bold flex items-center gap-1">
+                <ExtLink className="w-3 h-3" /> KEY RESOURCES:
+              </h4>
+              <div className="space-y-1.5">
+                {FORUM_RESOURCES.map((r) => (
+                  <a
+                    key={r.id}
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-2 p-2 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-200 rounded-lg transition-all"
+                  >
+                    <span className="text-sm shrink-0">{r.icon}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10.5px] font-bold text-slate-700 group-hover:text-emerald-700 truncate transition-colors">{r.name}</p>
+                      <p className="text-[8.5px] text-slate-400 font-mono truncate">{r.note}</p>
+                    </div>
+                    <ExtLink className="w-3 h-3 text-slate-300 group-hover:text-emerald-500 shrink-0 transition-colors" />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Connect with Academy Mentors — real contacts */}
+            <div className="pt-4 border-t border-slate-100 space-y-2">
+              <h4 className="text-[10px] font-mono tracking-widest text-blue-600 uppercase font-bold flex items-center gap-1">
+                <UserCheck className="w-3 h-3" /> ACADEMY MENTORS:
+              </h4>
+              <p className="text-[9.5px] text-slate-500 leading-relaxed">
+                Get 1-on-1 guidance on DataFlow, licensing, and exam prep. Email a mentor directly:
+              </p>
+              <div className="space-y-1.5">
+                {ACADEMY_MENTORS.map((m) => (
+                  <a
+                    key={m.email}
+                    href={`mailto:${m.email}?subject=Mentorship%20request%20-%20The%20Centered%20Nurse%20Academy`}
+                    className="group flex items-center gap-2 p-2 bg-blue-50/50 hover:bg-blue-50 border border-blue-100 rounded-lg transition-all"
+                  >
+                    <span className="shrink-0 w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center"><Mail className="w-3.5 h-3.5" /></span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10.5px] font-bold text-slate-700 truncate">{m.name}</p>
+                      <p className="text-[8.5px] text-slate-400 font-mono truncate">{m.role}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Core Post Lists middle */}
@@ -485,12 +536,12 @@ export default function Forum({
                 </form>
               ) : (
                 <div className="p-4 bg-slate-50 border border-slate-200 text-center rounded-xl">
-                  <p className="text-xs text-slate-500 mb-2">Connect your account profile to post clinical responses</p>
+                  <p className="text-xs text-slate-500 mb-2">Sign in to your account to post clinical responses</p>
                   <button
                     onClick={onLogin}
                     className="py-1.5 px-4 bg-blue-650 hover:bg-blue-600 text-white rounded-lg text-xs font-bold font-mono cursor-pointer"
                   >
-                    Google Login
+                    Sign In
                   </button>
                 </div>
               )}
@@ -501,21 +552,41 @@ export default function Forum({
           <div className="p-5 bg-white border border-slate-205 rounded-2xl space-y-4 text-xs text-slate-800 shadow-sm">
             <div className="flex items-center gap-2 text-amber-600">
               <Sparkles className="w-4 h-4 text-amber-600" />
-              <h4 className="font-bold font-mono text-[10.5px] uppercase tracking-wider">Mentorship resources</h4>
+              <h4 className="font-bold font-mono text-[10.5px] uppercase tracking-wider">Mentorship &amp; Support</h4>
             </div>
             <p className="text-[11px] text-slate-500 leading-normal">
-              Remember, to register successfully on UAE DHA primary services, you must obtain a Good Standing record, with verified MoFA degree stamps beforehand.
+              To register in the UAE you'll need DataFlow primary-source verification, a Good Standing Certificate, and attested (MoFA) credentials before your DHA / DOH / MOHAP eligibility and exam.
             </p>
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+
+            {/* Real academy mentor contacts */}
+            <div className="p-3 bg-blue-50/50 border border-blue-100 rounded-xl space-y-2">
               <div className="flex items-center gap-2">
                 <UserCheck className="w-3.5 h-3.5 text-blue-650" />
-                <span className="font-bold text-slate-700">Registered Mentors:</span>
+                <span className="font-bold text-slate-700 text-[11px]">Talk to an Academy Mentor</span>
               </div>
-              <ul className="space-y-1.5 list-inside list-disc pl-1 text-[11px] text-slate-500 font-mono">
-                <li>Nurse Specialist Jameela K. (DHA)</li>
-                <li>Senior Lecturer Dr. Fatima (HAAD)</li>
-                <li>Clinician Rahul Sharma (MOHAP)</li>
-              </ul>
+              <div className="space-y-1.5">
+                {ACADEMY_MENTORS.map((m) => (
+                  <a
+                    key={m.email}
+                    href={`mailto:${m.email}?subject=Mentorship%20request%20-%20The%20Centered%20Nurse%20Academy`}
+                    className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white transition-all group"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                    <span className="text-[10.5px] text-slate-600 group-hover:text-blue-700 truncate font-mono">{m.email}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Working resource links */}
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+              <span className="font-bold text-slate-700 text-[11px] flex items-center gap-1.5"><ExtLink className="w-3.5 h-3.5 text-emerald-600" /> Useful Links</span>
+              {FORUM_RESOURCES.slice(0, 5).map((r) => (
+                <a key={r.id} href={r.url} target="_blank" rel="noopener noreferrer"
+                   className="flex items-center gap-2 text-[10.5px] text-slate-600 hover:text-emerald-700 transition-colors">
+                  <span>{r.icon}</span><span className="truncate underline decoration-slate-300">{r.name}</span>
+                </a>
+              ))}
             </div>
           </div>
         </div>
