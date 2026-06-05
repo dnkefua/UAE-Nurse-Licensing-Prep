@@ -109,37 +109,51 @@ export default function Tests({ onSaveAttempt, userId, testAttempts }: TestsProp
 
       {!isExamActive ? (
         <div className="space-y-6">
-          {/* Exam Choice Deck */}
+          {/* Exam Choice Deck — three distinct regulator exams */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {(['DHA', 'MOH', 'HAAD_DOH'] as ExamType[]).map((type) => {
-              const label = type === 'DHA' ? 'Dubai Health Authority (DHA)' : type === 'MOH' ? 'Ministry of Health (MOHAP)' : 'Abu Dhabi Health (HAAD/DOH)';
-              const passingScore = type === 'HAAD_DOH' ? '65%' : '60%';
+              const meta = {
+                DHA:      { label: 'DHA — Dubai Health Authority', emirate: 'Dubai', provider: 'Prometric (Sheryan licensing)', flag: '🏙️' },
+                MOH:      { label: 'MOHAP — Ministry of Health', emirate: 'Northern Emirates', provider: 'Prometric', flag: '🇦🇪' },
+                HAAD_DOH: { label: 'DOH Abu Dhabi (HAAD)', emirate: 'Abu Dhabi', provider: 'Pearson VUE', flag: '🏛️' },
+              }[type];
+              const count = MOCK_QUESTIONS.filter(q => q.examType === type).length;
               return (
                 <div
                   key={type}
                   className="p-6 bg-white border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4 hover:border-blue-300 hover:shadow-md transition-all shadow-sm"
                 >
                   <div>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 bg-blue-50 text-blue-600 rounded">
-                      REGULATOR TEMPLATE
-                    </span>
-                    <h3 className="font-bold text-sm text-slate-800 mt-2 font-sans">{label}</h3>
-                    <div className="text-[11px] text-slate-500 mt-2 space-y-1 font-mono">
-                      <p>● Questions count: {questions.length} items</p>
-                      <p>● Target Pass Rate: {passingScore}</p>
-                      <p>● Duration: Self-paced / Scored Timer</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">{meta.flag}</span>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 bg-blue-50 text-blue-600 rounded uppercase">
+                        {meta.emirate}
+                      </span>
                     </div>
+                    <h3 className="font-bold text-sm text-slate-800 mt-2 font-sans">{meta.label}</h3>
+                    <div className="text-[11px] text-slate-500 mt-2 space-y-1 font-mono">
+                      <p>● Questions: {count} board-style items</p>
+                      <p>● Exam provider: {meta.provider}</p>
+                      <p>● Pass mark: ~60% · scored timer</p>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-2 leading-relaxed">
+                      A distinct mock for the {meta.emirate} regulator, modelled on the real exam blueprint (safe practice, pharmacology, med-surg, maternal-child, critical care, mental health &amp; ethics).
+                    </p>
                   </div>
                   <button
                     onClick={() => startExam(type)}
-                    className="w-full py-2.5 px-4 bg-blue-650 hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition-all cursor-pointer text-center shadow-sm shadow-blue-500/10"
+                    className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer text-center shadow-sm shadow-blue-500/10"
                   >
-                    Launch {type} Test
+                    Launch {type === 'HAAD_DOH' ? 'DOH/HAAD' : type} Mock Exam
                   </button>
                 </div>
               );
             })}
           </div>
+          <p className="text-[11px] text-slate-400 flex items-start gap-1.5 px-1">
+            <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            These are realistic practice questions that mirror each authority's exam style and domains — not actual copyrighted exam items. Each regulator (Dubai/DHA, Abu Dhabi/DOH, Northern Emirates/MOHAP) runs its own separate licensing exam.
+          </p>
 
           {/* Test scores history */}
           {testAttempts.length > 0 && (
