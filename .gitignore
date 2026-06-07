@@ -23,3 +23,7 @@ functions/node_modules/
 # IDE
 .idea/
 *.iml
+
+# Pre-launch security checklist (contains references to compromised credentials)
+SECURITY_PRELAUNCH_CHECKLIST.md
+
