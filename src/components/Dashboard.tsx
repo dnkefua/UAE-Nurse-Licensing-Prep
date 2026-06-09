@@ -595,10 +595,9 @@ export default function Dashboard({
         </p>
         <p className="mt-1.5">
           For any official licensing, registration, application, payment or scheduling step, use the official portals:&nbsp;
-          <a href="https://www.dha.gov.ae/" target="_blank" rel="noopener noreferrer" className="underline font-bold">dha.gov.ae</a> ·&nbsp;
-          <a href="https://www.doh.gov.ae/" target="_blank" rel="noopener noreferrer" className="underline font-bold">doh.gov.ae</a> ·&nbsp;
-          <a href="https://www.mohap.gov.ae/" target="_blank" rel="noopener noreferrer" className="underline font-bold">mohap.gov.ae</a> ·&nbsp;
-          <a href="https://www.ehs.gov.ae/" target="_blank" rel="noopener noreferrer" className="underline font-bold">ehs.gov.ae</a>
+          <a href="https://www.dha.gov.ae/en" target="_blank" rel="noopener noreferrer" className="underline font-bold">dha.gov.ae/en</a> ·&nbsp;
+          <a href="https://www.doh.gov.ae/en" target="_blank" rel="noopener noreferrer" className="underline font-bold">doh.gov.ae/en</a> ·&nbsp;
+          <a href="https://mohap.gov.ae/en/home" target="_blank" rel="noopener noreferrer" className="underline font-bold">mohap.gov.ae/en</a>
         </p>
       </div>
     </div>
