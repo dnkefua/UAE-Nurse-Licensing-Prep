@@ -54,6 +54,12 @@ function AuthorityModal({ authority, onClose }: { authority: AuthorityInfo; onCl
 
         {/* Body */}
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-5">
+          {/* Independent-app disclaimer — required by Play "Misleading Claims" policy */}
+          <div className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5 text-[11px] leading-relaxed text-amber-900">
+            <p className="font-bold text-[10px] uppercase tracking-wider text-amber-700 mb-1">⚠ Independent app — not government affiliated</p>
+            <p>This summary is an independent study reference. We are <strong>not</strong> affiliated with {authority.code}. Use the official portal below for any licensing, registration, payment or scheduling step.</p>
+          </div>
+
           <p className="text-[13px] text-slate-600 leading-relaxed">{authority.overview}</p>
 
           {/* Quick facts */}
@@ -260,6 +266,10 @@ export default function Forum({
                 <p className="text-[9px] text-slate-400 leading-relaxed pt-1 flex items-start gap-1">
                   <Building2 className="w-3 h-3 mt-0.5 shrink-0" />
                   Tap an authority to view its licensing pathway, pass mark &amp; official portal links in-app.
+                </p>
+                <p className="text-[9px] text-amber-700 leading-relaxed bg-amber-50 border border-amber-200 rounded-lg px-2 py-1.5 mt-1 flex items-start gap-1">
+                  <Building2 className="w-3 h-3 mt-0.5 shrink-0" />
+                  <span><strong>Independent app:</strong> not affiliated with DHA, DOH, MOHAP or any government entity. Use the official portal for any registration or payment step.</span>
                 </p>
               </div>
             </div>

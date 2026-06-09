@@ -586,6 +586,21 @@ export default function Dashboard({
           })}
         </div>
       </div>
+
+      {/* Misleading-Claims policy: independent-app disclaimer */}
+      <div className="mt-6 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3.5 text-[11px] leading-relaxed text-amber-900">
+        <p className="font-bold uppercase tracking-wider text-[10px] text-amber-700 mb-1.5">⚠ Independent App — Not Government Affiliated</p>
+        <p>
+          The Centered Nurse Academy is an independent study and exam-preparation app. It is <strong>not affiliated with, endorsed by, sponsored by, or authorized by</strong> the Dubai Health Authority (DHA), the Department of Health Abu Dhabi (DOH / HAAD), the Ministry of Health &amp; Prevention (MOHAP), Emirates Health Services (EHS), DataFlow, Prometric, Pearson VUE, the WHO, or any government, regulator, or examination body.
+        </p>
+        <p className="mt-1.5">
+          For any official licensing, registration, application, payment or scheduling step, use the official portals:&nbsp;
+          <a href="https://www.dha.gov.ae/" target="_blank" rel="noopener noreferrer" className="underline font-bold">dha.gov.ae</a> ·&nbsp;
+          <a href="https://www.doh.gov.ae/" target="_blank" rel="noopener noreferrer" className="underline font-bold">doh.gov.ae</a> ·&nbsp;
+          <a href="https://www.mohap.gov.ae/" target="_blank" rel="noopener noreferrer" className="underline font-bold">mohap.gov.ae</a> ·&nbsp;
+          <a href="https://www.ehs.gov.ae/" target="_blank" rel="noopener noreferrer" className="underline font-bold">ehs.gov.ae</a>
+        </p>
+      </div>
     </div>
   );
 }
