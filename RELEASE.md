@@ -18,7 +18,7 @@ To remove the claim, run the same command with `false`. Do not grant admin claim
 ## Pre-release checks
 
 1. Use Node 22 for Cloud Functions and a supported Node version for the UI build.
-2. For Android, install Android SDK Platform 36 and matching build tools, set `android/local.properties`, and retain the protected release keystore configuration. The project targets API 36 and has version code 6 / version 1.1.0.
+2. For Android, install Android SDK Platform 36 and matching build tools, set `android/local.properties`, and retain the protected release keystore configuration. The project targets API 36 and has version code 7 / version 1.1.1.
 3. Install root and `functions/` dependencies from the lockfiles.
 4. Configure the `GEMINI_API_KEY` and `RAPIDAPI_KEY` Functions secrets. Jobs gracefully show an unconfigured state without RapidAPI.
 5. Set `ALLOWED_ORIGINS` when using a custom production domain; defaults cover Firebase Hosting and Capacitor origins.

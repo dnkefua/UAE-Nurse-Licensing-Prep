@@ -14,7 +14,7 @@ type Listing = {
   id: string; title: string; employer: string; role: string; city: string;
   employmentType: string; postedDate: string; salaryRange: string; summary: string;
   responsibilities: string[]; requirements: string[]; benefits: string[];
-  applyUrl: string; publisher: string;
+  applyUrl: string; publisher: string; sourceKind: 'healthcare_institution' | 'direct_apply';
 };
 const stringValue = (value: unknown, fallback = '') => typeof value === 'string' && value.trim() ? value : fallback;
 const stringList = (value: unknown): string[] => Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
@@ -36,6 +36,7 @@ function parseListings(items: unknown): Listing[] {
       salaryRange: stringValue(item.salaryRange, 'Salary not supplied'),
       summary: stringValue(item.summary, 'Description not supplied. Read the linked source.'),
       publisher: stringValue(item.publisher, 'Publisher not supplied'),
+      sourceKind: item.sourceKind === 'healthcare_institution' ? 'healthcare_institution' : 'direct_apply',
       responsibilities: stringList(item.responsibilities),
       requirements: stringList(item.requirements),
       benefits: stringList(item.benefits),
@@ -62,7 +63,7 @@ function JobModal({ job, onClose }: { job: Listing; onClose: () => void }) {
           <button type="button" aria-label="Close job details" onClick={onClose} className="p-2 bg-slate-100 rounded-lg"><X aria-hidden="true" /></button>
         </div>
         <p>{job.employer} · {job.city}</p>
-        <p className="text-sm text-slate-700">Source: {job.publisher}. {postedLabel(job.postedDate)}. Availability and employer identity have not been independently verified.</p>
+        <p className="text-sm text-slate-700">Source: {job.publisher}. {postedLabel(job.postedDate)}. Source qualification: {job.sourceKind === 'healthcare_institution' ? 'recognized healthcare-institution signal' : 'direct-apply, non-agency signal'}.</p>
         <p className="text-sm">{job.employmentType} · Source salary: {job.salaryRange}</p>
         <p className="text-sm whitespace-pre-wrap">{job.summary}</p>
         {([
@@ -104,7 +105,8 @@ export default function Jobs() {
         if (!alive) return;
         if (data.configured === false) { setStatus('unconfigured'); return; }
         setJobs(parseListings(data.items));
-        setReceivedAt(new Date().toLocaleString('en-AE'));
+        const retrieved = typeof data.retrievedAt === 'string' ? new Date(data.retrievedAt) : null;
+        setReceivedAt(retrieved && Number.isFinite(retrieved.getTime()) ? retrieved.toLocaleString('en-AE') : null);
         setStatus('ready');
       } catch {
         if (alive) setStatus('error');
@@ -121,14 +123,14 @@ export default function Jobs() {
       {active && <JobModal job={active} onClose={() => setActive(null)} />}
       <header className="space-y-2">
         <h2 className="text-xl font-bold flex gap-2 items-center"><Briefcase aria-hidden="true" /> Nursing jobs and career resources</h2>
-        <p className="text-sm text-slate-700">Third-party listings and a curated employer directory. Inclusion does not verify an employer, recruiter, or current vacancy.</p>
+        <p className="text-sm text-slate-700">Recent UAE nursing listings from the configured jobs provider, filtered to healthcare institutions or direct-apply non-agency results, plus official employer career portals.</p>
       </header>
       <p className="rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-950">
-        Check the employer’s identity and application process independently. Be cautious about requests for payment or sensitive documents. A link or listing here is not a guarantee of authenticity.
+        Listings are source-qualified, not guaranteed. Confirm the vacancy on the employer’s official site and never pay a recruiter or send sensitive documents through an unofficial channel.
       </p>
       <section className="space-y-4" aria-labelledby="jobs-list-title">
         <div className="flex justify-between items-center gap-3">
-          <h3 id="jobs-list-title" className="font-bold">Listings returned by the jobs service</h3>
+          <h3 id="jobs-list-title" className="font-bold">Current source-qualified listings</h3>
           <button type="button" onClick={() => setRefresh(value => value + 1)} disabled={status === 'loading'} className="px-4 py-2 rounded-lg bg-blue-700 text-white disabled:opacity-50">Refresh listings</button>
         </div>
         <label className="block text-sm font-semibold" htmlFor="job-role">Filter supplied role</label>
@@ -139,7 +141,7 @@ export default function Jobs() {
           {status === 'loading' && 'Loading listings…'}
           {status === 'unconfigured' && 'The jobs feed is not configured. Browse the employer and search directories below.'}
           {status === 'ready' && filtered.length === 0 && 'No listings were returned for this filter. This does not mean employers have no vacancies.'}
-          {status === 'ready' && receivedAt && <p>Response received in this browser: {receivedAt}. This is not a verification or posting time; the service may return cached data.</p>}
+          {status === 'ready' && receivedAt && <p>Provider data retrieved: {receivedAt}. Results are limited to postings dated within the last 35 days and may be cached for up to 24 hours.</p>}
         </div>
         {status === 'error' && <p role="alert" className="text-sm text-rose-800">Could not load listings. Try refreshing. Employer and search links remain available below.</p>}
         <div className="grid gap-3">
@@ -148,14 +150,15 @@ export default function Jobs() {
               <span className="block font-bold">{job.title}</span>
               <span className="block text-sm">{job.employer} · {job.city}</span>
               <span className="block text-xs text-slate-700">Source: {job.publisher} · {postedLabel(job.postedDate)}</span>
+              <span className="block text-xs font-semibold text-emerald-800">{job.sourceKind === 'healthcare_institution' ? 'Healthcare institution source' : 'Direct application source'}</span>
               <span className="block text-sm text-blue-800">Read listing details</span>
             </button>
           ))}
         </div>
       </section>
       <section className="space-y-3">
-        <h3 className="font-bold">Curated employer directory</h3>
-        <p className="text-sm text-slate-700">Static links selected for this directory. Current vacancies and link status have not been verified; no verification date is recorded.</p>
+        <h3 className="font-bold">Official employer career portals</h3>
+        <p className="text-sm text-slate-700">These employer-owned career sources were checked on 15 September 2026. Openings are controlled by each employer and can change without notice.</p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {JOB_EMPLOYERS.map(employer => <InAppArticle key={employer.id} url={employer.careersUrl} sourceName={employer.employer} label="Employer career resource" />)}
         </div>

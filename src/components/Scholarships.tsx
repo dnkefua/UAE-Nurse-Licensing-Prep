@@ -22,6 +22,15 @@ const TYPE_COLOR: Record<string, string> = {
   Award:       'bg-rose-50 text-rose-700 border-rose-200',
 };
 
+const STATUS_COLOR: Record<Scholarship['status'], string> = {
+  Open: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  'Registration open': 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  Upcoming: 'bg-blue-50 text-blue-800 border-blue-200',
+  'Save the date': 'bg-violet-50 text-violet-800 border-violet-200',
+  Closed: 'bg-slate-100 text-slate-700 border-slate-200',
+  'Check provider': 'bg-amber-50 text-amber-800 border-amber-200',
+};
+
 function ScholarshipModal({ sc, onClose }: { sc: Scholarship; onClose: () => void }) {
   const dialogRef = useRef<HTMLDivElement>(null);
   useModalAccessibility(dialogRef, onClose);
@@ -48,26 +57,27 @@ function ScholarshipModal({ sc, onClose }: { sc: Scholarship; onClose: () => voi
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-5">
-          <p className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-sm text-amber-950">Informational directory entry, not a verified live offer. No verification date is recorded. Check all details on the linked provider page.</p>
+          <p className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-950">Official provider source checked on {sc.verifiedOn}. Recorded status: <strong>{sc.status}</strong>. Reconfirm before applying because funding rounds can change.</p>
           <div className="flex flex-wrap gap-2">
             <span className={`text-[10px] font-mono font-bold border px-2.5 py-1 rounded-lg ${TYPE_COLOR[sc.type]}`}>{sc.type}</span>
+            <span className={`text-[10px] font-mono font-bold border px-2.5 py-1 rounded-lg ${STATUS_COLOR[sc.status]}`}>{sc.status}</span>
           </div>
 
           <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2.5">
             <Wallet className="w-4 h-4 text-emerald-600 shrink-0" />
             <div>
-              <p className="text-[9px] font-mono text-emerald-700 uppercase tracking-wider">Funding value (not verified)</p>
+              <p className="text-[9px] font-mono text-emerald-700 uppercase tracking-wider">Provider-stated funding</p>
               <p className="text-[13px] font-bold text-emerald-800">{sc.amount}</p>
             </div>
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">Directory summary (unreviewed)</h3>
-            <p className="text-[13px] text-slate-600 leading-relaxed">{sc.summary || 'No summary has been independently reviewed. Open the provider page for current details.'}</p>
+            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">Official-source summary</h3>
+            <p className="text-[13px] text-slate-600 leading-relaxed">{sc.summary}</p>
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Eligibility notes (unreviewed)</h3>
+            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Provider eligibility highlights</h3>
             <ul className="space-y-1.5">
               {sc.eligibility.map((e, i) => (
                 <li key={i} className="flex gap-2 text-[12.5px] text-slate-600 leading-relaxed">
@@ -119,14 +129,14 @@ export default function Scholarships() {
           Nursing Scholarships &amp; Grants
         </h2>
         <p className="text-xs text-slate-500 mt-0.5">
-          Informational directory of funding resources for nurses and students. These are not verified live offers. Current availability, eligibility, amounts, and deadlines must be checked with the provider.
+          Authentic nursing funding programmes checked against official provider sources on 15 September 2026. Open, upcoming and closed status is shown explicitly.
         </p>
       </div>
 
       {/* Safety note */}
       <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-[11px] text-amber-900">
         <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-        <span><strong>Check with the provider:</strong> Inclusion here is not an endorsement. Confirm current terms and the identity of anyone requesting money or documents.</span>
+        <span><strong>Apply only through the official link:</strong> Reconfirm the current round and never pay an unofficial recruiter or send documents outside the provider’s stated process.</span>
       </div>
 
       {/* Region filters */}
@@ -157,7 +167,7 @@ export default function Scholarships() {
           >
             <div className="flex items-start justify-between gap-2">
               <span className="text-2xl">{s.flag}</span>
-              <span className={`text-[9px] font-mono font-bold border px-2 py-0.5 rounded uppercase ${TYPE_COLOR[s.type]}`}>{s.type}</span>
+              <span className={`text-[9px] font-mono font-bold border px-2 py-0.5 rounded uppercase ${STATUS_COLOR[s.status]}`}>{s.status}</span>
             </div>
             <h4 className="font-bold text-sm text-slate-900 mt-3 leading-snug group-hover:text-amber-700 transition-colors">{s.name}</h4>
             <p className="text-[10px] font-mono text-slate-400 mt-1">{s.provider}</p>
@@ -166,7 +176,7 @@ export default function Scholarships() {
             </div>
             <p className="text-[11.5px] text-slate-500 leading-relaxed mt-2 line-clamp-2 flex-1">{s.summary}</p>
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
-              <span className="text-[9px] font-mono text-slate-400 flex items-center gap-1"><CalendarClock className="w-3 h-3" /> {s.deadlineLabel}</span>
+              <span className="text-[9px] font-mono text-slate-500 flex items-center gap-1"><CalendarClock className="w-3 h-3" /> {s.deadlineLabel}</span>
               <span className="text-[10px] font-mono font-bold text-amber-600 uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
                 Details <ChevronRight className="w-3 h-3" />
               </span>

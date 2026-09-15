@@ -202,13 +202,24 @@ interface LiveJob {
   country: string; role: string; employmentType: string; postedDate: string;
   postedTs: number; salaryRange: string; summary: string; responsibilities: string[];
   requirements: string[]; benefits: string[]; applyUrl: string; publisher: string;
-  directApply: boolean; institution: boolean; verified: boolean;
+  directApply: boolean; institution: boolean; sourceKind: 'healthcare_institution' | 'direct_apply';
 }
 
 // Recruitment-agency / resume-farm signals (employer or publisher name)
 const AGENCY_RE = /\b(recruit|recruitment|consultanc|consultant|manpower|staffing|staff\s|talent|hr\s?solution|human\s?resource|placement|outsourc|workforce|resourcing|executive\s?search|headhunt|agency|maids?|domestic)\b/i;
 // Genuine healthcare-institution signals
 const INSTITUTION_RE = /\b(hospital|clinic|polyclinic|medical\s?cent(er|re)|medical\s?city|health\s?(care|services|system)?|healthcare|seha|cleveland|mediclinic|nmc|aster|burjeel|medeor|thumbay|prime\s?(hospital|health)|king'?s\s?college|american\s?hospital|medcare|emirates\s?health|dubai\s?health|tawam|mafraq|sheikh\s?shakhbout|fakeeh|zulekha|canadian\s?specialist|nmc\s?royal|llh)\b/i;
+const JOB_MAX_AGE_MS = 35 * 24 * 60 * 60 * 1000;
+
+function safeJobUrl(value: unknown): string | null {
+  if (typeof value !== 'string' || value.length > 2048) return null;
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'https:' || !url.hostname || url.username || url.password) return null;
+    if (/^(localhost|127\.|10\.|192\.168\.|169\.254\.|\[?::1\]?)/i.test(url.hostname)) return null;
+    return url.toString();
+  } catch { return null; }
+}
 
 function inferRole(title: string): string {
   const t = title.toLowerCase();
@@ -245,7 +256,8 @@ async function fetchJSearch(query: string, key: string): Promise<any[]> {
 function normalizeJob(j: any): LiveJob | null {
   const employer = (j.employer_name || '').trim();
   const title = (j.job_title || '').trim();
-  if (!title || !j.job_apply_link) return null;
+  const applyUrl = safeJobUrl(j.job_apply_link);
+  if (!title || !applyUrl) return null;
 
   const hay = `${employer} ${j.job_publisher || ''}`;
   const institution = INSTITUTION_RE.test(hay);
@@ -257,6 +269,10 @@ function normalizeJob(j: any): LiveJob | null {
 
   const hl = j.job_highlights || {};
   const ts = j.job_posted_at_timestamp ? j.job_posted_at_timestamp * 1000 : Date.parse(j.job_posted_at_datetime_utc || '') || 0;
+  const now = Date.now();
+  if (!ts || ts > now + 24 * 60 * 60 * 1000 || now - ts > JOB_MAX_AGE_MS) return null;
+  const country = String(j.job_country || '').trim().toLowerCase();
+  if (country && !['ae', 'uae', 'united arab emirates'].includes(country)) return null;
 
   return {
     id: j.job_id || `${employer}-${title}`.slice(0, 80),
@@ -274,15 +290,15 @@ function normalizeJob(j: any): LiveJob | null {
     responsibilities: Array.isArray(hl.Responsibilities) ? hl.Responsibilities.slice(0, 8) : [],
     requirements: Array.isArray(hl.Qualifications) ? hl.Qualifications.slice(0, 8) : [],
     benefits: Array.isArray(hl.Benefits) ? hl.Benefits.slice(0, 8) : [],
-    applyUrl: j.job_apply_link,
+    applyUrl,
     publisher: j.job_publisher || '',
     directApply,
     institution,
-    verified: false,
+    sourceKind: institution ? 'healthcare_institution' : 'direct_apply',
   };
 }
 
-const jobsCache = new Map<string, { items: LiveJob[]; ts: number }>();
+const jobsCache = new Map<string, { items: LiveJob[]; ts: number; retrievedAt: string }>();
 const JOBS_TTL = 24 * 60 * 60 * 1000; // 24h — conserves the free API quota
 
 // GET /api/jobs
@@ -292,7 +308,7 @@ app.get('/api/jobs', async (_req: Request, res: Response) => {
 
   const cached = jobsCache.get('all');
   if (cached && Date.now() - cached.ts < JOBS_TTL) {
-    res.json({ items: cached.items, configured: true, cached: true });
+    res.json({ items: cached.items, configured: true, cached: true, retrievedAt: cached.retrievedAt });
     return;
   }
 
@@ -320,8 +336,9 @@ app.get('/api/jobs', async (_req: Request, res: Response) => {
       return ds !== 0 ? ds : b.postedTs - a.postedTs;
     });
 
-    jobsCache.set('all', { items, ts: Date.now() });
-    res.json({ items, configured: true, cached: false });
+    const retrievedAt = new Date().toISOString();
+    jobsCache.set('all', { items, ts: Date.now(), retrievedAt });
+    res.json({ items, configured: true, cached: false, retrievedAt });
   } catch (error) {
     console.error('[jobs] error', error);
     res.status(500).json({ items: [], configured: true, error: 'Failed to load jobs.' });

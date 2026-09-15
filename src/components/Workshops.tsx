@@ -12,7 +12,16 @@ import {
 import { WORKSHOPS, Workshop, WorkshopCountry } from '../data/staticData';
 import { InAppArticle, useModalAccessibility } from '../lib/readable';
 
-const COUNTRY_FILTERS: (WorkshopCountry | 'All')[] = ['All', 'UAE', 'USA', 'UK', 'Canada', 'Australia'];
+const COUNTRY_FILTERS: (WorkshopCountry | 'All')[] = ['All', 'UAE', 'USA', 'UK', 'Ireland', 'Taiwan', 'Australia'];
+
+const STATUS_COLOR: Record<Workshop['status'], string> = {
+  Open: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  'Registration open': 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  Upcoming: 'bg-blue-50 text-blue-800 border-blue-200',
+  'Save the date': 'bg-violet-50 text-violet-800 border-violet-200',
+  Closed: 'bg-slate-100 text-slate-700 border-slate-200',
+  'Check provider': 'bg-amber-50 text-amber-800 border-amber-200',
+};
 
 function WorkshopModal({ ws, onClose }: { ws: Workshop; onClose: () => void }) {
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -40,8 +49,9 @@ function WorkshopModal({ ws, onClose }: { ws: Workshop; onClose: () => void }) {
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-5">
-          <p className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-sm text-amber-950">Informational directory entry, not a verified live offer. No verification date is recorded. Check all details on the linked provider page.</p>
+          <p className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-950">Official organizer source checked on {ws.verifiedOn}. Current status: <strong>{ws.status}</strong>. Reconfirm before booking because schedules can change.</p>
           <div className="flex flex-wrap gap-2">
+            <span className={`text-[10px] font-mono font-bold border px-2.5 py-1 rounded-lg ${STATUS_COLOR[ws.status]}`}>{ws.status}</span>
             <span className="text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg">{ws.topic}</span>
             <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><Award className="w-3 h-3" /> {ws.cpd}</span>
           </div>
@@ -55,12 +65,12 @@ function WorkshopModal({ ws, onClose }: { ws: Workshop; onClose: () => void }) {
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">Directory summary (unreviewed)</h3>
+            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">Official-source summary</h3>
             <p className="text-[13px] text-slate-600 leading-relaxed">{ws.summary}</p>
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-amber-500" /> Directory notes (unreviewed)</h3>
+            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-amber-500" /> Published programme notes</h3>
             <ul className="space-y-1.5">
               {ws.highlights.map((h, i) => (
                 <li key={i} className="flex gap-2 text-[12.5px] text-slate-600 leading-relaxed">
@@ -70,7 +80,7 @@ function WorkshopModal({ ws, onClose }: { ws: Workshop; onClose: () => void }) {
             </ul>
           </div>
 
-          <p className="text-[10px] text-slate-400">Dates vary each year — confirm the exact schedule, fees, and CPD accreditation on the official event page.</p>
+          <p className="text-[10px] text-slate-500">The organizer is authoritative for registration, programme changes, fees, visas and continuing-education recognition.</p>
 
           {/* External source link; no imported page content */}
           <div className="pt-2 border-t border-slate-100">
@@ -109,7 +119,7 @@ export default function Workshops() {
           Nursing Workshops &amp; Seminars
         </h2>
         <p className="text-xs text-slate-500 mt-0.5">
-          Informational directory of learning and event resources. These are not verified live events or offers. Dates, availability, fees, and CPD recognition must be checked with the provider.
+          Upcoming nursing and healthcare events checked against official organizer sources on 15 September 2026. Reconfirm details before travel or payment.
         </p>
       </div>
 
@@ -141,7 +151,7 @@ export default function Workshops() {
           >
             <div className="flex items-start justify-between gap-2">
               <span className="text-2xl">{w.flag}</span>
-              <span className="text-[9px] font-mono font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded uppercase">{w.format}</span>
+              <span className={`text-[9px] font-mono font-bold border px-2 py-0.5 rounded uppercase ${STATUS_COLOR[w.status]}`}>{w.status}</span>
             </div>
             <h4 className="font-bold text-sm text-slate-900 mt-3 leading-snug group-hover:text-blue-700 transition-colors">{w.title}</h4>
             <p className="text-[10px] font-mono text-slate-400 mt-1">{w.organizer}</p>
@@ -151,7 +161,7 @@ export default function Workshops() {
             </div>
             <p className="text-[11.5px] text-slate-500 leading-relaxed mt-2 line-clamp-2 flex-1">{w.summary}</p>
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
-              <span className="text-[9px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded">{w.cpd}</span>
+              <span className="text-[9px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded">Source checked {w.verifiedOn}</span>
               <span className="text-[10px] font-mono font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
                 Details <ChevronRight className="w-3 h-3" />
               </span>

@@ -5,7 +5,7 @@
 
 import { StudyTopic, Question } from '../types';
 
-// ── UAE Nursing Jobs (unverified informational directory) ───────────────────
+// ── UAE Nursing Jobs (live provider feed + official employer sources) ───────
 
 export type JobRole = 'Registered Nurse' | 'Nursing Assistant' | 'Specialist Nurse' | 'Midwife' | 'Home Care Nurse';
 
@@ -20,10 +20,11 @@ export interface JobEmployer {
   whyLegit: string;      // legacy field; not evidence of verification
   careersUrl: string;    // official careers page
   verified: boolean;
+  verifiedOn: string;
   facts: { label: string; value: string }[];
 }
 
-/** Static directory links. No current vacancy or employer verification is recorded. */
+/** Official employer career sources checked on 2026-09-15. */
 export const JOB_EMPLOYERS: JobEmployer[] = [
   {
     id: 'seha',
@@ -31,9 +32,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '🏥', emirate: 'Abu Dhabi', type: 'Government',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse', 'Midwife'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
-    careersUrl: 'https://www.seha.ae/careers/',
-    verified: false,
+    whyLegit: 'Official SEHA careers source.',
+    careersUrl: 'https://www.seha.ae/public/careers',
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
   {
@@ -42,9 +43,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '🏛️', emirate: 'Dubai', type: 'Government',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
+    whyLegit: 'Official Dubai Health careers source.',
     careersUrl: 'https://www.dubaihealth.ae/careers',
-    verified: false,
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
   {
@@ -53,9 +54,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '🇦🇪', emirate: 'Northern Emirates', type: 'Government',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Midwife'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
+    whyLegit: 'Official Emirates Health Services careers source.',
     careersUrl: 'https://www.ehs.gov.ae/en/careers',
-    verified: false,
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
   {
@@ -64,9 +65,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '🩺', emirate: 'Abu Dhabi', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Specialist Nurse'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
+    whyLegit: 'Official Cleveland Clinic Abu Dhabi careers source.',
     careersUrl: 'https://www.clevelandclinicabudhabi.ae/en/careers',
-    verified: false,
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
   {
@@ -75,9 +76,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '➕', emirate: 'Dubai / Abu Dhabi', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Specialist Nurse', 'Midwife'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
-    careersUrl: 'https://www.mediclinic.ae/en/corporate/careers.html',
-    verified: false,
+    whyLegit: 'Official Mediclinic Middle East careers source.',
+    careersUrl: 'https://www.mediclinic.ae/en/corporate/jobs-and-careers.html',
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
   {
@@ -86,9 +87,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '🏨', emirate: 'UAE-wide', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
+    whyLegit: 'Official NMC Healthcare careers source.',
     careersUrl: 'https://nmc.ae/careers/',
-    verified: false,
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
   {
@@ -97,9 +98,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '💠', emirate: 'UAE-wide', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Home Care Nurse'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
-    careersUrl: 'https://career.asterdmhealthcare.com/',
-    verified: false,
+    whyLegit: 'Official Aster DM Healthcare careers source.',
+    careersUrl: 'https://www.asterdmhealthcare.com/about-us/careers',
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
   {
@@ -108,9 +109,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '🔷', emirate: 'Abu Dhabi / Dubai', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Specialist Nurse', 'Nursing Assistant'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
+    whyLegit: 'Official Burjeel Holdings careers source.',
     careersUrl: 'https://burjeelholdings.com/careers/',
-    verified: false,
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
   {
@@ -119,9 +120,9 @@ export const JOB_EMPLOYERS: JobEmployer[] = [
     logo: '🏥', emirate: 'Dubai', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Specialist Nurse'],
     about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
-    whyLegit: 'Directory entry only; no independent verification is recorded.',
+    whyLegit: 'Official American Hospital Dubai careers source.',
     careersUrl: 'https://www.ahdubai.com/careers',
-    verified: false,
+    verified: true, verifiedOn: '2026-09-15',
     facts: [],
   },
 ];
@@ -186,7 +187,9 @@ export const LINKEDIN_SEARCHES: { id: string; label: string; note: string; url: 
 
 // ── Nursing Workshops, Seminars & Conferences (curated, authentic organisers) ───
 
-export type WorkshopCountry = 'UAE' | 'USA' | 'Canada' | 'UK' | 'Australia';
+export type WorkshopCountry = 'UAE' | 'USA' | 'UK' | 'Ireland' | 'Taiwan' | 'Australia';
+
+export type OpportunityStatus = 'Open' | 'Registration open' | 'Upcoming' | 'Save the date' | 'Closed' | 'Check provider';
 
 export interface Workshop {
   id: string;
@@ -203,101 +206,66 @@ export interface Workshop {
   summary: string;
   highlights: string[];
   url: string;         // official event/registration page
+  status: OpportunityStatus;
+  verifiedOn: string;  // ISO date when the official source was checked
 }
 
 export const WORKSHOPS: Workshop[] = [
-  // ── UAE ──
   {
-    id: 'w-arabhealth', title: 'Arab Health Congress', organizer: 'Informa Markets',
-    country: 'UAE', flag: '🇦🇪', city: 'Dubai', format: 'In-person', dateLabel: 'Annual · January',
-    topic: 'Multi-specialty CME/CPD + nursing track', cpd: 'CPD-accredited (DHA/DOH)', cost: 'Free expo; paid conference tracks',
-    summary: 'The largest healthcare exhibition and congress in the Middle East, with dedicated nursing and CPD-accredited sessions across specialties.',
-    highlights: ['Nursing & midwifery conference track', 'Hands-on clinical workshops', 'DHA/DOH CPD points', 'Global networking & exhibitors'],
-    url: 'https://www.arabhealthonline.com/',
+    id: 'w-whx-dubai-2027', title: 'World Health Expo Dubai 2027', organizer: 'Informa Markets',
+    country: 'UAE', flag: '🇦🇪', city: 'Dubai', format: 'In-person', dateLabel: '25–28 January 2027',
+    topic: 'Healthcare delivery, clinical learning and technology', cpd: 'CME stages listed; confirm credit eligibility', cost: 'Ticketed — see official registration',
+    summary: 'The official successor to Arab Health, held at Dubai Exhibition Centre and Dubai World Trade Centre.',
+    highlights: ['Registration is open', 'Clinical care and CME stages', 'Healthcare technology and leadership programmes'],
+    url: 'https://www.worldhealthexpo.com/events/healthcare/dubai/', status: 'Registration open', verifiedOn: '2026-09-15',
   },
   {
-    id: 'w-eccc', title: 'Emirates Critical Care Conference (ECCC)', organizer: 'ECCC',
-    country: 'UAE', flag: '🇦🇪', city: 'Dubai', format: 'In-person', dateLabel: 'Annual · April',
-    topic: 'Critical care & emergency nursing', cpd: 'CPD-accredited', cost: 'Paid registration (nurse rates available)',
-    summary: 'A leading regional conference for critical-care physicians and nurses, featuring ICU, ED, and acute-care workshops.',
-    highlights: ['ICU & emergency nursing streams', 'Simulation workshops', 'Regional & international faculty'],
-    url: 'https://www.eccc-dubai.com/',
+    id: 'w-aacn-nti-2027', title: 'AACN National Teaching Institute 2027', organizer: 'American Association of Critical-Care Nurses',
+    country: 'USA', flag: '🇺🇸', city: 'Indianapolis', format: 'In-person', dateLabel: '3–5 May 2027; preconference 2 May',
+    topic: 'Acute and critical care nursing', cpd: 'Continuing-education details pending', cost: 'Registration details pending',
+    summary: 'AACN’s official annual learning and networking event for acute and critical care nurses.',
+    highlights: ['Indiana Convention Center', 'Official future-event dates published', 'Programme and registration to follow'],
+    url: 'https://www.aacn.org/conferences-and-events/nti/future-ntis', status: 'Save the date', verifiedOn: '2026-09-15',
   },
   {
-    id: 'w-ghw', title: 'Abu Dhabi Global Healthcare Week', organizer: 'Abu Dhabi DoH / Informa',
-    country: 'UAE', flag: '🇦🇪', city: 'Abu Dhabi', format: 'Hybrid', dateLabel: 'Annual · May',
-    topic: 'Health system, innovation & workforce', cpd: 'CPD sessions available', cost: 'Free & paid passes',
-    summary: 'A major Abu Dhabi gathering on healthcare innovation and workforce development, including nursing leadership sessions.',
-    highlights: ['Nursing leadership & workforce talks', 'Digital health & innovation', 'Policy and CPD content'],
-    url: 'https://www.globalhealthcareweek.com/',
-  },
-  // ── USA ──
-  {
-    id: 'w-nti', title: 'AACN National Teaching Institute (NTI)', organizer: 'Amer. Assoc. of Critical-Care Nurses',
-    country: 'USA', flag: '🇺🇸', city: 'Rotating cities', format: 'Hybrid', dateLabel: 'Annual · May',
-    topic: 'Critical & acute care nursing', cpd: 'CE/CNE contact hours', cost: 'Member & non-member rates',
-    summary: 'One of the largest critical-care nursing conferences in the world, with hundreds of CE sessions and skills labs.',
-    highlights: ['500+ CE sessions', 'Hands-on skills stations', 'Certification review courses'],
-    url: 'https://www.aacn.org/nti',
+    id: 'w-rcn-congress-2027', title: 'RCN Congress 2027', organizer: 'Royal College of Nursing',
+    country: 'UK', flag: '🇬🇧', city: 'Liverpool', format: 'In-person', dateLabel: '24–28 May 2027',
+    topic: 'Nursing practice, workforce policy and professional development', cpd: 'Confirm learning/CPD recognition', cost: 'Booking details pending',
+    summary: 'The Royal College of Nursing’s national congress, with professional learning, networking and member debates.',
+    highlights: ['Official 2027 dates announced', 'Education and development programme', 'Professional exhibition and debates'],
+    url: 'https://www.rcn.org.uk/congress', status: 'Upcoming', verifiedOn: '2026-09-15',
   },
   {
-    id: 'w-sigma', title: 'Sigma Nursing Conferences & Conventions', organizer: 'Sigma Theta Tau International',
-    country: 'USA', flag: '🇺🇸', city: 'Various / Virtual', format: 'Hybrid', dateLabel: 'Multiple per year',
-    topic: 'Research, leadership & EBP', cpd: 'CNE contact hours', cost: 'Member & non-member rates',
-    summary: 'Global nursing honor society events focused on evidence-based practice, research, and leadership development.',
-    highlights: ['Research & EBP sessions', 'Leadership academies', 'Global nursing network'],
-    url: 'https://www.sigmanursing.org/connect-engage/meetings-events',
+    id: 'w-sigma-research-2027', title: '38th International Nursing Research Congress', organizer: 'Sigma Nursing',
+    country: 'Ireland', flag: '🇮🇪', city: 'Dublin', format: 'In-person', dateLabel: '16–18 July 2027',
+    topic: 'Nursing research and evidence-based practice', cpd: 'Confirm continuing-education details', cost: 'Registration details pending',
+    summary: 'Sigma’s official global nursing-research congress focused on evidence and innovation in healthcare.',
+    highlights: ['2027 event officially announced', 'Research, clinical practice and leadership focus', 'Dublin venue'],
+    url: 'https://www.sigmanursing.org/events/international-nursing-research-congress', status: 'Save the date', verifiedOn: '2026-09-15',
   },
   {
-    id: 'w-ana', title: 'ANA Events & Nursing Conferences', organizer: 'American Nurses Association',
-    country: 'USA', flag: '🇺🇸', city: 'Various / Virtual', format: 'Hybrid', dateLabel: 'Year-round',
-    topic: 'Practice, policy & professional development', cpd: 'CNE contact hours', cost: 'Member & non-member rates',
-    summary: 'A calendar of webinars, conferences, and CE events from the leading US nursing body.',
-    highlights: ['Live & on-demand CE', 'Policy & advocacy', 'Specialty webinars'],
-    url: 'https://www.nursingworld.org/education-events/',
-  },
-  // ── UK ──
-  {
-    id: 'w-rcn', title: 'RCN Congress & Events', organizer: 'Royal College of Nursing',
-    country: 'UK', flag: '🇬🇧', city: 'Various / Online', format: 'Hybrid', dateLabel: 'Annual · May + year-round',
-    topic: 'Practice, policy & professional issues', cpd: 'CPD-recognised', cost: 'Free & paid (member discounts)',
-    summary: 'The UK\'s foremost nursing congress plus a programme of CPD events, webinars, and clinical updates.',
-    highlights: ['Congress debates & policy', 'Clinical CPD webinars', 'Career & revalidation support'],
-    url: 'https://www.rcn.org.uk/news-and-events/events',
+    id: 'w-icn-congress-2027', title: '31st International Council of Nurses Congress', organizer: 'International Council of Nurses',
+    country: 'Taiwan', flag: '🇹🇼', city: 'Taipei', format: 'In-person', dateLabel: '8–11 July 2027',
+    topic: 'Global nursing leadership, policy and practice', cpd: 'Programme details pending', cost: 'Registration details pending',
+    summary: 'The International Council of Nurses announced Taipei and the 8–11 July 2027 dates for its 31st Congress.',
+    highlights: ['Official ICN announcement', 'Hosted with the Taiwan Nurses Association', 'Global nursing programme'],
+    url: 'https://www.icn.ch/news/icn-elects-new-president-jose-luis-cobos-serrano-new-board-directors-and-announces-2027', status: 'Save the date', verifiedOn: '2026-09-15',
   },
   {
-    id: 'w-nt', title: 'Nursing Times Events & Summits', organizer: 'Nursing Times',
-    country: 'UK', flag: '🇬🇧', city: 'UK / Online', format: 'Hybrid', dateLabel: 'Year-round',
-    topic: 'Clinical updates & workforce', cpd: 'CPD-aligned', cost: 'Free & paid',
-    summary: 'Summits, awards, and CPD webinars covering clinical practice, leadership, and workforce wellbeing.',
-    highlights: ['Clinical CPD webinars', 'Leadership summits', 'Nursing Times Awards'],
-    url: 'https://www.nursingtimes.net/events/',
-  },
-  // ── Canada ──
-  {
-    id: 'w-cna', title: 'Canadian Nurses Association Events', organizer: 'Canadian Nurses Association (CNA)',
-    country: 'Canada', flag: '🇨🇦', city: 'Various / Virtual', format: 'Hybrid', dateLabel: 'Year-round',
-    topic: 'Practice, policy & certification', cpd: 'CNA-recognised learning', cost: 'Member & non-member rates',
-    summary: 'National nursing association events, webinars, and certification programmes for Canadian and internationally educated nurses.',
-    highlights: ['Certification prep', 'Policy & practice webinars', 'NurseONE resources'],
-    url: 'https://www.cna-aiic.ca/en/professional-development',
-  },
-  // ── Australia ──
-  {
-    id: 'w-acn', title: 'ACN National Nursing Forum & CPD', organizer: 'Australian College of Nursing',
-    country: 'Australia', flag: '🇦🇺', city: 'Various / Online', format: 'Hybrid', dateLabel: 'Annual · Aug + year-round',
-    topic: 'Leadership, practice & specialty CPD', cpd: 'CPD hours (AHPRA-aligned)', cost: 'Member & non-member rates',
-    summary: 'The flagship Australian nursing forum plus an extensive CPD library aligned with AHPRA registration requirements.',
-    highlights: ['National Nursing Forum', 'Specialty CPD courses', 'Leadership programmes'],
-    url: 'https://www.acn.edu.au/events',
+    id: 'w-acn-nnf-2027', title: 'Australian College of Nursing National Nursing Forum 2027', organizer: 'Australian College of Nursing',
+    country: 'Australia', flag: '🇦🇺', city: 'Gold Coast', format: 'In-person', dateLabel: '5–6 August 2027',
+    topic: 'Nursing leadership, education and professional practice', cpd: 'Confirm CPD details with ACN', cost: 'Registration details pending',
+    summary: 'ACN’s official national nursing forum at the Gold Coast Convention and Exhibition Centre.',
+    highlights: ['Register-interest option available', 'Official dates and venue published', 'Nursing presentations and networking'],
+    url: 'https://www.acn.edu.au/events/national-nursing-forum', status: 'Upcoming', verifiedOn: '2026-09-15',
   },
   {
-    id: 'w-crana', title: 'CRANAplus Conference (Remote & Rural)', organizer: 'CRANAplus',
-    country: 'Australia', flag: '🇦🇺', city: 'Rotating', format: 'In-person', dateLabel: 'Annual · September',
-    topic: 'Remote & rural health nursing', cpd: 'CPD hours', cost: 'Member & non-member rates',
-    summary: 'Australia\'s peak body for remote and rural health, with hands-on workshops for nurses working in isolated settings.',
-    highlights: ['Remote emergency care workshops', 'Rural & Indigenous health', 'Networking for bush nurses'],
-    url: 'https://crana.org.au/education/conference',
+    id: 'w-sigma-biennial-2027', title: 'Sigma 49th Biennial Convention', organizer: 'Sigma Nursing',
+    country: 'USA', flag: '🇺🇸', city: 'Denver', format: 'In-person', dateLabel: '29 October–1 November 2027',
+    topic: 'Global nursing leadership, research and professional development', cpd: 'Confirm continuing-education details', cost: 'Registration details pending',
+    summary: 'Sigma’s official biennial convention for its international nursing community.',
+    highlights: ['Official dates and city published', 'Call for abstracts opens 1 October 2026', 'Registration details to follow'],
+    url: 'https://www.sigmanursing.org/events/biennial-convention', status: 'Save the date', verifiedOn: '2026-09-15',
   },
 ];
 
@@ -318,98 +286,82 @@ export interface Scholarship {
   summary?: string;
   eligibility: string[];
   url: string;            // official apply/info page
+  status: OpportunityStatus;
+  verifiedOn: string;     // ISO date when the official source was checked
 }
 
 export const SCHOLARSHIPS: Scholarship[] = [
-  // ── International ──
   {
-    id: 's-sigma', name: 'Sigma Global Nursing Research Grants', provider: 'Sigma Theta Tau International',
-    region: 'International', flag: '🌍', type: 'Grant', amount: 'Up to US$5,000+', level: 'Graduate / researchers',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Registered nurse conducting research', 'Sigma membership for some grants', 'Defined research proposal'],
-    url: 'https://www.sigmanursing.org/advance-elevate/research/research-grants',
+    id: 's-ehs-nursing', name: 'EHS Bachelor of Nursing Scholarship', provider: 'Emirates Health Services',
+    region: 'UAE', flag: '🇦🇪', type: 'Scholarship', amount: 'Tuition/books plus up to AED 25,000 per qualifying semester', level: 'Bachelor of Nursing',
+    deadlineLabel: 'Contact EHS for the current intake',
+    summary: 'An official EHS scholarship for eligible UAE nationals studying nursing at approved UAE institutions, with a post-graduation service commitment.',
+    eligibility: ['UAE citizen with a valid family book', 'Meet EHS academic and English-language requirements', 'Accept the EHS employment/service commitment after graduation'],
+    url: 'https://www.ehs.gov.ae/assets/f3464b3d/nursing-scholarship.aspx', status: 'Open', verifiedOn: '2026-09-15',
   },
   {
-    id: 's-jnj', name: 'Johnson & Johnson Nursing Scholarships Hub', provider: 'Johnson & Johnson (Discover Nursing)',
-    region: 'International', flag: '🌍', type: 'Scholarship', amount: 'Varies (directory)', level: 'All levels',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Nursing students & RNs', 'Criteria vary by listed award'],
-    url: 'https://nursing.jnj.com/specialties-and-pathways/scholarships',
-  },
-  // ── USA ──
-  {
-    id: 's-anf', name: 'American Nurses Foundation Scholarships', provider: 'American Nurses Foundation',
-    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Varies', level: 'All levels',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['US nursing students / RNs', 'Academic & financial-need criteria'],
-    url: 'https://www.nursingworld.org/foundation/',
+    id: 's-uae-mohesr', name: 'UAE Federal Scholarship Request', provider: 'Ministry of Higher Education and Scientific Research',
+    region: 'UAE', flag: '🇦🇪', type: 'Scholarship', amount: 'Government scholarship benefits vary by approved award', level: 'Approved higher-education programmes',
+    deadlineLabel: 'Use the official portal for the current cycle',
+    summary: 'The UAE federal scholarship portal lists healthcare among national priority study sectors and publishes approved institutions and programmes.',
+    eligibility: ['UAE scholarship applicants', 'Admission to an approved institution/programme', 'Meet the current ministry selection and scholarship rules'],
+    url: 'https://scholarship.mohesr.gov.ae/', status: 'Open', verifiedOn: '2026-09-15',
   },
   {
-    id: 's-nhsc', name: 'NHSC Scholarship Program', provider: 'Health Resources & Services Admin (HRSA)',
-    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Full tuition + stipend', level: 'Undergraduate / Graduate',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['US citizen', 'Eligible nursing/health program', 'Commit to service obligation'],
-    url: 'https://nhsc.hrsa.gov/scholarships',
+    id: 's-rcn-professional-2026', name: 'RCN Foundation Professional Bursary Scheme', provider: 'RCN Foundation',
+    region: 'UK', flag: '🇬🇧', type: 'Bursary', amount: 'Up to £1,600', level: 'Professional development',
+    deadlineLabel: 'Closes 30 September 2026 at 5pm UK time',
+    summary: 'Official funding for eligible UK nursing and care professionals taking an accredited course or module starting from January 2027 to January 2028.',
+    eligibility: ['Eligible UK nursing, midwifery or care professional', 'UK-accredited course in the stated start-date window', 'Evidence of eligible expenditure is required if awarded'],
+    url: 'https://rcnfoundation.rcn.org.uk/Grants-and-funding/Educational-grants/RCN-Foundation-Professional-Bursary-Scheme', status: 'Open', verifiedOn: '2026-09-15',
   },
   {
-    id: 's-fnsna', name: 'FNSNA Scholarships', provider: 'Foundation of the National Student Nurses\' Association',
-    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'US$1,000 – $7,500', level: 'Nursing students',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Enrolled in a US nursing program', 'Academic merit & involvement'],
-    url: 'https://www.nsna.org/foundation.html',
+    id: 's-fnf-leadership-2027', name: 'Florence Nightingale Foundation Leadership Scholarship 2027–28', provider: 'Florence Nightingale Foundation',
+    region: 'UK', flag: '🇬🇧', type: 'Scholarship', amount: 'Sponsored leadership development; employer contribution may apply', level: 'Registered nurses and midwives',
+    deadlineLabel: 'Applications expected to open in autumn 2026',
+    summary: 'The official 2026–27 round is closed; the Foundation states that 2027–28 details and applications will follow in autumn.',
+    eligibility: ['Registered nurse or midwife', 'Programme-level leadership criteria', 'International applicants may need their own sponsor'],
+    url: 'https://florence-nightingale-foundation.org.uk/programmes/scholarships2026-27/', status: 'Upcoming', verifiedOn: '2026-09-15',
   },
   {
-    id: 's-tylenol', name: 'Tylenol Future Care Scholarship', provider: 'Tylenol (Kenvue)',
-    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Up to US$10,000', level: 'Undergraduate / Graduate',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Pursuing healthcare/nursing degree', 'US-based study', 'Essay & academic record'],
-    url: 'https://www.tylenol.com/news/scholarship',
-  },
-  // ── UK ──
-  {
-    id: 's-rcnf', name: 'RCN Foundation Grants & Bursaries', provider: 'RCN Foundation',
-    region: 'UK', flag: '🇬🇧', type: 'Bursary', amount: 'Varies', level: 'Nurses & students',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['UK-based nurses/midwives/HCSWs', 'Education or hardship criteria'],
-    url: 'https://www.rcnfoundation.rcn.org.uk/',
+    id: 's-nurse-corps-2027', name: 'Nurse Corps Scholarship Program', provider: 'U.S. Health Resources and Services Administration',
+    region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Tuition, eligible costs and monthly stipend in exchange for service', level: 'Eligible nursing degree programmes',
+    deadlineLabel: '2026 cycle closed; subscribe for the 2027 opening',
+    summary: 'A federal nursing scholarship with a service obligation at an eligible critical-shortage facility after graduation.',
+    eligibility: ['U.S. citizen, national or lawful permanent resident', 'Accepted or enrolled in an accredited U.S. nursing programme', 'Commit to the programme’s post-graduation service requirement'],
+    url: 'https://bhw.hrsa.gov/programs/nurse-corps/scholarship/apply', status: 'Closed', verifiedOn: '2026-09-15',
   },
   {
-    id: 's-fnf', name: 'Florence Nightingale Foundation Scholarships', provider: 'Florence Nightingale Foundation',
-    region: 'UK', flag: '🇬🇧', type: 'Scholarship', amount: 'Varies', level: 'Registered nurses/midwives',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Registered nurse/midwife', 'Leadership/research development focus'],
-    url: 'https://florence-nightingale-foundation.org.uk/our-work/scholars-academy/',
-  },
-  // ── Canada ──
-  {
-    id: 's-cnf', name: 'Canadian Nurses Foundation Awards', provider: 'Canadian Nurses Foundation',
-    region: 'Canada', flag: '🇨🇦', type: 'Award', amount: 'CA$1,000 – $10,000+', level: 'Students & RNs',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Canadian nursing student or RN', 'Academic merit & goals'],
-    url: 'https://cnf-fiic.ca/scholarships-awards/',
-  },
-  // ── Australia ──
-  {
-    id: 's-acn', name: 'ACN Scholarships', provider: 'Australian College of Nursing',
-    region: 'Australia', flag: '🇦🇺', type: 'Scholarship', amount: 'Varies (incl. gov-funded)', level: 'All levels',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Australian nurses/students', 'Program-specific criteria'],
-    url: 'https://www.acn.edu.au/scholarships',
-  },
-  // ── UAE / Region ──
-  {
-    id: 's-hamdan', name: 'Hamdan Bin Rashid Al Maktoum Awards', provider: 'Hamdan Medical Award (Dubai)',
-    region: 'UAE', flag: '🇦🇪', type: 'Grant', amount: 'Varies (research & training)', level: 'Health professionals',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Health professionals / researchers', 'Award-specific criteria'],
-    url: 'https://www.hmaward.org.ae/',
+    id: 's-cnf-2027', name: 'Canadian Nurses Foundation Scholarship & Bursary Program', provider: 'Canadian Nurses Foundation',
+    region: 'Canada', flag: '🇨🇦', type: 'Scholarship', amount: 'Typically CA$750–CA$10,000 depending on award', level: 'Practical nursing through doctoral study',
+    deadlineLabel: 'Current round closed; annual applications usually January–mid-March',
+    summary: 'The official national programme offers more than 100 nursing scholarships and awards across multiple study levels.',
+    eligibility: ['Canadian citizen or permanent resident', 'Enrolled in a nursing programme in Canada', 'Meet the selected award’s level and criteria'],
+    url: 'https://cnf-fiic.ca/scholarships/', status: 'Closed', verifiedOn: '2026-09-15',
   },
   {
-    id: 's-who-emro', name: 'WHO EMRO Fellowships', provider: 'World Health Organization — Eastern Mediterranean',
-    region: 'UAE', flag: '🌍', type: 'Fellowship', amount: 'Funded training', level: 'Health workforce',
-    deadlineLabel: 'Current deadline not verified',
-    eligibility: ['Nominated via national health authority', 'Public-health/clinical focus'],
-    url: 'https://www.emro.who.int/health-workforce/fellowships/',
+    id: 's-acn', name: 'Australian College of Nursing Scholarships', provider: 'Australian College of Nursing',
+    region: 'Australia', flag: '🇦🇺', type: 'Scholarship', amount: 'Varies by government or partner-funded round', level: 'Programme-specific',
+    deadlineLabel: 'Check the official page for open rounds',
+    summary: 'ACN’s official scholarship hub publishes current Australian nursing and healthcare funding rounds and their eligibility rules.',
+    eligibility: ['Eligibility varies by scholarship', 'Australian residency/citizenship rules may apply', 'Use only the application route linked by ACN'],
+    url: 'https://www.acn.edu.au/scholarships', status: 'Check provider', verifiedOn: '2026-09-15',
+  },
+  {
+    id: 's-sigma', name: 'Sigma Nursing Research Project Grants', provider: 'Sigma Nursing',
+    region: 'International', flag: '🌍', type: 'Grant', amount: 'Varies by named research grant', level: 'Nurse researchers',
+    deadlineLabel: 'Deadlines vary by grant',
+    summary: 'Sigma’s official grant directory lists nursing research funding programmes with grant-specific deadlines and eligibility.',
+    eligibility: ['Nursing-focused research proposal', 'Grant-specific investigator and membership requirements', 'Submit through Sigma’s official grant system'],
+    url: 'https://www.sigmanursing.org/awards-grants/grants/research-project-grants', status: 'Check provider', verifiedOn: '2026-09-15',
+  },
+  {
+    id: 's-who-emro', name: 'WHO Eastern Mediterranean Fellowships', provider: 'World Health Organization — Eastern Mediterranean Region',
+    region: 'International', flag: '🌍', type: 'Fellowship', amount: 'WHO-supported training subject to nomination and programme rules', level: 'Health workforce',
+    deadlineLabel: 'National nomination timelines vary',
+    summary: 'WHO EMRO’s official fellowship programme supports health-workforce development through member-state nomination channels.',
+    eligibility: ['Nomination through the relevant national health authority', 'Programme aligned with national health priorities', 'Meet WHO and nominating-country requirements'],
+    url: 'https://www.emro.who.int/health-workforce/fellowships/', status: 'Check provider', verifiedOn: '2026-09-15',
   },
 ];
 
