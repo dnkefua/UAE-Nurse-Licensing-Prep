@@ -14,6 +14,7 @@ export interface UserProfile {
   studyHoursGoal: number; // Weekly hour goals
   completedMilestones: string[]; // ['degree_attestation', 'dataflow_verification', 'exam_booking', etc]
   currentStreak: number;
+  lastStudyDate?: string;
   createdAt: string; // Timestamp ISO
   updatedAt: string; // Timestamp ISO
 }
@@ -55,6 +56,7 @@ export interface StudySession {
 }
 
 export interface TestAttempt {
+  assessmentVersion?: string;
   id: string;
   userId: string;
   examType: ExamType;

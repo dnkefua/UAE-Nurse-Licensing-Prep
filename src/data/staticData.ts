@@ -5,7 +5,7 @@
 
 import { StudyTopic, Question } from '../types';
 
-// ── UAE Nursing Jobs (curated, legitimate official employers) ───────────────────
+// ── UAE Nursing Jobs (unverified informational directory) ───────────────────
 
 export type JobRole = 'Registered Nurse' | 'Nursing Assistant' | 'Specialist Nurse' | 'Midwife' | 'Home Care Nurse';
 
@@ -17,152 +17,112 @@ export interface JobEmployer {
   type: 'Hospital Group' | 'Government' | 'Clinic Network' | 'Home Healthcare';
   roles: JobRole[];
   about: string;
-  whyLegit: string;      // why this is a verified/legitimate employer
+  whyLegit: string;      // legacy field; not evidence of verification
   careersUrl: string;    // official careers page
   verified: boolean;
   facts: { label: string; value: string }[];
 }
 
-/**
- * Each entry links to the employer's OFFICIAL careers portal — the only place
- * to apply. These are large, licensed UAE healthcare providers. Applications are
- * always free: legitimate UAE employers never charge candidates a placement fee.
- */
+/** Static directory links. No current vacancy or employer verification is recorded. */
 export const JOB_EMPLOYERS: JobEmployer[] = [
   {
     id: 'seha',
     employer: 'SEHA — Abu Dhabi Health Services',
     logo: '🏥', emirate: 'Abu Dhabi', type: 'Government',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse', 'Midwife'],
-    about: 'The UAE\'s largest healthcare network, operating public hospitals and clinics across Abu Dhabi (including Sheikh Shakhbout Medical City, Tawam, and Mafraq).',
-    whyLegit: 'Government-owned (Abu Dhabi Health Services Co.). Recruits directly via its official careers portal — no agency fees.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://www.seha.ae/careers/',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'DOH Abu Dhabi' },
-      { label: 'Facilities', value: 'Hospitals + clinics' },
-      { label: 'License', value: 'DOH required' },
-    ],
+    verified: false,
+    facts: [],
   },
   {
     id: 'dubai-health',
     employer: 'Dubai Health (DHA hospitals)',
     logo: '🏛️', emirate: 'Dubai', type: 'Government',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse'],
-    about: 'The integrated academic health system of Dubai — Rashid, Dubai, Latifa, and Hatta Hospitals, plus primary care centres.',
-    whyLegit: 'Operated by Dubai Health (government). Official recruitment via Dubai Careers / Dubai Health portal.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://www.dubaihealth.ae/careers',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'DHA' },
-      { label: 'Facilities', value: 'Public hospitals' },
-      { label: 'License', value: 'DHA required' },
-    ],
+    verified: false,
+    facts: [],
   },
   {
     id: 'ehs',
     employer: 'Emirates Health Services (EHS)',
     logo: '🇦🇪', emirate: 'Northern Emirates', type: 'Government',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Midwife'],
-    about: 'Federal health services operating hospitals and centres across Sharjah, Ajman, UAQ, RAK, and Fujairah.',
-    whyLegit: 'Federal government body (formerly part of MOHAP). Hires through the official EHS / UAE government jobs portal.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://www.ehs.gov.ae/en/careers',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'MOHAP' },
-      { label: 'Region', value: 'Northern Emirates' },
-      { label: 'License', value: 'MOHAP required' },
-    ],
+    verified: false,
+    facts: [],
   },
   {
     id: 'cleveland',
     employer: 'Cleveland Clinic Abu Dhabi',
     logo: '🩺', emirate: 'Abu Dhabi', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Specialist Nurse'],
-    about: 'A multispecialty hospital and a leading US academic medical centre\'s flagship in the Middle East.',
-    whyLegit: 'Part of Mubadala Health. Applications only via the official Cleveland Clinic Abu Dhabi careers site.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://www.clevelandclinicabudhabi.ae/en/careers',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'DOH Abu Dhabi' },
-      { label: 'Type', value: 'Tertiary hospital' },
-      { label: 'Experience', value: '2+ yrs typical' },
-    ],
+    verified: false,
+    facts: [],
   },
   {
     id: 'mediclinic',
     employer: 'Mediclinic Middle East',
     logo: '➕', emirate: 'Dubai / Abu Dhabi', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Specialist Nurse', 'Midwife'],
-    about: 'A private hospital and clinic group operating across Dubai, Abu Dhabi, and Al Ain.',
-    whyLegit: 'Part of Mediclinic International (JSE-listed). Recruits via its official careers portal — no candidate fees.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://www.mediclinic.ae/en/corporate/careers.html',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'DHA / DOH' },
-      { label: 'Type', value: 'Private hospitals' },
-      { label: 'Experience', value: '2+ yrs typical' },
-    ],
+    verified: false,
+    facts: [],
   },
   {
     id: 'nmc',
     employer: 'NMC Healthcare',
     logo: '🏨', emirate: 'UAE-wide', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Specialist Nurse'],
-    about: 'One of the largest private healthcare networks in the UAE, with hospitals and medical centres nationwide.',
-    whyLegit: 'Established licensed provider. Official applications via the NMC careers portal.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://nmc.ae/careers/',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'DHA / DOH / MOHAP' },
-      { label: 'Type', value: 'Hospitals + clinics' },
-      { label: 'Network', value: 'UAE-wide' },
-    ],
+    verified: false,
+    facts: [],
   },
   {
     id: 'aster',
     employer: 'Aster DM Healthcare',
     logo: '💠', emirate: 'UAE-wide', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Nursing Assistant', 'Home Care Nurse'],
-    about: 'Operates Aster, Medcare, and Aster Clinics across the UAE, plus Aster Home Health Care.',
-    whyLegit: 'Listed healthcare group. Careers managed through the official Aster careers site.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://career.asterdmhealthcare.com/',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'DHA / DOH / MOHAP' },
-      { label: 'Brands', value: 'Aster, Medcare' },
-      { label: 'Home care', value: 'Available' },
-    ],
+    verified: false,
+    facts: [],
   },
   {
     id: 'burjeel',
     employer: 'Burjeel Holdings (VPS)',
     logo: '🔷', emirate: 'Abu Dhabi / Dubai', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Specialist Nurse', 'Nursing Assistant'],
-    about: 'A super-specialty hospital group (Burjeel, Medeor, LLH) across the UAE.',
-    whyLegit: 'ADX-listed healthcare provider. Applications via the official Burjeel Holdings careers portal.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://burjeelholdings.com/careers/',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'DOH / DHA' },
-      { label: 'Type', value: 'Super-specialty' },
-      { label: 'Brands', value: 'Burjeel, Medeor' },
-    ],
+    verified: false,
+    facts: [],
   },
   {
     id: 'ahd',
     employer: 'American Hospital Dubai',
     logo: '🏥', emirate: 'Dubai', type: 'Hospital Group',
     roles: ['Registered Nurse', 'Specialist Nurse'],
-    about: 'A private American-standard (JCI-accredited) tertiary hospital in Dubai.',
-    whyLegit: 'Long-established licensed hospital. Recruits directly via its official careers page.',
+    about: 'Employer career resource. Confirm current organisation details and vacancies on its website.',
+    whyLegit: 'Directory entry only; no independent verification is recorded.',
     careersUrl: 'https://www.ahdubai.com/careers',
-    verified: true,
-    facts: [
-      { label: 'Regulator', value: 'DHA' },
-      { label: 'Accreditation', value: 'JCI' },
-      { label: 'Experience', value: '2+ yrs typical' },
-    ],
+    verified: false,
+    facts: [],
   },
 ];
 
@@ -193,254 +153,8 @@ export interface JobPosting {
   live?: boolean;
 }
 
-/**
- * Representative current openings at verified UAE employers. Full live vacancy
- * lists and the actual application form live on each employer's official careers
- * portal (the Apply button). Applying is always free — never pay a placement fee.
- * Sorted newest-first by postedDate in the component.
- */
-export const JOB_POSTINGS: JobPosting[] = [
-  {
-    id: 'p-seha-medsurg',
-    title: 'Registered Nurse — Medical / Surgical Ward',
-    employer: 'SEHA — Abu Dhabi Health Services', logo: '🏥', emirate: 'Abu Dhabi',
-    role: 'Registered Nurse', employmentType: 'Full-time', shift: 'Rotating (day/night)',
-    postedDate: '2026-06-04', salaryRange: 'AED 9,000 – 13,000 / month + benefits',
-    summary: 'Provide holistic, evidence-based nursing care to adult medical-surgical patients across SEHA hospitals, working within a multidisciplinary team to deliver safe, patient-centred care aligned with DOH standards.',
-    responsibilities: [
-      'Assess, plan, implement and evaluate individualised patient care plans.',
-      'Administer medications and treatments safely per physician orders and policy.',
-      'Monitor and document vital signs, intake/output, and clinical changes.',
-      'Educate patients and families on care, discharge planning, and self-management.',
-      'Maintain infection-control and patient-safety standards at all times.',
-    ],
-    requirements: [
-      'Valid DOH (Abu Dhabi) licence or eligibility (DataFlow + exam passed).',
-      'BSc Nursing or 3-year diploma with registration in home country.',
-      'Minimum 2 years post-graduation clinical experience.',
-      'Valid BLS; ACLS preferred.',
-      'Good Standing Certificate and attested credentials.',
-    ],
-    benefits: ['Tax-free salary', 'Housing & transport allowance', 'Annual flights', 'Medical insurance', 'Paid annual leave'],
-    applyUrl: 'https://www.seha.ae/careers/', verified: true,
-  },
-  {
-    id: 'p-ccad-icu',
-    title: 'Registered Nurse — Critical Care (ICU)',
-    employer: 'Cleveland Clinic Abu Dhabi', logo: '🩺', emirate: 'Abu Dhabi',
-    role: 'Specialist Nurse', employmentType: 'Full-time', shift: '12-hour rotating',
-    postedDate: '2026-06-03', salaryRange: 'AED 14,000 – 19,000 / month + benefits',
-    summary: 'Deliver advanced critical-care nursing to high-acuity patients in a JCI-accredited tertiary ICU, using best-practice protocols and advanced monitoring within a renowned academic medical centre.',
-    responsibilities: [
-      'Manage critically ill patients including ventilated and post-operative cases.',
-      'Operate and interpret haemodynamic and cardiac monitoring equipment.',
-      'Titrate vasoactive and sedation infusions per protocol.',
-      'Respond to emergencies and participate in code/rapid-response teams.',
-      'Document accurately in the electronic health record (EPIC).',
-    ],
-    requirements: [
-      'Valid DOH licence or eligibility.',
-      'BSc Nursing required.',
-      'Minimum 2–3 years recent ICU/critical-care experience.',
-      'Valid BLS and ACLS (PALS an asset).',
-      'Strong English communication skills.',
-    ],
-    benefits: ['Tax-free salary', 'Furnished accommodation or allowance', 'Annual flights', 'Family medical cover', 'Continuing-education support'],
-    applyUrl: 'https://www.clevelandclinicabudhabi.ae/en/careers', verified: true,
-  },
-  {
-    id: 'p-nmc-na',
-    title: 'Nursing Assistant / Patient Care Assistant',
-    employer: 'NMC Healthcare', logo: '🏨', emirate: 'Dubai',
-    role: 'Nursing Assistant', employmentType: 'Full-time', shift: 'Rotating',
-    postedDate: '2026-06-02', salaryRange: 'AED 3,500 – 5,500 / month + benefits',
-    summary: 'Support registered nurses in delivering basic patient care and maintaining a safe, clean, and comfortable environment across NMC hospitals and medical centres.',
-    responsibilities: [
-      'Assist patients with hygiene, mobility, feeding, and daily activities.',
-      'Take and record basic observations (temperature, pulse, BP) as delegated.',
-      'Maintain cleanliness and stock of clinical areas and equipment.',
-      'Transport patients and samples safely within the facility.',
-      'Report changes in patient condition to the registered nurse promptly.',
-    ],
-    requirements: [
-      'Nursing Assistant / PCA certificate or equivalent healthcare qualification.',
-      'DHA eligibility/registration as a Nursing Assistant (where applicable).',
-      'Prior hospital or care-home experience preferred.',
-      'Valid BLS certificate.',
-      'Compassionate, team-oriented attitude.',
-    ],
-    benefits: ['Tax-free salary', 'Shared accommodation or allowance', 'Medical insurance', 'Annual leave & flight', 'Visa sponsorship'],
-    applyUrl: 'https://nmc.ae/careers/', verified: true,
-  },
-  {
-    id: 'p-mediclinic-ed',
-    title: 'Registered Nurse — Emergency Department',
-    employer: 'Mediclinic Middle East', logo: '➕', emirate: 'Dubai',
-    role: 'Specialist Nurse', employmentType: 'Full-time', shift: '12-hour rotating',
-    postedDate: '2026-05-30', salaryRange: 'AED 11,000 – 16,000 / month + benefits',
-    summary: 'Provide rapid, high-quality emergency nursing care across triage, resuscitation, and treatment areas in a busy private ED, prioritising patient safety and timely intervention.',
-    responsibilities: [
-      'Perform triage and rapid assessment of presenting patients.',
-      'Deliver emergency interventions and assist with resuscitation.',
-      'Administer medications and manage IV access under pressure.',
-      'Coordinate with physicians and specialists for admissions/referrals.',
-      'Maintain accurate, timely clinical documentation.',
-    ],
-    requirements: [
-      'Valid DHA licence or eligibility.',
-      'BSc Nursing or recognised diploma.',
-      'Minimum 2 years emergency / acute-care experience.',
-      'Valid BLS and ACLS; PALS/TNCC an advantage.',
-      'Ability to work calmly in a fast-paced environment.',
-    ],
-    benefits: ['Tax-free salary', 'Housing allowance', 'Annual flights', 'Comprehensive medical cover', 'Professional development'],
-    applyUrl: 'https://www.mediclinic.ae/en/corporate/careers.html', verified: true,
-  },
-  {
-    id: 'p-dubaihealth-midwife',
-    title: 'Midwife / Labour & Delivery Nurse',
-    employer: 'Dubai Health (Latifa Hospital)', logo: '🏛️', emirate: 'Dubai',
-    role: 'Midwife', employmentType: 'Full-time', shift: 'Rotating',
-    postedDate: '2026-05-28', salaryRange: 'AED 10,000 – 15,000 / month + benefits',
-    summary: 'Provide expert maternity and newborn care across antenatal, labour, delivery, and postnatal services at a leading government women\'s & children\'s hospital.',
-    responsibilities: [
-      'Provide care and monitoring throughout labour and delivery.',
-      'Conduct fetal heart and maternal monitoring; recognise complications early.',
-      'Support normal births and assist with operative deliveries.',
-      'Deliver postnatal care and breastfeeding/newborn education.',
-      'Maintain accurate maternity records and escalate risks promptly.',
-    ],
-    requirements: [
-      'Valid DHA licence or eligibility as Midwife / RN-Midwife.',
-      'BSc Nursing/Midwifery or recognised midwifery qualification.',
-      'Minimum 2 years labour-and-delivery experience.',
-      'Valid BLS; NRP/fetal-monitoring certification preferred.',
-      'Good Standing Certificate.',
-    ],
-    benefits: ['Tax-free salary', 'Government benefits package', 'Housing & transport', 'Annual flights', 'Medical insurance'],
-    applyUrl: 'https://www.dubaihealth.ae/careers', verified: true,
-  },
-  {
-    id: 'p-aster-homecare',
-    title: 'Home Care Nurse',
-    employer: 'Aster Home Health Care', logo: '💠', emirate: 'Dubai',
-    role: 'Home Care Nurse', employmentType: 'Full-time', shift: 'Day shifts / on-call',
-    postedDate: '2026-05-26', salaryRange: 'AED 7,000 – 10,000 / month + benefits',
-    summary: 'Deliver one-to-one clinical care to patients in their homes — from post-operative and elderly care to chronic-disease management — representing Aster\'s home-health service.',
-    responsibilities: [
-      'Provide skilled nursing care in the patient\'s home per the care plan.',
-      'Administer medications, wound care, and tube/catheter management.',
-      'Monitor chronic conditions and educate family caregivers.',
-      'Document visits and coordinate with the supervising physician.',
-      'Ensure safety, dignity, and infection control in the home setting.',
-    ],
-    requirements: [
-      'Valid DHA licence (Registered Nurse).',
-      'BSc Nursing or diploma with registration.',
-      'Minimum 2 years clinical experience; home-care exposure preferred.',
-      'Valid BLS; UAE driving licence an advantage.',
-      'Independent, reliable, and patient-focused.',
-    ],
-    benefits: ['Tax-free salary', 'Transport/allowance', 'Medical insurance', 'Annual leave & flight', 'Visa sponsorship'],
-    applyUrl: 'https://career.asterdmhealthcare.com/', verified: true,
-  },
-  {
-    id: 'p-burjeel-ot',
-    title: 'Registered Nurse — Operating Theatre (Scrub/Circulating)',
-    employer: 'Burjeel Holdings', logo: '🔷', emirate: 'Abu Dhabi',
-    role: 'Specialist Nurse', employmentType: 'Full-time', shift: 'Rotating + on-call',
-    postedDate: '2026-05-24', salaryRange: 'AED 11,000 – 16,000 / month + benefits',
-    summary: 'Provide perioperative nursing as scrub and circulating nurse across a broad surgical caseload in a super-specialty hospital, ensuring sterile technique and patient safety.',
-    responsibilities: [
-      'Prepare the operating room, instruments, and sterile field.',
-      'Function as scrub and/or circulating nurse during procedures.',
-      'Perform surgical counts and maintain asepsis throughout.',
-      'Monitor the patient and support the surgical team intra-operatively.',
-      'Ensure correct handling of specimens and equipment.',
-    ],
-    requirements: [
-      'Valid DOH licence or eligibility.',
-      'BSc Nursing or recognised diploma.',
-      'Minimum 2 years operating-theatre experience.',
-      'Valid BLS; perioperative certification an asset.',
-      'Strong attention to detail and teamwork.',
-    ],
-    benefits: ['Tax-free salary', 'Housing allowance', 'Annual flights', 'Medical cover', 'Career-growth pathways'],
-    applyUrl: 'https://burjeelholdings.com/careers/', verified: true,
-  },
-  {
-    id: 'p-ahd-peds',
-    title: 'Registered Nurse — Paediatrics',
-    employer: 'American Hospital Dubai', logo: '🏥', emirate: 'Dubai',
-    role: 'Registered Nurse', employmentType: 'Full-time', shift: 'Rotating',
-    postedDate: '2026-05-22', salaryRange: 'AED 11,000 – 15,000 / month + benefits',
-    summary: 'Provide family-centred paediatric nursing care to infants, children, and adolescents in a JCI-accredited private hospital, partnering with families and the care team.',
-    responsibilities: [
-      'Deliver age-appropriate nursing care and accurate paediatric dosing.',
-      'Monitor growth, development, and clinical status of paediatric patients.',
-      'Support families with education and emotional reassurance.',
-      'Recognise and escalate paediatric deterioration early.',
-      'Maintain meticulous documentation and safety checks.',
-    ],
-    requirements: [
-      'Valid DHA licence or eligibility.',
-      'BSc Nursing required.',
-      'Minimum 2 years paediatric nursing experience.',
-      'Valid BLS and PALS.',
-      'Excellent communication with children and families.',
-    ],
-    benefits: ['Tax-free salary', 'Housing allowance', 'Annual flights', 'Family medical insurance', 'Education support'],
-    applyUrl: 'https://www.ahdubai.com/careers', verified: true,
-  },
-  {
-    id: 'p-ehs-opd',
-    title: 'Staff Nurse — Outpatient Clinics',
-    employer: 'Emirates Health Services (EHS)', logo: '🇦🇪', emirate: 'Sharjah',
-    role: 'Registered Nurse', employmentType: 'Full-time', shift: 'Day shifts',
-    postedDate: '2026-05-20', salaryRange: 'AED 8,500 – 12,000 / month + benefits',
-    summary: 'Provide nursing care across busy government outpatient and primary-care clinics in the Northern Emirates, supporting screening, treatment, and health-promotion services.',
-    responsibilities: [
-      'Assess and triage outpatients; record histories and vitals.',
-      'Assist physicians with examinations and minor procedures.',
-      'Administer vaccinations, injections, and treatments.',
-      'Provide health education and chronic-disease follow-up.',
-      'Maintain clinic stock, equipment, and documentation.',
-    ],
-    requirements: [
-      'Valid MOHAP licence or eligibility.',
-      'BSc Nursing or recognised diploma with registration.',
-      'Minimum 2 years clinical experience.',
-      'Valid BLS.',
-      'Arabic language an advantage (not essential).',
-    ],
-    benefits: ['Tax-free salary', 'Government benefits', 'Housing & transport', 'Annual flights', 'Medical insurance'],
-    applyUrl: 'https://www.ehs.gov.ae/en/careers', verified: true,
-  },
-  {
-    id: 'p-nmc-dialysis',
-    title: 'Dialysis Nurse (Haemodialysis)',
-    employer: 'NMC Healthcare', logo: '🏨', emirate: 'Abu Dhabi',
-    role: 'Specialist Nurse', employmentType: 'Full-time', shift: 'Rotating',
-    postedDate: '2026-05-18', salaryRange: 'AED 10,000 – 14,000 / month + benefits',
-    summary: 'Deliver safe, high-quality haemodialysis care to chronic kidney-disease patients, managing the dialysis procedure end-to-end and supporting long-term patient wellbeing.',
-    responsibilities: [
-      'Set up, prime, and operate haemodialysis machines safely.',
-      'Assess vascular access (AV fistula/catheter) and manage complications.',
-      'Monitor patients before, during, and after dialysis sessions.',
-      'Administer medications such as heparin and erythropoietin per orders.',
-      'Educate patients on fluid, diet, and access care.',
-    ],
-    requirements: [
-      'Valid DOH licence or eligibility.',
-      'BSc Nursing or diploma with registration.',
-      'Minimum 1–2 years dialysis/renal experience.',
-      'Valid BLS; dialysis certification preferred.',
-      'Strong assessment and monitoring skills.',
-    ],
-    benefits: ['Tax-free salary', 'Housing allowance', 'Annual flights', 'Medical insurance', 'Visa sponsorship'],
-    applyUrl: 'https://nmc.ae/careers/', verified: true,
-  },
-];
+/** No sample vacancies are presented as real job postings. */
+export const JOB_POSTINGS: JobPosting[] = [];
 
 export interface JobBoard {
   id: string;
@@ -450,7 +164,7 @@ export interface JobBoard {
   icon: string;
 }
 
-/** Reputable job boards, deep-linked to UAE nursing searches for live listings. */
+/** External job search resources; results and availability are not verified. */
 export const JOB_BOARDS: JobBoard[] = [
   { id: 'bayt',    name: 'Bayt.com',    icon: '🔎', note: 'Leading Middle East job site', searchUrl: 'https://www.bayt.com/en/uae/jobs/nurse-jobs/' },
   { id: 'linkedin',name: 'LinkedIn',    icon: '💼', note: 'Professional network jobs',     searchUrl: 'https://www.linkedin.com/jobs/search/?keywords=nurse&location=United%20Arab%20Emirates' },
@@ -459,7 +173,7 @@ export const JOB_BOARDS: JobBoard[] = [
   { id: 'gulftalent', name: 'GulfTalent', icon: '⭐', note: 'Gulf professional jobs',        searchUrl: 'https://www.gulftalent.com/uae/jobs/title/nurse' },
 ];
 
-// LinkedIn live searches — authentic recruiters, hospitals & clinics post here.
+// External LinkedIn searches; inclusion does not verify any recruiter.
 // Each opens LinkedIn's live job results filtered for UAE nursing roles.
 export const LINKEDIN_SEARCHES: { id: string; label: string; note: string; url: string }[] = [
   { id: 'li-rn',  label: 'Registered Nurse — UAE', note: 'Hospitals & clinics hiring RNs', url: 'https://www.linkedin.com/jobs/search/?keywords=registered%20nurse&location=United%20Arab%20Emirates&f_TPR=r604800' },
@@ -467,7 +181,7 @@ export const LINKEDIN_SEARCHES: { id: string; label: string; note: string; url: 
   { id: 'li-staff', label: 'Staff / Specialist Nurse — UAE', note: 'ICU, ED, OT, theatre, etc.', url: 'https://www.linkedin.com/jobs/search/?keywords=staff%20nurse&location=United%20Arab%20Emirates&f_TPR=r604800' },
   { id: 'li-dubai', label: 'Nurse jobs in Dubai', note: 'All nursing roles in Dubai',       url: 'https://www.linkedin.com/jobs/search/?keywords=nurse&location=Dubai%2C%20United%20Arab%20Emirates&f_TPR=r604800' },
   { id: 'li-auh', label: 'Nurse jobs in Abu Dhabi', note: 'All nursing roles in Abu Dhabi', url: 'https://www.linkedin.com/jobs/search/?keywords=nurse&location=Abu%20Dhabi%2C%20United%20Arab%20Emirates&f_TPR=r604800' },
-  { id: 'li-recruit', label: 'Healthcare recruiters — UAE', note: 'Verified agency recruiters', url: 'https://www.linkedin.com/search/results/people/?keywords=nurse%20recruiter%20UAE' },
+  { id: 'li-recruit', label: 'Healthcare recruiters — UAE', note: 'Recruiter search; results not verified', url: 'https://www.linkedin.com/search/results/people/?keywords=nurse%20recruiter%20UAE' },
 ];
 
 // ── Nursing Workshops, Seminars & Conferences (curated, authentic organisers) ───
@@ -601,7 +315,7 @@ export interface Scholarship {
   amount: string;
   level: string;          // e.g. 'BSN / Undergraduate', 'Graduate', 'All levels'
   deadlineLabel: string;  // e.g. 'Annual · varies'
-  summary: string;
+  summary?: string;
   eligibility: string[];
   url: string;            // official apply/info page
 }
@@ -611,14 +325,14 @@ export const SCHOLARSHIPS: Scholarship[] = [
   {
     id: 's-sigma', name: 'Sigma Global Nursing Research Grants', provider: 'Sigma Theta Tau International',
     region: 'International', flag: '🌍', type: 'Grant', amount: 'Up to US$5,000+', level: 'Graduate / researchers',
-    deadlineLabel: 'Annual cycles', summary: 'Research grants supporting nurses conducting evidence-based and clinical research worldwide.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Registered nurse conducting research', 'Sigma membership for some grants', 'Defined research proposal'],
     url: 'https://www.sigmanursing.org/advance-elevate/research/research-grants',
   },
   {
     id: 's-jnj', name: 'Johnson & Johnson Nursing Scholarships Hub', provider: 'Johnson & Johnson (Discover Nursing)',
     region: 'International', flag: '🌍', type: 'Scholarship', amount: 'Varies (directory)', level: 'All levels',
-    deadlineLabel: 'Varies by award', summary: 'A searchable directory of hundreds of nursing scholarships and funding opportunities curated by J&J.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Nursing students & RNs', 'Criteria vary by listed award'],
     url: 'https://nursing.jnj.com/specialties-and-pathways/scholarships',
   },
@@ -626,28 +340,28 @@ export const SCHOLARSHIPS: Scholarship[] = [
   {
     id: 's-anf', name: 'American Nurses Foundation Scholarships', provider: 'American Nurses Foundation',
     region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Varies', level: 'All levels',
-    deadlineLabel: 'Annual · varies', summary: 'Scholarships and grants supporting nursing education, research, and professional advancement in the US.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['US nursing students / RNs', 'Academic & financial-need criteria'],
     url: 'https://www.nursingworld.org/foundation/',
   },
   {
     id: 's-nhsc', name: 'NHSC Scholarship Program', provider: 'Health Resources & Services Admin (HRSA)',
     region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Full tuition + stipend', level: 'Undergraduate / Graduate',
-    deadlineLabel: 'Annual · Spring', summary: 'Pays tuition and fees in exchange for service in a high-need US community after graduation.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['US citizen', 'Eligible nursing/health program', 'Commit to service obligation'],
     url: 'https://nhsc.hrsa.gov/scholarships',
   },
   {
     id: 's-fnsna', name: 'FNSNA Scholarships', provider: 'Foundation of the National Student Nurses\' Association',
     region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'US$1,000 – $7,500', level: 'Nursing students',
-    deadlineLabel: 'Annual · January', summary: 'General and specialty scholarships for enrolled nursing students across the US.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Enrolled in a US nursing program', 'Academic merit & involvement'],
     url: 'https://www.nsna.org/foundation.html',
   },
   {
     id: 's-tylenol', name: 'Tylenol Future Care Scholarship', provider: 'Tylenol (Kenvue)',
     region: 'USA', flag: '🇺🇸', type: 'Scholarship', amount: 'Up to US$10,000', level: 'Undergraduate / Graduate',
-    deadlineLabel: 'Annual · Summer', summary: 'Long-running scholarship for students pursuing nursing and other healthcare degrees.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Pursuing healthcare/nursing degree', 'US-based study', 'Essay & academic record'],
     url: 'https://www.tylenol.com/news/scholarship',
   },
@@ -655,14 +369,14 @@ export const SCHOLARSHIPS: Scholarship[] = [
   {
     id: 's-rcnf', name: 'RCN Foundation Grants & Bursaries', provider: 'RCN Foundation',
     region: 'UK', flag: '🇬🇧', type: 'Bursary', amount: 'Varies', level: 'Nurses & students',
-    deadlineLabel: 'Open cycles', summary: 'Education bursaries and hardship grants for nurses, midwives, and healthcare support workers in the UK.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['UK-based nurses/midwives/HCSWs', 'Education or hardship criteria'],
     url: 'https://www.rcnfoundation.rcn.org.uk/',
   },
   {
     id: 's-fnf', name: 'Florence Nightingale Foundation Scholarships', provider: 'Florence Nightingale Foundation',
     region: 'UK', flag: '🇬🇧', type: 'Scholarship', amount: 'Varies', level: 'Registered nurses/midwives',
-    deadlineLabel: 'Annual · varies', summary: 'Leadership, research, and travel scholarships to develop nurse and midwife leaders.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Registered nurse/midwife', 'Leadership/research development focus'],
     url: 'https://florence-nightingale-foundation.org.uk/our-work/scholars-academy/',
   },
@@ -670,7 +384,7 @@ export const SCHOLARSHIPS: Scholarship[] = [
   {
     id: 's-cnf', name: 'Canadian Nurses Foundation Awards', provider: 'Canadian Nurses Foundation',
     region: 'Canada', flag: '🇨🇦', type: 'Award', amount: 'CA$1,000 – $10,000+', level: 'Students & RNs',
-    deadlineLabel: 'Annual · Spring', summary: 'Scholarships and research awards for Canadian nursing students and registered nurses pursuing further study.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Canadian nursing student or RN', 'Academic merit & goals'],
     url: 'https://cnf-fiic.ca/scholarships-awards/',
   },
@@ -678,7 +392,7 @@ export const SCHOLARSHIPS: Scholarship[] = [
   {
     id: 's-acn', name: 'ACN Scholarships', provider: 'Australian College of Nursing',
     region: 'Australia', flag: '🇦🇺', type: 'Scholarship', amount: 'Varies (incl. gov-funded)', level: 'All levels',
-    deadlineLabel: 'Multiple rounds', summary: 'A range of scholarships, including Australian Government–funded places, for CPD, postgraduate study, and specialty training.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Australian nurses/students', 'Program-specific criteria'],
     url: 'https://www.acn.edu.au/scholarships',
   },
@@ -686,14 +400,14 @@ export const SCHOLARSHIPS: Scholarship[] = [
   {
     id: 's-hamdan', name: 'Hamdan Bin Rashid Al Maktoum Awards', provider: 'Hamdan Medical Award (Dubai)',
     region: 'UAE', flag: '🇦🇪', type: 'Grant', amount: 'Varies (research & training)', level: 'Health professionals',
-    deadlineLabel: 'Biennial cycles', summary: 'Regional medical awards and research/training grants recognising excellence in healthcare, including nursing.',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Health professionals / researchers', 'Award-specific criteria'],
     url: 'https://www.hmaward.org.ae/',
   },
   {
     id: 's-who-emro', name: 'WHO EMRO Fellowships', provider: 'World Health Organization — Eastern Mediterranean',
     region: 'UAE', flag: '🌍', type: 'Fellowship', amount: 'Funded training', level: 'Health workforce',
-    deadlineLabel: 'Via national health authority', summary: 'WHO fellowships and training opportunities for health workforce capacity-building across the region (applied through your Ministry of Health).',
+    deadlineLabel: 'Current deadline not verified',
     eligibility: ['Nominated via national health authority', 'Public-health/clinical focus'],
     url: 'https://www.emro.who.int/health-workforce/fellowships/',
   },
@@ -719,7 +433,7 @@ export const FORUM_RESOURCES: ForumResource[] = [
   { id: 'who',      name: 'WHO — Nursing & Midwifery',  note: 'Global standards & workforce guidance',          url: 'https://www.who.int/health-topics/nursing', icon: '🏥' },
 ];
 
-// Academy mentors / admins — real contact points for 1-on-1 mentorship.
+// Existing academy contact addresses; availability and credentials are not verified.
 export const ACADEMY_MENTORS: { name: string; role: string; email: string }[] = [
   { name: 'Academy Lead Mentor', role: 'Licensing & DataFlow guidance', email: 'loveline082022@gmail.com' },
   { name: 'Academy Coordinator', role: 'Study planning & exam prep',    email: 'uncledez8@gmail.com' },
@@ -743,87 +457,40 @@ export interface AuthorityInfo {
   facts: { label: string; value: string }[];
 }
 
+// General source directory. Regulatory rules and assessment details are not verified here.
 export const UAE_AUTHORITIES: AuthorityInfo[] = [
   {
-    id: 'dha',
-    code: 'DHA',
-    name: 'Dubai Health Authority',
-    emirate: 'Dubai',
-    flag: '🏙️',
-    color: 'blue',
-    overview:
-      'The Dubai Health Authority regulates all healthcare professionals and facilities in the Emirate of Dubai. Nurses must register through the DHA Sheryan platform and pass the DHA licensing assessment before practising in Dubai (outside free zones such as DHCC).',
-    passMark: 'Typically 60% to pass the DHA computer-based assessment (Prometric-delivered).',
-    examProvider: 'Prometric (computer-based MCQ)',
-    licensingPortal: { label: 'DHA Sheryan Licensing Portal', url: 'https://services.dha.gov.ae/sheryan' },
-    officialSite: { label: 'dha.gov.ae', url: 'https://www.dha.gov.ae' },
-    steps: [
-      'Create a Sheryan unique ID account on the DHA portal.',
-      'Complete DataFlow primary source verification (PSV) of your credentials.',
-      'Submit qualifications + Good Standing Certificate for evaluation.',
-      'Receive eligibility, then book the DHA exam via Prometric.',
-      'Pass the assessment, then apply for the professional licence.'
-    ],
-    facts: [
-      { label: 'Region', value: 'Dubai' },
-      { label: 'Min. Experience', value: '2 years post-graduation (RN)' },
-      { label: 'Qualification', value: 'Bachelor / 3-yr Diploma in Nursing' },
-      { label: 'PSV', value: 'DataFlow required' }
-    ]
+    id: 'dha', code: 'DHA', name: 'Dubai Health Authority',
+    emirate: 'Dubai', flag: '🏙️', color: 'blue',
+    overview: 'Use DHA resources to confirm whether its licensing route applies to you. This app has not verified current requirements.',
+    passMark: 'Not verified. Consult the regulator for current assessment criteria.',
+    examProvider: 'Confirm the provider and booking process with the regulator.',
+    licensingPortal: { label: 'DHA Sheryan', url: 'https://services.dha.gov.ae/sheryan' },
+    officialSite: { label: 'DHA website', url: 'https://www.dha.gov.ae' },
+    steps: ['Confirm the applicable route and eligibility with the regulator.', 'Follow the regulator’s current instructions for documentation, assessment, and licensing.'],
+    facts: [{ label: 'Verification status', value: 'Requirements not verified in this app' }]
   },
   {
-    id: 'mohap',
-    code: 'MOHAP',
-    name: 'Ministry of Health & Prevention',
-    emirate: 'Northern Emirates',
-    flag: '🇦🇪',
-    color: 'emerald',
-    overview:
-      'MOHAP licenses healthcare professionals practising in the Northern Emirates (Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah, Fujairah). Registration is handled through the MOHAP unified electronic licensing system, with an MCQ assessment for most nursing cadres.',
-    passMark: 'Typically 60% pass threshold on the MOHAP assessment (Prometric-delivered).',
-    examProvider: 'Prometric (computer-based MCQ)',
-    licensingPortal: { label: 'MOHAP e-Licensing Services', url: 'https://mohap.gov.ae/en/services/practice-license-for-health-professionals' },
-    officialSite: { label: 'mohap.gov.ae', url: 'https://mohap.gov.ae' },
-    steps: [
-      'Register on the MOHAP smart services portal.',
-      'Complete DataFlow primary source verification.',
-      'Submit your degree, transcripts, and Good Standing Certificate.',
-      'Obtain eligibility and schedule the Prometric exam.',
-      'Pass and complete the licensing/evaluation payment.'
-    ],
-    facts: [
-      { label: 'Region', value: 'Northern Emirates' },
-      { label: 'Min. Experience', value: '2 years (varies by cadre)' },
-      { label: 'Qualification', value: 'Recognised Nursing degree/diploma' },
-      { label: 'PSV', value: 'DataFlow required' }
-    ]
+    id: 'mohap', code: 'MOHAP', name: 'Ministry of Health & Prevention',
+    emirate: 'UAE', flag: '🇦🇪', color: 'emerald',
+    overview: 'Consult MOHAP resources and confirm the authority responsible for your intended practice location. Current jurisdiction and requirements have not been verified here.',
+    passMark: 'Not verified. Consult the regulator for current assessment criteria.',
+    examProvider: 'Confirm the provider and booking process with the regulator.',
+    licensingPortal: { label: 'MOHAP services', url: 'https://mohap.gov.ae' },
+    officialSite: { label: 'MOHAP website', url: 'https://mohap.gov.ae' },
+    steps: ['Confirm the applicable authority, route, and eligibility.', 'Follow the responsible authority’s current instructions for documentation, assessment, and licensing.'],
+    facts: [{ label: 'Verification status', value: 'Requirements not verified in this app' }]
   },
   {
-    id: 'doh',
-    code: 'DOH / HAAD',
-    name: 'Department of Health – Abu Dhabi',
-    emirate: 'Abu Dhabi',
-    flag: '🏛️',
-    color: 'violet',
-    overview:
-      'The Department of Health Abu Dhabi (formerly HAAD) regulates the healthcare sector in the Emirate of Abu Dhabi. Professionals register through the DOH/Tamm platform and sit the Pearson VUE-delivered DOH examination before licensing.',
-    passMark: 'Typically 60% pass mark on the DOH examination (Pearson VUE-delivered).',
-    examProvider: 'Pearson VUE (computer-based MCQ)',
-    licensingPortal: { label: 'DOH Health Professional Licensing', url: 'https://www.doh.gov.ae/en/license' },
-    officialSite: { label: 'doh.gov.ae', url: 'https://www.doh.gov.ae' },
-    steps: [
-      'Create a DOH account and start the licensing application.',
-      'Complete DataFlow primary source verification.',
-      'Upload qualifications, experience certificates, and Good Standing.',
-      'Receive exam eligibility and book via Pearson VUE.',
-      'Pass the DOH exam, then finalise the professional licence.'
-    ],
-    facts: [
-      { label: 'Region', value: 'Abu Dhabi' },
-      { label: 'Min. Experience', value: '2 years post-graduation' },
-      { label: 'Qualification', value: 'Bachelor / accredited Diploma' },
-      { label: 'Exam Vendor', value: 'Pearson VUE' }
-    ]
+    id: 'doh', code: 'DOH / HAAD', name: 'Department of Health – Abu Dhabi',
+    emirate: 'Abu Dhabi', flag: '🏛️', color: 'violet',
+    overview: 'Use Department of Health resources to confirm the applicable licensing route. This app has not verified current requirements.',
+    passMark: 'Not verified. Consult the regulator for current assessment criteria.',
+    examProvider: 'Confirm the provider and booking process with the regulator.',
+    licensingPortal: { label: 'DOH licensing resources', url: 'https://www.doh.gov.ae/en/license' },
+    officialSite: { label: 'DOH website', url: 'https://www.doh.gov.ae' },
+    steps: ['Confirm the applicable route and eligibility with the regulator.', 'Follow the regulator’s current instructions for documentation, assessment, and licensing.'],
+    facts: [{ label: 'Verification status', value: 'Requirements not verified in this app' }]
   }
 ];
 

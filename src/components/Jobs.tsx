@@ -2,524 +2,172 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import {
-  Briefcase, MapPin, ExternalLink, X, ShieldCheck, Search, ChevronRight,
-  AlertTriangle, Building2, CheckCircle2, Stethoscope, Clock, Wallet,
-  CalendarClock, ListChecks, GraduationCap, Gift, Radio, BadgeCheck, Loader2, RefreshCw
-} from 'lucide-react';
-import { JOB_EMPLOYERS, JOB_BOARDS, JOB_POSTINGS, LINKEDIN_SEARCHES, JobEmployer, JobPosting, JobRole } from '../data/staticData';
+import { Briefcase, X } from 'lucide-react';
+import { JOB_EMPLOYERS, JOB_BOARDS, LINKEDIN_SEARCHES, JobRole } from '../data/staticData';
+import { apiFetch } from '../lib/api';
+import { InAppArticle, safeExternalUrl, useModalAccessibility } from '../lib/readable';
 
 const ROLE_FILTERS: (JobRole | 'All')[] = ['All', 'Registered Nurse', 'Nursing Assistant', 'Specialist Nurse', 'Midwife', 'Home Care Nurse'];
+type Listing = {
+  id: string; title: string; employer: string; role: string; city: string;
+  employmentType: string; postedDate: string; salaryRange: string; summary: string;
+  responsibilities: string[]; requirements: string[]; benefits: string[];
+  applyUrl: string; publisher: string;
+};
+const stringValue = (value: unknown, fallback = '') => typeof value === 'string' && value.trim() ? value : fallback;
+const stringList = (value: unknown): string[] => Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
 
-function timeAgo(iso: string): string {
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return '';
-  const days = Math.floor((Date.now() - d.getTime()) / 86400000);
-  if (days <= 0) return 'Today';
-  if (days === 1) return 'Yesterday';
-  if (days < 7) return `${days} days ago`;
-  if (days < 30) return `${Math.floor(days / 7)} week${days >= 14 ? 's' : ''} ago`;
-  return d.toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' });
+function parseListings(items: unknown): Listing[] {
+  if (!Array.isArray(items)) throw new Error('Invalid jobs response');
+  return items.flatMap((item, index) => {
+    if (!item || typeof item !== 'object') return [];
+    const title = stringValue(item.title);
+    const applyUrl = safeExternalUrl(stringValue(item.applyUrl));
+    if (!title || !applyUrl) return [];
+    return [{
+      id: `${stringValue(item.id, 'listing')}-${index}`, title, applyUrl,
+      employer: stringValue(item.employer, 'Employer not supplied'),
+      role: stringValue(item.role, 'Role not supplied'),
+      city: stringValue(item.city, 'Location not supplied'),
+      employmentType: stringValue(item.employmentType, 'Employment type not supplied'),
+      postedDate: stringValue(item.postedDate),
+      salaryRange: stringValue(item.salaryRange, 'Salary not supplied'),
+      summary: stringValue(item.summary, 'Description not supplied. Read the linked source.'),
+      publisher: stringValue(item.publisher, 'Publisher not supplied'),
+      responsibilities: stringList(item.responsibilities),
+      requirements: stringList(item.requirements),
+      benefits: stringList(item.benefits),
+    }];
+  });
 }
 
-// ── Full job-posting detail modal ───────────────────────────────────────────────
-function JobModal({ job, onClose }: { job: JobPosting; onClose: () => void }) {
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
-  }, [onClose]);
-
-  const Section = ({ icon, title, items }: { icon: React.ReactNode; title: string; items: string[] }) => {
-    if (!items || items.length === 0) return null;
-    return (
-      <div className="space-y-2">
-        <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">{icon} {title}</h3>
-        <ul className="space-y-1.5">
-          {items.map((t, i) => (
-            <li key={i} className="flex gap-2 text-[12.5px] text-slate-600 leading-relaxed">
-              <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-400" />
-              <span>{t}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
-  return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={onClose}>
-      <div className="bg-white w-full sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3 px-5 py-4 border-b border-slate-100 shrink-0">
-          <div className="flex items-start gap-3 min-w-0">
-            {job.logoUrl ? (
-              <img src={job.logoUrl} alt="" className="w-9 h-9 rounded-lg object-contain bg-white border border-slate-200 shrink-0"
-                   onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-            ) : (
-              <span className="text-2xl shrink-0">{job.logo}</span>
-            )}
-            <div className="min-w-0">
-              <h2 className="text-sm font-extrabold text-slate-900 leading-snug">{job.title}</h2>
-              <p className="text-[11px] text-slate-500 mt-0.5">{job.employer}</p>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-[10px] font-mono text-slate-400">
-                <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {job.emirate}</span>
-                {job.shift && <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {job.shift}</span>}
-                <span className="flex items-center gap-1"><CalendarClock className="w-3 h-3" /> {timeAgo(job.postedDate)}</span>
-              </div>
-            </div>
-          </div>
-          <button onClick={onClose} className="shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all cursor-pointer">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-5">
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            <span className="text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><Stethoscope className="w-3 h-3" /> {job.role}</span>
-            <span className="text-[10px] font-mono font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg flex items-center gap-1"><Briefcase className="w-3 h-3" /> {job.employmentType}</span>
-            {job.institution && <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Direct Institution</span>}
-            {!job.institution && job.directApply && <span className="text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><BadgeCheck className="w-3 h-3" /> Direct Apply</span>}
-            {!job.live && job.verified && <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Verified employer</span>}
-          </div>
-          {job.live && (
-            <p className="text-[10px] text-slate-400 flex items-center gap-1.5">
-              <Radio className="w-3 h-3 text-rose-500" /> Live listing{job.publisher ? ` · via ${job.publisher}` : ''}. Apply on the employer's posting below.
-            </p>
-          )}
-
-          {/* Salary */}
-          <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2.5">
-            <Wallet className="w-4 h-4 text-emerald-600 shrink-0" />
-            <div>
-              <p className="text-[9px] font-mono text-emerald-700 uppercase tracking-wider">Indicative Salary</p>
-              <p className="text-[13px] font-bold text-emerald-800">{job.salaryRange}</p>
-            </div>
-          </div>
-
-          {/* Summary */}
-          <div className="space-y-2">
-            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">Job Description</h3>
-            <p className="text-[13px] text-slate-600 leading-relaxed">{job.summary}</p>
-          </div>
-
-          <Section icon={<ListChecks className="w-3.5 h-3.5 text-blue-600" />} title="Key Responsibilities" items={job.responsibilities} />
-          <Section icon={<GraduationCap className="w-3.5 h-3.5 text-violet-600" />} title="Requirements to Apply" items={job.requirements} />
-          <Section icon={<Gift className="w-3.5 h-3.5 text-amber-500" />} title="Benefits" items={job.benefits} />
-
-          {/* How to apply */}
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
-            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> How to Apply</h3>
-            <ol className="text-[12px] text-slate-600 space-y-1 list-decimal list-inside leading-relaxed">
-              <li>Ensure your <strong>DHA / DOH / MOHAP</strong> licence or eligibility is ready (DataFlow + exam).</li>
-              <li>Prepare an updated CV, passport, attested degree, and Good Standing Certificate.</li>
-              <li>Click <strong>Apply on Official Portal</strong> below and submit through the employer's careers site.</li>
-            </ol>
-            <p className="text-[10px] text-amber-700 flex items-start gap-1 pt-1">
-              <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" />
-              Applying is free. Never pay a fee or send money to secure a job — it is illegal in the UAE.
-            </p>
-          </div>
-        </div>
-
-        {/* Footer apply */}
-        <div className="shrink-0 border-t border-slate-100 px-5 py-3 bg-slate-50/60">
-          <a href={job.applyUrl} target="_blank" rel="noopener noreferrer"
-             className="w-full inline-flex items-center justify-center gap-2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all">
-            <ExternalLink className="w-4 h-4" /> {job.live ? 'Apply on Employer Posting' : 'Apply on Official Portal'}
-          </a>
-        </div>
-      </div>
-    </div>,
-    document.body
-  );
+function postedLabel(value: string) {
+  const date = new Date(value);
+  if (!value || !Number.isFinite(date.getTime())) return 'Source posting date not supplied';
+  return `Source posting date: ${date.toLocaleDateString('en-AE')}${date.getTime() > Date.now() ? ' (future date supplied by source)' : ''}`;
 }
 
-// ── Employer detail modal ───────────────────────────────────────────────────────
-function EmployerModal({ employer, onClose }: { employer: JobEmployer; onClose: () => void }) {
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
-  }, [onClose]);
-
+function JobModal({ job, onClose }: { job: Listing; onClose: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useModalAccessibility(ref, onClose);
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={onClose}>
-      <div className="bg-white w-full sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-100 shrink-0">
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="text-2xl">{employer.logo}</span>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm font-extrabold text-slate-900 truncate">{employer.employer}</h2>
-                {employer.verified && (
-                  <span className="shrink-0 inline-flex items-center gap-0.5 text-[8px] font-mono font-extrabold uppercase bg-emerald-100 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded-full">
-                    <ShieldCheck className="w-2.5 h-2.5" /> Verified
-                  </span>
-                )}
-              </div>
-              <p className="text-[10px] font-mono text-slate-400 flex items-center gap-1"><MapPin className="w-3 h-3" /> {employer.emirate} · {employer.type}</p>
-            </div>
-          </div>
-          <button onClick={onClose} className="shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all cursor-pointer">
-            <X className="w-4 h-4" />
-          </button>
+    <div className="fixed inset-0 z-[100] bg-slate-950/70 p-4 flex items-center justify-center" onClick={onClose}>
+      <div ref={ref} role="dialog" aria-modal="true" aria-labelledby="job-title" tabIndex={-1}
+        className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90dvh] overflow-y-auto space-y-4"
+        onClick={event => event.stopPropagation()}>
+        <div className="flex justify-between gap-4 items-start">
+          <h2 id="job-title" className="text-lg font-bold">{job.title}</h2>
+          <button type="button" aria-label="Close job details" onClick={onClose} className="p-2 bg-slate-100 rounded-lg"><X aria-hidden="true" /></button>
         </div>
-
-        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-5">
-          <p className="text-[13px] text-slate-600 leading-relaxed">{employer.about}</p>
-          <div className="grid grid-cols-3 gap-2.5">
-            {employer.facts.map((f, i) => (
-              <div key={i} className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
-                <p className="text-[9px] font-mono text-slate-400 uppercase tracking-wider">{f.label}</p>
-                <p className="text-[11px] font-bold text-slate-800 mt-0.5">{f.value}</p>
-              </div>
-            ))}
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-[11px] font-mono font-bold text-slate-700 uppercase tracking-wider">Roles They Hire</h3>
-            <div className="flex flex-wrap gap-2">
-              {employer.roles.map(r => (
-                <span key={r} className="inline-flex items-center gap-1 text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-lg">
-                  <Stethoscope className="w-3 h-3" /> {r}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-start gap-2 bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 text-[11px] text-emerald-800">
-            <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
-            <span>{employer.whyLegit}</span>
-          </div>
-        </div>
-
-        <div className="shrink-0 border-t border-slate-100 px-5 py-3 bg-slate-50/60">
-          <a href={employer.careersUrl} target="_blank" rel="noopener noreferrer"
-             className="w-full inline-flex items-center justify-center gap-2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all">
-            <ExternalLink className="w-4 h-4" /> View Open Roles &amp; Apply (Official Site)
-          </a>
-        </div>
+        <p>{job.employer} · {job.city}</p>
+        <p className="text-sm text-slate-700">Source: {job.publisher}. {postedLabel(job.postedDate)}. Availability and employer identity have not been independently verified.</p>
+        <p className="text-sm">{job.employmentType} · Source salary: {job.salaryRange}</p>
+        <p className="text-sm whitespace-pre-wrap">{job.summary}</p>
+        {([
+          ['Responsibilities supplied by source', job.responsibilities],
+          ['Requirements supplied by source', job.requirements],
+          ['Benefits supplied by source', job.benefits],
+        ] as [string, string[]][]).map(([title, items]) => items.length > 0 && (
+          <section key={title}><h3 className="font-semibold">{title}</h3>
+            <ul className="list-disc pl-5 text-sm space-y-2 mt-2">{items.map((item, index) => <li key={index}>{item}</li>)}</ul>
+          </section>
+        ))}
+        <InAppArticle url={job.applyUrl} sourceName={new URL(job.applyUrl).hostname} label="Listing source" />
+        <p className="text-sm text-slate-700">Confirm the vacancy and application process independently with the employer before sharing documents or paying anyone. This app does not process applications.</p>
       </div>
-    </div>,
-    document.body
+    </div>, document.body
   );
 }
 
 export default function Jobs() {
-  const [roleFilter, setRoleFilter] = useState<JobRole | 'All'>('All');
-  const [job, setJob] = useState<JobPosting | null>(null);
-  const [employer, setEmployer] = useState<JobEmployer | null>(null);
+  const [role, setRole] = useState<JobRole | 'All'>('All');
+  const [jobs, setJobs] = useState<Listing[]>([]);
+  const [active, setActive] = useState<Listing | null>(null);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'unconfigured' | 'error'>('loading');
+  const [receivedAt, setReceivedAt] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState(0);
 
-  // Live jobs from the backend (/api/jobs, credibility-filtered)
-  const [liveJobs, setLiveJobs] = useState<JobPosting[]>([]);
-  const [liveLoading, setLiveLoading] = useState(true);
-  const [liveConfigured, setLiveConfigured] = useState(true);
+  useEffect(() => {
+    let alive = true;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 60000);
+    setStatus('loading');
+    setJobs([]);
+    setReceivedAt(null);
+    (async () => {
+      try {
+        const response = await apiFetch('/api/jobs', { signal: controller.signal });
+        if (!response.ok) throw new Error('Jobs request failed');
+        const data = await response.json();
+        if (!alive) return;
+        if (data.configured === false) { setStatus('unconfigured'); return; }
+        setJobs(parseListings(data.items));
+        setReceivedAt(new Date().toLocaleString('en-AE'));
+        setStatus('ready');
+      } catch {
+        if (alive) setStatus('error');
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    })();
+    return () => { alive = false; window.clearTimeout(timeout); controller.abort(); };
+  }, [refresh]);
 
-  const loadLive = async () => {
-    setLiveLoading(true);
-    try {
-      const res = await fetch('/api/jobs', { headers: { Accept: 'application/json' } });
-      const data = await res.json();
-      setLiveConfigured(data.configured !== false);
-      const items: JobPosting[] = (Array.isArray(data.items) ? data.items : []).map((j: any) => ({
-        id: `live-${j.id}`,
-        title: j.title,
-        employer: j.employer,
-        logo: '🏥',
-        logoUrl: j.logoUrl || undefined,
-        emirate: j.city || 'United Arab Emirates',
-        role: (j.role || 'Registered Nurse') as JobRole,
-        employmentType: j.employmentType || 'Full-time',
-        postedDate: j.postedDate,
-        salaryRange: j.salaryRange || 'Salary not disclosed',
-        summary: j.summary || '',
-        responsibilities: j.responsibilities || [],
-        requirements: j.requirements || [],
-        benefits: j.benefits || [],
-        applyUrl: j.applyUrl,
-        verified: !!j.institution,
-        publisher: j.publisher || undefined,
-        directApply: !!j.directApply,
-        institution: !!j.institution,
-        live: true,
-      }));
-      setLiveJobs(items);
-    } catch {
-      setLiveConfigured(false);
-    } finally {
-      setLiveLoading(false);
-    }
-  };
-
-  useEffect(() => { loadLive(); }, []);
-
-  const liveFiltered = useMemo(
-    () => (roleFilter === 'All' ? liveJobs : liveJobs.filter(j => j.role === roleFilter)),
-    [liveJobs, roleFilter]
-  );
-
-  // Sort curated postings newest-first, then filter by role
-  const postings = useMemo(() => {
-    const sorted = [...JOB_POSTINGS].sort(
-      (a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()
-    );
-    return roleFilter === 'All' ? sorted : sorted.filter(p => p.role === roleFilter);
-  }, [roleFilter]);
-
-  const employers = roleFilter === 'All'
-    ? JOB_EMPLOYERS
-    : JOB_EMPLOYERS.filter(e => e.roles.includes(roleFilter));
-
+  const filtered = role === 'All' ? jobs : jobs.filter(job => job.role === role);
   return (
-    <div className="space-y-6 animate-fade-in text-slate-900 pb-12">
-      {job && <JobModal job={job} onClose={() => setJob(null)} />}
-      {employer && <EmployerModal employer={employer} onClose={() => setEmployer(null)} />}
-
-      {/* Header */}
-      <div>
-        <h2 className="text-xl font-sans font-extrabold text-slate-900 flex items-center gap-2">
-          <Briefcase className="w-5 h-5 text-blue-600" />
-          UAE Nursing Jobs &amp; Careers
-        </h2>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Live &amp; verified openings for Nurses &amp; Nursing Assistants — filtered for direct hospital / health-system postings. Tap any job for the full description and how to apply.
-        </p>
-      </div>
-
-      {/* Safety notice */}
-      <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 text-[11px] text-amber-900">
-        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-        <span>
-          <strong>Avoid recruitment scams:</strong> Legitimate UAE employers and licensed agencies <strong>never charge candidates</strong> a placement or visa fee. Apply only through the official links here. Confirm the live vacancy on the employer's portal — listings are refreshed periodically.
-        </span>
-      </div>
-
-      {/* Role filters */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
-        {ROLE_FILTERS.map(r => (
-          <button
-            key={r}
-            onClick={() => setRoleFilter(r)}
-            className={`shrink-0 px-4 py-2 rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all cursor-pointer border ${
-              roleFilter === r
-                ? 'bg-blue-600 border-blue-700 text-white shadow-md'
-                : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
-            }`}
-          >
-            {r === 'All' ? '🏥 All Roles' : r}
-          </button>
-        ))}
-      </div>
-
-      {/* ── LIVE openings (from JSearch, credibility-filtered) ── */}
-      {(liveLoading || liveFiltered.length > 0) && (
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-              <Radio className="w-3.5 h-3.5 text-rose-500 animate-pulse" /> Live Openings
-              {!liveLoading && <span className="text-slate-400">({liveFiltered.length})</span>}
-            </h3>
-            <button onClick={loadLive} disabled={liveLoading}
-              className="flex items-center gap-1 text-[10px] font-mono font-bold text-slate-400 hover:text-blue-600 disabled:opacity-50 transition-colors cursor-pointer">
-              <RefreshCw className={`w-3 h-3 ${liveLoading ? 'animate-spin' : ''}`} /> Refresh
-            </button>
-          </div>
-
-          {liveLoading ? (
-            <div className="flex items-center gap-2 text-slate-400 text-xs font-mono py-6 justify-center">
-              <Loader2 className="w-4 h-4 animate-spin" /> Loading live UAE nursing jobs…
-            </div>
-          ) : (
-            <div className="space-y-3">
-              <p className="text-[10px] text-slate-400 flex items-center gap-1.5 -mt-1 mb-1">
-                <BadgeCheck className="w-3 h-3 text-emerald-500" /> Filtered for direct hospital / health-system &amp; direct-apply listings — recruiter resume-farms removed.
-              </p>
-              {liveFiltered.map(p => (
-                <div
-                  key={p.id}
-                  onClick={() => setJob(p)}
-                  className="group bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-rose-200 transition-all cursor-pointer flex items-start gap-4"
-                >
-                  {p.logoUrl ? (
-                    <img src={p.logoUrl} alt="" className="w-10 h-10 rounded-lg object-contain bg-white border border-slate-200 shrink-0"
-                         onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                  ) : (
-                    <span className="text-2xl shrink-0 mt-0.5">{p.logo}</span>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-3">
-                      <h4 className="font-bold text-sm text-slate-900 leading-snug group-hover:text-rose-700 transition-colors">{p.title}</h4>
-                      <span className="shrink-0 text-[10px] font-mono text-slate-400 flex items-center gap-1"><CalendarClock className="w-3 h-3" /> {timeAgo(p.postedDate)}</span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">{p.employer}</p>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[10px] font-mono text-slate-500">
-                      <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-slate-400" /> {p.emirate}</span>
-                      <span className="flex items-center gap-1"><Briefcase className="w-3 h-3 text-slate-400" /> {p.employmentType}</span>
-                      {p.salaryRange && !p.salaryRange.startsWith('Salary not') && <span className="flex items-center gap-1"><Wallet className="w-3 h-3 text-emerald-500" /> {p.salaryRange.split(' / ')[0]}</span>}
-                    </div>
-                    <div className="flex items-center justify-between mt-3 gap-2 flex-wrap">
-                      <div className="flex items-center gap-1.5">
-                        {p.institution
-                          ? <span className="text-[9px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded uppercase flex items-center gap-1"><ShieldCheck className="w-2.5 h-2.5" /> Direct Institution</span>
-                          : p.directApply
-                          ? <span className="text-[9px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded uppercase flex items-center gap-1"><BadgeCheck className="w-2.5 h-2.5" /> Direct Apply</span>
-                          : <span className="text-[9px] font-mono font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded uppercase">Listing</span>}
-                        {p.publisher && <span className="text-[9px] font-mono text-slate-400">via {p.publisher}</span>}
-                      </div>
-                      <span className="text-[10px] font-mono font-bold text-rose-600 uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
-                        View &amp; Apply <ChevronRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+    <div className="space-y-6 text-slate-900 pb-12">
+      {active && <JobModal job={active} onClose={() => setActive(null)} />}
+      <header className="space-y-2">
+        <h2 className="text-xl font-bold flex gap-2 items-center"><Briefcase aria-hidden="true" /> Nursing jobs and career resources</h2>
+        <p className="text-sm text-slate-700">Third-party listings and a curated employer directory. Inclusion does not verify an employer, recruiter, or current vacancy.</p>
+      </header>
+      <p className="rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-950">
+        Check the employer’s identity and application process independently. Be cautious about requests for payment or sensitive documents. A link or listing here is not a guarantee of authenticity.
+      </p>
+      <section className="space-y-4" aria-labelledby="jobs-list-title">
+        <div className="flex justify-between items-center gap-3">
+          <h3 id="jobs-list-title" className="font-bold">Listings returned by the jobs service</h3>
+          <button type="button" onClick={() => setRefresh(value => value + 1)} disabled={status === 'loading'} className="px-4 py-2 rounded-lg bg-blue-700 text-white disabled:opacity-50">Refresh listings</button>
         </div>
-      )}
-
-      {/* Curated openings (newest first) */}
-      <div>
-        <h3 className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-          <Briefcase className="w-3.5 h-3.5 text-blue-600" /> {liveFiltered.length > 0 || liveLoading ? 'Featured Openings' : 'Current Openings'} ({postings.length})
-        </h3>
-
-        {postings.length === 0 ? (
-          <div className="text-center py-10 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-400">
-            No postings for this role right now. Try “All Roles” or check the verified employers below.
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {postings.map(p => (
-              <div
-                key={p.id}
-                onClick={() => setJob(p)}
-                className="group bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer flex items-start gap-4"
-              >
-                <span className="text-2xl shrink-0 mt-0.5">{p.logo}</span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-start justify-between gap-3">
-                    <h4 className="font-bold text-sm text-slate-900 leading-snug group-hover:text-blue-700 transition-colors">{p.title}</h4>
-                    <span className="shrink-0 text-[10px] font-mono text-slate-400 flex items-center gap-1"><CalendarClock className="w-3 h-3" /> {timeAgo(p.postedDate)}</span>
-                  </div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">{p.employer}</p>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[10px] font-mono text-slate-500">
-                    <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-slate-400" /> {p.emirate}</span>
-                    <span className="flex items-center gap-1"><Briefcase className="w-3 h-3 text-slate-400" /> {p.employmentType}</span>
-                    <span className="flex items-center gap-1"><Wallet className="w-3 h-3 text-emerald-500" /> {p.salaryRange.split(' / ')[0]}</span>
-                  </div>
-                  <p className="text-[11.5px] text-slate-500 leading-relaxed mt-2 line-clamp-2">{p.summary}</p>
-                  <div className="flex items-center justify-between mt-3">
-                    <span className="text-[9px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded uppercase">{p.role}</span>
-                    <span className="text-[10px] font-mono font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
-                      View &amp; Apply <ChevronRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Verified employers */}
-      <div>
-        <h3 className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Verified Official Employers ({employers.length})
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {employers.map(e => (
-            <div
-              key={e.id}
-              onClick={() => setEmployer(e)}
-              className="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer flex flex-col"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <span className="text-3xl">{e.logo}</span>
-                {e.verified && (
-                  <span className="inline-flex items-center gap-0.5 text-[8px] font-mono font-extrabold uppercase bg-emerald-100 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded-full">
-                    <ShieldCheck className="w-2.5 h-2.5" /> Verified
-                  </span>
-                )}
-              </div>
-              <h4 className="font-bold text-sm text-slate-900 mt-3 leading-snug group-hover:text-blue-700 transition-colors">{e.employer}</h4>
-              <p className="text-[10px] font-mono text-slate-400 flex items-center gap-1 mt-1"><MapPin className="w-3 h-3" /> {e.emirate}</p>
-              <p className="text-[11px] text-slate-500 leading-relaxed mt-2 line-clamp-2 flex-1">{e.about}</p>
-              <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
-                <span className="text-[10px] font-mono font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
-                  View &amp; Apply <ChevronRight className="w-3 h-3" />
-                </span>
-                <Building2 className="w-3.5 h-3.5 text-slate-300" />
-              </div>
-            </div>
+        <label className="block text-sm font-semibold" htmlFor="job-role">Filter supplied role</label>
+        <select id="job-role" value={role} onChange={event => setRole(event.target.value as JobRole | 'All')} className="border border-slate-300 rounded-lg p-3 max-w-full">
+          {ROLE_FILTERS.map(value => <option key={value} value={value}>{value === 'All' ? 'All roles' : value}</option>)}
+        </select>
+        <div role="status" className="text-sm text-slate-700">
+          {status === 'loading' && 'Loading listings…'}
+          {status === 'unconfigured' && 'The jobs feed is not configured. Browse the employer and search directories below.'}
+          {status === 'ready' && filtered.length === 0 && 'No listings were returned for this filter. This does not mean employers have no vacancies.'}
+          {status === 'ready' && receivedAt && <p>Response received in this browser: {receivedAt}. This is not a verification or posting time; the service may return cached data.</p>}
+        </div>
+        {status === 'error' && <p role="alert" className="text-sm text-rose-800">Could not load listings. Try refreshing. Employer and search links remain available below.</p>}
+        <div className="grid gap-3">
+          {filtered.map(job => (
+            <button type="button" key={job.id} onClick={() => setActive(job)} aria-haspopup="dialog" className="text-left bg-white border border-slate-200 rounded-xl p-5 space-y-2 hover:border-blue-500">
+              <span className="block font-bold">{job.title}</span>
+              <span className="block text-sm">{job.employer} · {job.city}</span>
+              <span className="block text-xs text-slate-700">Source: {job.publisher} · {postedLabel(job.postedDate)}</span>
+              <span className="block text-sm text-blue-800">Read listing details</span>
+            </button>
           ))}
         </div>
-      </div>
-
-      {/* LinkedIn live jobs — recruiters, hospitals & clinics */}
-      <div>
-        <h3 className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-          <span className="text-[#0a66c2]">in</span> LinkedIn — Live Jobs (Recruiters, Hospitals &amp; Clinics)
-        </h3>
-        <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-          <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
-            Opens LinkedIn's live results (posted in the last week) where verified hospitals, clinics, and healthcare recruiters post UAE nursing roles. Apply directly through the official LinkedIn posting.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-            {LINKEDIN_SEARCHES.map(s => (
-              <a
-                key={s.id}
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-3 p-3 bg-[#0a66c2]/5 border border-[#0a66c2]/20 rounded-xl hover:border-[#0a66c2]/50 hover:bg-[#0a66c2]/10 transition-all"
-              >
-                <span className="shrink-0 w-7 h-7 rounded bg-[#0a66c2] text-white text-xs font-extrabold flex items-center justify-center">in</span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold text-slate-800 group-hover:text-[#0a66c2] transition-colors">{s.label}</p>
-                  <p className="text-[10px] text-slate-400 truncate">{s.note}</p>
-                </div>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#0a66c2] transition-colors shrink-0" />
-              </a>
-            ))}
-          </div>
+      </section>
+      <section className="space-y-3">
+        <h3 className="font-bold">Curated employer directory</h3>
+        <p className="text-sm text-slate-700">Static links selected for this directory. Current vacancies and link status have not been verified; no verification date is recorded.</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {JOB_EMPLOYERS.map(employer => <InAppArticle key={employer.id} url={employer.careersUrl} sourceName={employer.employer} label="Employer career resource" />)}
         </div>
-      </div>
-
-      {/* Live job boards */}
-      <div>
-        <h3 className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-          <Search className="w-3.5 h-3.5 text-violet-600" /> More Live Listings (Reputable Boards)
-        </h3>
-        <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-            {JOB_BOARDS.map(b => (
-              <a
-                key={b.id}
-                href={b.searchUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl hover:border-violet-300 hover:bg-violet-50/40 transition-all"
-              >
-                <span className="text-xl shrink-0">{b.icon}</span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold text-slate-800 group-hover:text-violet-700 transition-colors">{b.name}</p>
-                  <p className="text-[10px] text-slate-400 truncate">{b.note}</p>
-                </div>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-300 group-hover:text-violet-500 transition-colors shrink-0" />
-              </a>
-            ))}
-          </div>
+      </section>
+      <section className="space-y-3">
+        <h3 className="font-bold">External job searches</h3>
+        <p className="text-sm text-slate-700">Search results are controlled by each site and may include agencies or expired listings. They have not been reviewed here.</p>
+        <div className="grid sm:grid-cols-2 gap-3">
+          {JOB_BOARDS.map(board => <InAppArticle key={board.id} url={board.searchUrl} sourceName={board.name} label="Job search" />)}
+          {LINKEDIN_SEARCHES.map(search => <InAppArticle key={search.id} url={search.url} sourceName={search.label} label="LinkedIn search" />)}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

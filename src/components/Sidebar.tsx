@@ -16,6 +16,7 @@ interface SidebarProps {
   onLogin: () => void;
   onLogout: () => void;
   notificationCount: number;
+  isAdmin: boolean;
 }
 
 export default function Sidebar({
@@ -26,7 +27,8 @@ export default function Sidebar({
   user,
   onLogin,
   onLogout,
-  notificationCount
+  notificationCount,
+  isAdmin
 }: SidebarProps) {
   const menuItems = [
     { id: 'dashboard', label: 'Milestones & Progress', icon: Award },
@@ -39,6 +41,7 @@ export default function Sidebar({
     { id: 'scholarships', label: 'Scholarships & Grants', icon: Trophy },
     { id: 'forum', label: 'Collaborative Forum', icon: MessageSquare },
     { id: 'calendar', label: 'Study Calendar & Q&A', icon: Calendar },
+    { id: 'account', label: 'Account & Privacy', icon: User },
   ];
 
   return (
@@ -98,14 +101,14 @@ export default function Sidebar({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <p className="font-bold text-xs text-white truncate">{user.displayName || 'Candidate'}</p>
-                    {(user.email === 'loveline082022@gmail.com' || user.email === 'uncledez8@gmail.com') && (
+                    {isAdmin && (
                       <span className="text-[8px] font-mono font-extrabold bg-[#dfba6b] text-slate-950 px-1 py-0.5 rounded-xs shrink-0">
                         OWNER
                       </span>
                     )}
                   </div>
                   <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
-                  {(user.email === 'loveline082022@gmail.com' || user.email === 'uncledez8@gmail.com') && (
+                  {isAdmin && (
                     <p className="text-[9px] font-mono text-[#dfba6b] font-extrabold mt-0.5">👑 Academy Admin</p>
                   )}
                 </div>

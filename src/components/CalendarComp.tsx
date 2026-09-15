@@ -271,9 +271,9 @@ export default function CalendarComp({
         <div>
           <h2 className="text-xl font-sans font-extrabold text-slate-900 flex items-center gap-1.5">
             <Calendar className="w-5.5 h-5.5 text-blue-600" />
-            Live Q&As & Peer Study Calendar
+            Peer Study Calendar
           </h2>
-          <p className="text-xs text-slate-550 font-sans">Schedule collaborative group study slots or book seats for Expert Q&A panels</p>
+          <p className="text-xs text-slate-550 font-sans">Schedule collaborative peer study slots. Expert status is assigned only by an administrator.</p>
         </div>
 
         <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -354,31 +354,12 @@ export default function CalendarComp({
             </div>
             <div className="flex flex-col justify-end">
               <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs">
-                <input
-                  type="checkbox"
-                  id="isExpert"
-                  checked={newIsExpert}
-                  onChange={(e) => setNewIsExpert(e.target.checked)}
-                  className="w-4 h-4 text-blue-650 bg-white border-slate-300 rounded accent-blue-650 shrink-0 cursor-pointer"
-                />
-                <label htmlFor="isExpert" className="text-slate-700 font-medium cursor-pointer">This is an Expert-led Q&A</label>
+                <Users className="w-4 h-4" />
+                <span className="text-slate-700 font-medium">Peer study room</span>
               </div>
             </div>
           </div>
 
-          {newIsExpert && (
-            <div className="max-w-xs transition-all">
-              <label className="block text-[10px] font-bold text-slate-450 mb-1 uppercase font-mono tracking-wider">Invited Expert / Mentor Name</label>
-              <input
-                type="text"
-                placeholder="e.g. Dr. Fatima or Senior Nurse Rahul"
-                value={newExpertName}
-                onChange={(e) => setNewExpertName(e.target.value)}
-                required
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-sky-500 placeholder:text-slate-600"
-              />
-            </div>
-          )}
 
           <div className="flex justify-end gap-3 pt-2">
             <button

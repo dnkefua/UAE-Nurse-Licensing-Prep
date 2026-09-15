@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useTransition, useEffect } from 'react';
+import React, { useState, useTransition, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Award, Calendar, CheckSquare, Square, Zap, Bell, Shield, TrendingUp, AlertCircle, Sparkles, X, ChevronRight, Target, BarChart3, CheckCircle2 } from 'lucide-react';
 import { ExamType, UserProfile, TestAttempt } from '../types';
+import { UAE_AUTHORITIES } from '../data/staticData';
+import { useModalAccessibility } from '../lib/readable';
 
 interface DashboardProps {
   profile: UserProfile | null;
@@ -21,7 +23,6 @@ export default function Dashboard({
   profile,
   testAttempts,
   onUpdateProfile,
-  onTriggerMockNotification,
   notifications,
   onDismissNotification
 }: DashboardProps) {
@@ -29,87 +30,66 @@ export default function Dashboard({
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(profile?.displayName || 'Aspiring Nurse');
   const [targetExam, setTargetExam] = useState<ExamType>(profile?.targetExam || 'DHA');
-  const [examDate, setExamDate] = useState(profile?.examDate?.split('T')[0] || '2026-10-15');
+  const [examDate, setExamDate] = useState(profile?.examDate?.split('T')[0] || '');
   const [studyHoursGoal, setStudyHoursGoal] = useState(profile?.studyHoursGoal || 15);
   const [registeredForExam, setRegisteredForExam] = useState(profile?.registeredForExam || false);
 
-  const [notificationPermissionRequested, setNotificationPermissionRequested] = useState(false);
-  const [notificationStatus, setNotificationStatus] = useState<'default' | 'granted' | 'denied'>('default');
+  const [saveError, setSaveError] = useState('');
+  const [milestoneSaving, setMilestoneSaving] = useState(false);
+  const milestoneLock = useRef(false);
 
   // Clickable stat-card detail modal
   const [detailCard, setDetailCard] = useState<'progress' | 'skills' | 'countdown' | null>(null);
-  useEffect(() => {
-    if (!detailCard) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setDetailCard(null); };
-    window.addEventListener('keydown', onKey);
-    return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
-  }, [detailCard]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useModalAccessibility(dialogRef, () => setDetailCard(null), !!detailCard);
 
   const standardMilestones = [
-    { id: '1_degree_verify', label: '1. MOH / MoFA Degree Attestation', desc: 'Certifying nursing qualifications from native foreign ministry & UAE consulate.' },
-    { id: '2_good_standing', label: '2. Good Standing Certificate (GSC)', desc: 'From your native country licensing council (validity must cover past 6 months).' },
-    { id: '3_dataflow', label: '3. DataFlow Primary Source Verification', desc: 'Verifying original school diploma and work background logs on DataFlow registry.' },
-    { id: '4_eligibility', label: '4. Health Authority Eligibility Application', desc: 'Submitting files to DHA/MOHAP/DOH online portals to claim review approval.' },
-    { id: '5_prometric_book', label: '5. Prometric Exam Sitting Booking', desc: 'Paying fees and booking dates with authorized regional Prometric testing center.' },
-    { id: '6_exam_sit', label: '6. Sit UAE Licensing Written Exam', desc: 'Acing the exam MCQ database in person! Critical threshold score is 60%-70% depending on regulator.' }
+    { id: '1_degree_verify', label: '1. Check qualification documents', desc: 'Ask your regulator which documents and attestations apply to your route.' },
+    { id: '2_good_standing', label: '2. Check professional standing documents', desc: 'Confirm whether a certificate is needed and its required validity.' },
+    { id: '3_dataflow', label: '3. Check credential verification', desc: 'Follow the regulator’s instructions for any primary source verification.' },
+    { id: '4_eligibility', label: '4. Review your application route', desc: 'Confirm eligibility and required steps through the regulator’s portal.' },
+    { id: '5_prometric_book', label: '5. Arrange an assessment if required', desc: 'Confirm the provider, fees, and booking process with your regulator.' },
+    { id: '6_exam_sit', label: '6. Complete any required assessment', desc: 'Check results and further licensing steps with the regulator.' }
   ];
 
   const handleProfileSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaveError('');
     startTransition(async () => {
       try {
         await onUpdateProfile({
           displayName,
           targetExam,
-          examDate: new Date(examDate).toISOString(),
+          examDate: examDate ? new Date(examDate).toISOString() : '',
           studyHoursGoal,
           registeredForExam
         });
         setIsEditing(false);
       } catch (err) {
-        console.error("Save failure:", err);
+        setSaveError('Could not save your plan. Please try again.');
       }
     });
   };
 
   const toggleMilestone = async (id: string) => {
-    if (!profile) return;
-    const currentList = [...profile.completedMilestones];
-    const index = currentList.indexOf(id);
-    if (index > -1) {
-      currentList.splice(index, 1);
-    } else {
-      currentList.push(id);
-    }
-    await onUpdateProfile({ completedMilestones: currentList });
-  };
-
-  const requestNotificationPermission = () => {
-    setNotificationPermissionRequested(true);
-    // Request mock/browser notification consent
-    if ('Notification' in window) {
-      Notification.requestPermission().then((permission) => {
-        setNotificationStatus(permission);
-        if (permission === 'granted') {
-          try {
-            new window.Notification("Verification Granted", {
-              body: "You will receive immediate alerts for DHA/MOH exam deadlines!",
-              icon: "https://cdn-icons-png.flaticon.com/512/822/822143.png"
-            });
-          } catch (e) {
-            console.log("Iframe restricted notification delivery.");
-          }
-        }
-      });
-    } else {
-      setNotificationStatus('granted');
+    if (!profile || milestoneLock.current || !standardMilestones.some(m => m.id === id)) return;
+    milestoneLock.current = true;
+    setMilestoneSaving(true);
+    setSaveError('');
+    const current = new Set(profile.completedMilestones || []);
+    if (current.has(id)) current.delete(id); else current.add(id);
+    try {
+      await onUpdateProfile({ completedMilestones: [...current] });
+    } catch {
+      setSaveError('Could not save milestone completion. Please try again.');
+    } finally {
+      milestoneLock.current = false;
+      setMilestoneSaving(false);
     }
   };
 
   // Calculations for display
-  const completedCount = profile?.completedMilestones?.length || 0;
+  const completedCount = standardMilestones.filter(m => profile?.completedMilestones?.includes(m.id)).length;
   const progressPercent = Math.round((completedCount / standardMilestones.length) * 100);
   const averagePracticeScore = testAttempts.length > 0 
     ? Math.round(testAttempts.reduce((acc, curr) => acc + curr.score, 0) / testAttempts.length)
@@ -117,8 +97,9 @@ export default function Dashboard({
 
   // Custom formatted date countdown helper
   const getDaysRemaining = () => {
-    if (!profile?.examDate) return 0;
+    if (!profile?.examDate) return null;
     const limit = new Date(profile.examDate).getTime();
+    if (!Number.isFinite(limit)) return null;
     const current = new Date().getTime();
     const gap = limit - current;
     return Math.max(0, Math.ceil(gap / (1000 * 60 * 60 * 24)));
@@ -134,13 +115,13 @@ export default function Dashboard({
         <div className="space-y-4 max-w-xl">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#dfba6b]/10 text-[#dfba6b] border border-[#dfba6b]/20 rounded-full text-xs font-mono font-bold tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-[#dfba6b]" />
-            THE CENTERED NURSE OFFICIAL UAE SYLLABUS
+            INDEPENDENT NURSING STUDY SUPPORT
           </div>
           <h2 className="text-2xl sm:text-3xl font-sans font-black text-white tracking-wide leading-tight uppercase">
             The Centered Nurse Prep Grid
           </h2>
           <p className="text-sm text-slate-300 leading-relaxed font-sans">
-            Welcome to the official UAE nurse licensing portal. Track regulatory milestones, activate mock simulators, schedule 1-on-1 coaching, and lock down your DHA / MOHAP / HAAD licensure.
+            Track your study plan and personal checklist. This independent preparation app does not determine licensing eligibility or certify exam readiness.
           </p>
           <div className="flex flex-wrap gap-4 pt-1">
             <div className="flex items-center gap-2 px-3 py-2 bg-[#0f1d31] border border-[#1b2f48] rounded-xl text-xs font-bold font-mono">
@@ -149,7 +130,7 @@ export default function Dashboard({
             </div>
             <div className="flex items-center gap-2 px-3 py-2 bg-[#0f1d31] border border-[#1b2f48] rounded-xl text-xs font-bold font-mono">
               <Calendar className="w-4 h-4 text-slate-350" />
-              <span>Exam Sitting: <strong className="text-[#dfba6b] font-extrabold">{(profile?.examDate ? new Date(profile.examDate) : new Date(examDate)).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })}</strong></span>
+              <span>Your target date: <strong className="text-[#dfba6b] font-extrabold">{profile?.examDate && Number.isFinite(Date.parse(profile.examDate)) ? new Date(profile.examDate).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Not set'}</strong></span>
             </div>
           </div>
         </div>
@@ -160,22 +141,18 @@ export default function Dashboard({
           >
             {isEditing ? 'Cancel Plan' : 'Modify Study Plan'}
           </button>
-          <button
-            onClick={onTriggerMockNotification}
-            className="flex-1 md:flex-none py-3 px-5 bg-[#dfba6b] hover:bg-[#ebd095] text-slate-950 rounded-xl text-xs font-black font-mono uppercase tracking-wider transition-all cursor-pointer shadow-lg shadow-[#dfba6b]/10 text-nowrap"
-          >
-            Trigger Reminder
-          </button>
         </div>
       </div>
 
+      {saveError && <p role="alert" className="text-sm text-rose-800">{saveError}</p>}
       {isEditing && (
         <form onSubmit={handleProfileSave} className="p-6 bg-white border border-slate-200 rounded-2xl space-y-4 shadow-sm text-slate-850">
-          <h3 className="font-bold text-sm tracking-wide text-[#dfba6b] font-mono">EDIT TARGET ARCHITECTURE</h3>
+          <h3 className="font-bold text-sm tracking-wide text-[#dfba6b] font-mono">EDIT STUDY PLAN</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase font-mono tracking-wider">Candidate Name</label>
+              <label htmlFor="plan-name" className="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase font-mono tracking-wider">Candidate Name</label>
               <input
+                id="plan-name"
                 type="text"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
@@ -184,8 +161,8 @@ export default function Dashboard({
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase font-mono tracking-wider">Regulator Authority</label>
-              <select
+              <label htmlFor="plan-regulator" className="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase font-mono tracking-wider">Regulator Authority</label>
+              <select id="plan-regulator"
                 value={targetExam}
                 onChange={(e) => setTargetExam(e.target.value as ExamType)}
                 className="w-full bg-white border border-slate-200 rounded-lg py-2.5 px-3 text-xs text-slate-805 focus:outline-none focus:border-blue-500 font-sans"
@@ -196,8 +173,9 @@ export default function Dashboard({
               </select>
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase font-mono tracking-wider">Estimated Sitting Date</label>
+              <label htmlFor="plan-date" className="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase font-mono tracking-wider">Estimated Sitting Date</label>
               <input
+                id="plan-date"
                 type="date"
                 value={examDate}
                 onChange={(e) => setExamDate(e.target.value)}
@@ -206,8 +184,9 @@ export default function Dashboard({
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase font-mono tracking-wider">Goal (Weekly study hrs)</label>
+              <label htmlFor="plan-hours" className="block text-[11px] font-bold text-slate-500 mb-1.5 uppercase font-mono tracking-wider">Goal (Weekly study hrs)</label>
               <input
+                id="plan-hours"
                 type="number"
                 min="1"
                 max="100"
@@ -227,7 +206,7 @@ export default function Dashboard({
               className="w-4 h-4 accent-[#dfba6b] rounded border-slate-300"
             />
             <label htmlFor="registeredForExam" className="text-xs text-slate-600 cursor-pointer">
-              I have officially completed document checks and booked my Prometric seat!
+              I have booked an assessment (self-reported; not verified by this app).
             </label>
           </div>
           <div className="flex justify-end gap-3 pt-2">
@@ -243,7 +222,7 @@ export default function Dashboard({
               disabled={isPending}
               className="px-4 py-2 bg-[#0c1a2e] hover:bg-[#152741] text-[#dfba6b] border border-[#dfba6b]/40 disabled:opacity-50 rounded-lg text-xs font-bold uppercase tracking-wider font-mono"
             >
-              {isPending ? 'Syncing...' : 'Save Plan Schema'}
+              {isPending ? 'Syncing...' : 'Save study plan'}
             </button>
           </div>
         </form>
@@ -259,8 +238,8 @@ export default function Dashboard({
         >
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="font-sans font-bold text-sm tracking-tight text-slate-900">Licensing Progression</h3>
-              <p className="text-xs text-slate-500">Prerequisites completed towards UAE registration</p>
+              <h3 className="font-sans font-bold text-sm tracking-tight text-slate-900">Personal Checklist Progress</h3>
+              <p className="text-xs text-slate-500">Self-reported completion of the six items below</p>
             </div>
             <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-[#dfba6b] group-hover:translate-x-0.5 transition-all shrink-0" />
           </div>
@@ -289,7 +268,7 @@ export default function Dashboard({
             </div>
           </div>
           <p className="text-[11px] text-slate-500 text-center leading-normal">
-            Follow the mandatory 6-step registration flow to practice legally as a Certified Nurse in the UAE.
+            This optional planning checklist is not a mandatory licensing sequence or proof of registration.
           </p>
         </button>
 
@@ -321,7 +300,7 @@ export default function Dashboard({
             </div>
             <div className="pt-2 text-[11px] text-slate-500 flex items-center gap-1 bg-slate-50 p-2 border border-slate-100 rounded-lg">
               <AlertCircle className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-              <span>DHA & MOH recommend an accuracy target ≥ 70% to guarantee sitting success.</span>
+              <span>Practice scores reflect this app’s unreviewed questions and do not predict exam results.</span>
             </div>
           </div>
           <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-slate-100 pt-2">
@@ -339,12 +318,12 @@ export default function Dashboard({
           <div className="flex items-start justify-between">
             <div>
               <h3 className="font-sans font-bold text-sm tracking-tight text-slate-900">Exam Countdown Timer</h3>
-              <p className="text-xs text-slate-500">Estimated timeline till your prometric session</p>
+              <p className="text-xs text-slate-500">Time remaining to your self-entered target</p>
             </div>
             <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all shrink-0" />
           </div>
           <div className="flex items-baseline gap-1 py-1">
-            <span className="text-5xl font-mono font-extrabold tracking-tight text-slate-800 bg-slate-50 px-3 py-1 rounded-2xl border border-slate-200">{daysRemaining}</span>
+            <span className="text-5xl font-mono font-extrabold tracking-tight text-slate-800 bg-slate-50 px-3 py-1 rounded-2xl border border-slate-200">{daysRemaining ?? 'Not set'}</span>
             <span className="text-sm text-slate-500 font-bold italic">Days Left</span>
           </div>
           <div className="space-y-1.5 pt-1">
@@ -358,7 +337,7 @@ export default function Dashboard({
           <div className="text-[11px] text-slate-450 border-t border-slate-100 pt-2 font-mono flex justify-between">
             <span>REGISTRATION STATUS:</span>
             <span className={profile?.registeredForExam ? 'text-emerald-600 font-bold' : 'text-amber-500 font-semibold'}>
-              {profile?.registeredForExam ? '● SEAT BOOKED' : '○ UNBOOKED'}
+              {profile?.registeredForExam ? 'Self-reported booking' : '○ UNBOOKED'}
             </span>
           </div>
         </button>
@@ -367,15 +346,15 @@ export default function Dashboard({
       {/* Stat-card detail modal */}
       {detailCard && createPortal(
         <div className="fixed inset-0 z-[100] flex items-stretch sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm sm:p-4" onClick={() => setDetailCard(null)}>
-          <div className="bg-white w-full sm:max-w-lg sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[90vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
+          <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="dashboard-dialog-title" tabIndex={-1} className="bg-white w-full sm:max-w-lg sm:rounded-3xl shadow-2xl flex flex-col h-[100dvh] sm:h-auto sm:max-h-[90vh] overflow-hidden animate-modal-in" onClick={e => e.stopPropagation()}>
             {/* Header */}
             <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-100 shrink-0">
-              <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                {detailCard === 'progress' && <><Target className="w-4 h-4 text-[#dfba6b]" /> Licensing Progression Detail</>}
+              <h2 id="dashboard-dialog-title" className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                {detailCard === 'progress' && <><Target className="w-4 h-4 text-[#dfba6b]" /> Personal Checklist Progress Detail</>}
                 {detailCard === 'skills' && <><BarChart3 className="w-4 h-4 text-blue-600" /> Skills Evaluation Detail</>}
                 {detailCard === 'countdown' && <><Calendar className="w-4 h-4 text-blue-600" /> Exam Timeline Detail</>}
               </h2>
-              <button onClick={() => setDetailCard(null)} className="shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all cursor-pointer">
+              <button aria-label="Close details" onClick={() => setDetailCard(null)} className="shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -388,7 +367,7 @@ export default function Dashboard({
                     <span className="text-xs font-bold text-[#a37d36]">Overall completion</span>
                     <span className="text-2xl font-extrabold font-mono text-[#a37d36]">{progressPercent}%</span>
                   </div>
-                  <p className="text-[11px] text-slate-500">Tap any item to jump to the full Milestone Tracker below and toggle it.</p>
+                  <p className="text-[11px] text-slate-500">Use the Milestone Tracker below to update completion.</p>
                   <div className="space-y-2">
                     {standardMilestones.map(m => {
                       const done = profile?.completedMilestones?.includes(m.id) || false;
@@ -423,7 +402,7 @@ export default function Dashboard({
                   </div>
                   <div className="flex items-start gap-1.5 bg-blue-50 border border-blue-100 p-3 rounded-xl text-[11px] text-blue-800">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                    <span>DHA, MOHAP &amp; DOH recommend an accuracy target ≥ 70% before booking your exam seat.</span>
+                    <span>Practice scores are not regulator thresholds or evidence of exam readiness.</span>
                   </div>
                   <h4 className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider pt-1">Recent Attempts</h4>
                   {testAttempts.length === 0 ? (
@@ -448,11 +427,11 @@ export default function Dashboard({
               {detailCard === 'countdown' && (
                 <>
                   <div className="flex items-baseline gap-2 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
-                    <span className="text-3xl font-extrabold font-mono text-slate-800">{daysRemaining}</span>
-                    <span className="text-sm text-slate-500 font-bold">days until your exam sitting</span>
+                    <span className="text-3xl font-extrabold font-mono text-slate-800">{daysRemaining ?? 'Not set'}</span>
+                    <span className="text-sm text-slate-500 font-bold">days to your target, if set</span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    Target date: <strong className="text-slate-700">{(profile?.examDate ? new Date(profile.examDate) : new Date(examDate)).toLocaleDateString('en-AE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</strong>
+                    Target date: <strong className="text-slate-700">{profile?.examDate && Number.isFinite(Date.parse(profile.examDate)) ? new Date(profile.examDate).toLocaleDateString('en-AE') : 'Not set'}</strong>
                   </p>
                   <h4 className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider pt-1">Your Phase</h4>
                   <div className="space-y-2">
@@ -477,7 +456,7 @@ export default function Dashboard({
                   <div className="flex items-center justify-between text-[11px] font-mono border-t border-slate-100 pt-3">
                     <span className="text-slate-400">Registration status:</span>
                     <span className={profile?.registeredForExam ? 'text-emerald-600 font-bold' : 'text-amber-500 font-semibold'}>
-                      {profile?.registeredForExam ? '● SEAT BOOKED' : '○ NOT BOOKED YET'}
+                      {profile?.registeredForExam ? '● SEAT BOOKED' : 'No booking reported'}
                     </span>
                   </div>
                 </>
@@ -500,10 +479,11 @@ export default function Dashboard({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Bell className="w-4 h-4 text-amber-600 animate-swing" />
-              <h4 className="text-xs font-bold font-mono tracking-wider text-amber-900 uppercase">IN-APP ALERTS & REGISTRATION DEADLINES</h4>
+              <h4 className="text-xs font-bold font-mono tracking-wider text-amber-900 uppercase">IN-APP MESSAGES</h4>
             </div>
-            <span className="text-[9px] font-mono text-amber-600 uppercase bg-amber-100 px-2 py-0.5 rounded">Action Requested</span>
+            <span className="text-[9px] font-mono text-amber-600 uppercase bg-amber-100 px-2 py-0.5 rounded">Unverified messages</span>
           </div>
+          <p className="text-xs text-amber-900">These app messages are not verified regulator notices or deadlines. Check the regulator’s website before acting.</p>
           <div className="space-y-2">
             {notifications.map((notif) => (
               <div key={notif.id} className="flex items-start justify-between bg-white p-3 rounded-xl border border-slate-205 text-xs gap-4 shadow-sm text-slate-800">
@@ -523,34 +503,12 @@ export default function Dashboard({
         </div>
       )}
 
-      {/* Real Privacy Alert and Notification Access Control */}
-      {!notificationPermissionRequested && (
-        <div className="p-4 bg-white border border-slate-200 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-          <div className="flex gap-2.5">
-            <div className="p-2 bg-blue-50 rounded-xl text-blue-600 self-start sm:self-auto shrink-0">
-              <Shield className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-slate-900">Private Study Lock / Encrypted Local Storage</h4>
-              <p className="text-[11px] text-slate-500">All practice exam histories are protected under Firestore rules, kept fully isolated and verified with authorized tokens.</p>
-            </div>
-          </div>
-          <button
-            onClick={requestNotificationPermission}
-            className="w-full sm:w-auto py-2 px-4 bg-slate-900 hover:bg-slate-800 rounded-lg text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer text-nowrap"
-          >
-            <Bell className="w-3.5 h-3.5" />
-            Enable Notification Alerts
-          </button>
-        </div>
-      )}
-
       {/* Licensing Milestones Interactivity Checklist */}
       <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm text-slate-800">
         <div className="mb-4">
           <h3 className="font-sans font-bold text-base text-slate-900 flex items-center gap-2">
             <CheckSquare className="w-5 h-5 text-[#dfba6b]" />
-            UAE Licensing Board Milestone Tracker
+            Personal Milestone Tracker
           </h3>
           <p className="text-xs text-slate-550">Click each task to log completion. Progress calculates dynamically in your study dashboard.</p>
         </div>
@@ -560,6 +518,9 @@ export default function Dashboard({
             return (
               <button
                 key={milestone.id}
+                type="button"
+                disabled={!profile || milestoneSaving}
+                aria-pressed={isCompleted}
                 onClick={() => toggleMilestone(milestone.id)}
                 className={`
                   p-4 rounded-xl border text-left flex gap-3 transition-all cursor-pointer
@@ -587,6 +548,13 @@ export default function Dashboard({
         </div>
       </div>
 
+      <section className="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+        <h3 className="font-bold">Regulator resources</h3>
+        <p className="text-sm text-slate-700">Confirm the rules for your role, qualifications, and route with the relevant regulator. Requirements and assessment arrangements have not been verified here.</p>
+        <div className="flex flex-wrap gap-4">
+          {UAE_AUTHORITIES.map(authority => <a key={authority.id} href={authority.officialSite.url} target="_blank" rel="noopener noreferrer" className="text-blue-800 underline">{authority.name} (new tab)</a>)}
+        </div>
+      </section>
       {/* Misleading-Claims policy: independent-app disclaimer */}
       <div className="mt-6 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3.5 text-[11px] leading-relaxed text-amber-900">
         <p className="font-bold uppercase tracking-wider text-[10px] text-amber-700 mb-1.5">⚠ Independent App — Not Government Affiliated</p>

@@ -223,8 +223,19 @@ button, [role="button"] { user-select: none; }
 button:active:not(:disabled), [role="button"]:active { transform: scale(0.98); }
 
 /* Accessible focus: visible for keyboard, hidden for pointer/touch */
-:focus { outline: none; }
-:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 3px solid #1d4ed8 !important; outline-offset: 3px; border-radius: 6px; }
+
+/* Native hidden content must remain hidden despite display utility classes. */
+[hidden] { display: none !important; }
+button, [role="button"] { min-height: 44px; }
+button:disabled { cursor: not-allowed; }
+[role="dialog"] { overflow-wrap: anywhere; }
+[role="dialog"] a { overflow-wrap: anywhere; }
+
+@media (forced-colors: active) {
+  :focus-visible { outline-color: Highlight !important; }
+  button, a { forced-color-adjust: auto; }
+}
 
 /* Safe-area insets (notch / status bar / home indicator) */
 .pt-safe { padding-top: env(safe-area-inset-top); }
@@ -254,4 +265,3 @@ input:not([type="checkbox"]):not([type="radio"]), select, textarea {
     scroll-behavior: auto !important;
   }
 }
-
